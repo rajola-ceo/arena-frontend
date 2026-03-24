@@ -1,8 +1,37 @@
 // js/config/firebase.js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-import { getAuth } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
-import { getStorage } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-storage.js";
+import { 
+    getAuth, 
+    GoogleAuthProvider,
+    signInWithPopup,
+    signOut,
+    onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+import { 
+    getFirestore, 
+    collection, 
+    doc, 
+    getDoc, 
+    getDocs, 
+    setDoc, 
+    updateDoc, 
+    deleteDoc, 
+    addDoc, 
+    query, 
+    where, 
+    orderBy, 
+    limit, 
+    Timestamp,
+    arrayUnion,
+    arrayRemove
+} from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+import { 
+    getStorage, 
+    ref, 
+    uploadBytes, 
+    getDownloadURL, 
+    deleteObject 
+} from "https://www.gstatic.com/firebasejs/10.7.0/firebase-storage.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBW0Sz7TODfa8tQJTfNUaLhfK9qJhdA1yE",
@@ -15,6 +44,37 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
-export const db = getFirestore(app);
-export const storage = getStorage(app);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const storage = getStorage(app);
+const googleProvider = new GoogleAuthProvider();
+
+// Export everything
+export { 
+    auth, 
+    db, 
+    storage, 
+    googleProvider,
+    signInWithPopup,
+    signOut,
+    onAuthStateChanged,
+    collection,
+    doc,
+    getDoc,
+    getDocs,
+    setDoc,
+    updateDoc,
+    deleteDoc,
+    addDoc,
+    query,
+    where,
+    orderBy,
+    limit,
+    Timestamp,
+    arrayUnion,
+    arrayRemove,
+    ref,
+    uploadBytes,
+    getDownloadURL,
+    deleteObject
+};
