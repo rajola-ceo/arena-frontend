@@ -125,7 +125,7 @@
             border-radius: 40px;
             font-size: 16px;
             font-weight: 600;
-            color: #444;
+            color: #111;
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
@@ -1151,6 +1151,10 @@
             });
             
             if (!response.ok) {
+                if (response.status === 401) {
+                    showToast('Session expired. Please login again.', 'error');
+                    signOut(auth);
+                }
                 throw new Error(`HTTP ${response.status}`);
             }
             return await response.json();
@@ -1181,12 +1185,16 @@
     }
 
     // ===================== COIN SERVICE =====================
+    let userCoins = 0;
+
     async function getUserCoins() {
         if (!currentUser) return 0;
         try {
             const data = await apiRequest(`/api/coins/${currentUser.uid}`);
-            return data.balance;
+            userCoins = data.balance;
+            return userCoins;
         } catch (error) {
+            console.error('Error getting coins:', error);
             return 0;
         }
     }
@@ -1195,6 +1203,7 @@
         if (!currentUser) return { success: false };
         try {
             const result = await apiRequest(`/api/coins/${currentUser.uid}/claim`, { method: 'POST' });
+            userCoins = result.newBalance || userCoins + result.amount;
             return { success: true, amount: result.amount };
         } catch (error) {
             return { success: false, error: error.message };
@@ -1225,7 +1234,7 @@
                 container.appendChild(createLeagueCard(league));
             });
         } catch (error) {
-            container.innerHTML = '<div class="empty-state">Failed to load leagues</div>';
+            container.innerHTML = '<div class="empty-state">Failed to load leagues. Make sure backend is running.</div>';
         }
     }
 
@@ -1323,10 +1332,10 @@
         
         try {
             const league = await apiRequest(`/api/leagues/${leagueId}`);
-            const userCoins = await getUserCoins();
+            const userCoinsBalance = await getUserCoins();
             
-            if (league.entryFee > userCoins) {
-                showToast(`Need ${league.entryFee} Veno Coins to join! You have ${userCoins}`, 'error');
+            if (league.entryFee > userCoinsBalance) {
+                showToast(`Need ${league.entryFee} Veno Coins to join! You have ${userCoinsBalance}`, 'error');
                 return;
             }
             
@@ -1529,7 +1538,7 @@
         } catch (error) {
             console.error('Google login error:', error);
             if (error.code === 'auth/unauthorized-domain') {
-                showToast(`Please add ${window.location.hostname} to Firebase authorized domains`, 'error');
+                showToast(`Please add ${window.location.hostname} to Firebase authorized domains in Firebase Console`, 'error');
             } else {
                 showToast(error.message, 'error');
             }
