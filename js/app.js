@@ -910,4 +910,4 @@ window.showToast = showToast;
 window.joinLeague = (leagueId) => window.App?.joinLeague(leagueId);
 window.viewLeague = (leagueId) => window.location.href = `league-view.html?id=${leagueId}`;
 
-console.log('✅ Veno-Arena loaded - Connected to Render backend at', 'https://crunck-backend.onrender.com');
+console.log('✅ Veno-Arena loaded - Connected to Render backend at', 'https://arena-backend-cv5d.onrender.com');
