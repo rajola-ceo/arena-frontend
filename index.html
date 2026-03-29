@@ -3,14 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <meta name="description" content="Join football leagues, tournaments and competitions on Crunk Games">
-    <meta name="keywords" content="football leagues, tournaments, eFootball, FC, DLS, competitions">
-    <meta name="theme-color" content="#10b981">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Crunk Games">
-    
-    <title>Crunk Games - Tournaments & Leagues</title>
+    <title>Crunk Games - Complete Gaming Platform</title>
     
     <!-- External Libraries -->
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
@@ -38,18 +31,6 @@
             --silver: #94a3b8;
             --bronze: #cd7f32;
             --transition: all 0.3s ease;
-        }
-
-        body.light-theme {
-            --primary: #059669;
-            --primary-dark: #047857;
-            --primary-light: #10b981;
-            --bg-primary: #f3f4f6;
-            --bg-secondary: #ffffff;
-            --bg-tertiary: #e5e7eb;
-            --border-color: #d1d5db;
-            --text-primary: #111827;
-            --text-secondary: #4b5563;
         }
 
         * {
@@ -92,10 +73,11 @@
             backdrop-filter: blur(10px);
         }
 
-        .topbar-left {
-            display: flex;
-            align-items: center;
-            gap: 15px;
+        .brand h1 {
+            font-size: 24px;
+            color: var(--primary);
+            font-weight: 700;
+            letter-spacing: 1px;
         }
 
         .menu-btn {
@@ -114,17 +96,10 @@
             transform: scale(1.1);
         }
 
-        .brand h1 {
-            font-size: 22px;
-            color: var(--primary);
-            font-weight: 700;
-            letter-spacing: 1px;
-        }
-
-        .topbar-right {
+        .topbar-icons {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 20px;
         }
 
         .veno-coins-display {
@@ -138,61 +113,44 @@
         }
 
         .veno-coins-display i {
-            color: #fbbf24;
+            color: var(--gold);
             font-size: 18px;
         }
 
         .veno-coins-display span {
             font-weight: 700;
-            font-size: 14px;
+            font-size: 16px;
             color: var(--primary);
         }
 
-        .claim-veno-btn {
-            background: rgba(16, 185, 129, 0.15);
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            color: var(--primary);
-            padding: 6px 12px;
-            border-radius: 30px;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: 600;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .claim-veno-btn:hover {
-            background: rgba(16, 185, 129, 0.25);
-            transform: translateY(-2px);
-        }
-
-        .notification-bell {
+        .notification-btn {
             position: relative;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--text-secondary);
             cursor: pointer;
-            font-size: 20px;
+            transition: var(--transition);
+        }
+
+        .notification-btn:hover {
             color: var(--primary);
         }
 
-        .notification-count {
+        .notification-badge {
             position: absolute;
             top: -5px;
-            right: -8px;
+            right: -5px;
             background: var(--error);
             color: white;
+            width: 20px;
+            height: 20px;
             border-radius: 50%;
-            width: 18px;
-            height: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 11px;
+            font-size: 12px;
             font-weight: 700;
-        }
-
-        .profile-dropdown {
-            position: relative;
         }
 
         .profile-pic {
@@ -207,95 +165,6 @@
 
         .profile-pic:hover {
             transform: scale(1.05);
-        }
-
-        .profile-popup {
-            display: none;
-            position: absolute;
-            top: 55px;
-            right: 0;
-            width: 240px;
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 15px;
-            z-index: 10001;
-            animation: slideDown 0.3s ease;
-        }
-
-        .profile-popup.active {
-            display: block;
-        }
-
-        .account-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 15px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .account-info img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-        }
-
-        .account-info div p {
-            margin: 0;
-            font-size: 13px;
-        }
-
-        .account-info div p:first-child {
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        .account-info div p:last-child {
-            color: var(--text-secondary);
-            font-size: 12px;
-        }
-
-        .profile-menu {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-
-        .profile-menu a {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px;
-            border-radius: 8px;
-            text-decoration: none;
-            color: var(--text-primary);
-            transition: var(--transition);
-            font-size: 13px;
-        }
-
-        .profile-menu a:hover {
-            background: rgba(16, 185, 129, 0.1);
-            color: var(--primary);
-        }
-
-        #logoutBtn {
-            width: 100%;
-            padding: 8px;
-            background: var(--error);
-            border: none;
-            border-radius: 8px;
-            color: white;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 13px;
-            transition: var(--transition);
-        }
-
-        #logoutBtn:hover {
-            opacity: 0.8;
         }
 
         /* ==================== SIDEBAR ==================== */
@@ -318,11 +187,11 @@
         }
 
         .sidebar-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
             padding: 20px;
             border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .sidebar-header h3 {
@@ -330,60 +199,18 @@
             font-size: 18px;
         }
 
-        .close-sidebar {
+        .close-sidebar-btn {
             background: none;
             border: none;
             font-size: 24px;
-            cursor: pointer;
             color: var(--text-secondary);
+            cursor: pointer;
             transition: var(--transition);
-            padding: 8px;
-            border-radius: 50%;
         }
 
-        .close-sidebar:hover {
+        .close-sidebar-btn:hover {
             color: var(--error);
             transform: rotate(90deg);
-        }
-
-        .venaura-section {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 15px 20px;
-            margin: 10px 15px;
-            background: var(--bg-tertiary);
-            border-radius: 16px;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .venaura-section:hover {
-            background: rgba(16, 185, 129, 0.1);
-        }
-
-        .venaura-icon {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 24px;
-        }
-
-        .venaura-info h3 {
-            margin: 0;
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .venaura-info p {
-            margin: 0;
-            font-size: 12px;
-            color: var(--text-secondary);
         }
 
         .sidebar-menu {
@@ -395,7 +222,7 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 12px 16px;
+            padding: 14px 16px;
             border-radius: 12px;
             cursor: pointer;
             transition: var(--transition);
@@ -403,23 +230,14 @@
             color: var(--text-primary);
         }
 
-        .sidebar-menu li:hover {
-            background: var(--primary);
-            color: white;
-            transform: translateX(5px);
+        .sidebar-menu li:hover,
+        .sidebar-menu li.active {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--primary);
         }
 
         .sidebar-menu li i {
             width: 24px;
-            color: var(--primary);
-        }
-
-        .sidebar-menu li:hover i {
-            color: white;
-        }
-
-        .sidebar-menu li.active {
-            background: rgba(16, 185, 129, 0.1);
             color: var(--primary);
         }
 
@@ -432,25 +250,22 @@
             border-top: 1px solid var(--border-color);
         }
 
-        .sidebar-theme {
+        .theme-toggle-btn {
+            width: 100%;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 12px;
+            padding: 12px 16px;
             background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
             border-radius: 12px;
+            color: var(--text-primary);
             cursor: pointer;
             transition: var(--transition);
-            font-size: 13px;
         }
 
-        .sidebar-theme:hover {
-            background: rgba(16, 185, 129, 0.1);
-        }
-
-        .theme-toggle {
-            display: flex;
-            gap: 5px;
+        .theme-toggle-btn:hover {
+            border-color: var(--primary);
         }
 
         .sidebar-overlay {
@@ -469,6 +284,87 @@
             display: block;
         }
 
+        /* ==================== PROFILE POPUP ==================== */
+        .profile-popup {
+            position: absolute;
+            top: 70px;
+            right: 0;
+            width: 280px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 15px;
+            z-index: 2001;
+            display: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .profile-popup.active {
+            display: block;
+        }
+
+        .profile-popup-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .profile-popup-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary);
+        }
+
+        .profile-popup-info h4 {
+            font-size: 14px;
+            margin-bottom: 3px;
+        }
+
+        .profile-popup-info p {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .profile-popup-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .profile-popup-menu a,
+        .profile-popup-menu button {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            font-size: 13px;
+        }
+
+        .profile-popup-menu a:hover,
+        .profile-popup-menu button:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .logout-btn {
+            background: rgba(239, 68, 68, 0.1) !important;
+            border-color: var(--error) !important;
+            color: var(--error) !important;
+        }
+
         /* ==================== MAIN CONTENT ==================== */
         main {
             flex: 1;
@@ -476,20 +372,26 @@
             padding: 20px;
         }
 
-        .page {
+        .page-container {
             display: none;
+        }
+
+        .page-container.active {
+            display: block;
             animation: fadeIn 0.3s ease;
         }
 
-        .page.active {
-            display: block;
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
+        /* ==================== HERO SECTION ==================== */
         .hero {
             background: linear-gradient(135deg, #1a2a3a, #0f172a);
             border-radius: 24px;
             padding: 40px;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
             text-align: center;
         }
 
@@ -514,6 +416,7 @@
             flex-wrap: wrap;
         }
 
+        /* ==================== BUTTONS ==================== */
         .btn {
             padding: 12px 24px;
             border-radius: 30px;
@@ -539,88 +442,24 @@
 
         .btn-secondary {
             background: transparent;
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--primary);
+            border: 1px solid rgba(16, 185, 129, 0.3);
         }
 
         .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        /* ==================== QUICK ACTIONS ==================== */
-        .quick-actions {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 40px;
-        }
-
-        .action-card {
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 20px;
-            text-align: center;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .action-card:hover {
-            transform: translateY(-5px);
+            background: rgba(16, 185, 129, 0.1);
             border-color: var(--primary);
-            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.2);
         }
 
-        .action-card i {
-            font-size: 32px;
-            color: var(--primary);
-            margin-bottom: 12px;
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
-        .action-card h3 {
-            font-size: 16px;
-            margin-bottom: 5px;
-        }
-
-        .action-card p {
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-
-        /* ==================== SECTIONS ==================== */
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 30px 0 20px;
-        }
-
-        .section-header h2 {
-            font-size: 22px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .section-header a {
-            color: var(--primary);
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            transition: var(--transition);
-        }
-
-        .section-header a:hover {
-            transform: translateX(5px);
-        }
-
-        /* ==================== GRIDS & CARDS ==================== */
+        /* ==================== GRID & CARDS ==================== */
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 20px;
             margin-bottom: 30px;
         }
@@ -649,31 +488,17 @@
             align-items: center;
         }
 
-        .card-status {
+        .card-badge {
             font-size: 11px;
-            font-weight: 600;
-            padding: 4px 8px;
+            padding: 4px 10px;
             border-radius: 20px;
-        }
-
-        .status-live {
             background: rgba(16, 185, 129, 0.2);
-            color: #10b981;
-        }
-
-        .status-registration {
-            background: rgba(59, 130, 246, 0.2);
-            color: #3b82f6;
-        }
-
-        .status-completed {
-            background: rgba(107, 114, 128, 0.2);
-            color: #6b7280;
+            color: var(--primary);
         }
 
         .card-meta {
             display: flex;
-            gap: 12px;
+            gap: 10px;
             flex-wrap: wrap;
             font-size: 12px;
             color: var(--text-secondary);
@@ -691,6 +516,7 @@
             padding: 15px;
             background: var(--bg-secondary);
             border-radius: 12px;
+            font-size: 13px;
         }
 
         .card-footer {
@@ -709,21 +535,12 @@
             font-weight: 600;
             cursor: pointer;
             transition: var(--transition);
-            border: none;
-        }
-
-        .card-footer .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-        }
-
-        .card-footer .btn-secondary {
             background: var(--bg-secondary);
-            color: var(--text-primary);
             border: 1px solid var(--border-color);
+            color: var(--text-primary);
         }
 
-        .card-footer .btn-secondary:hover {
+        .card-footer button:hover {
             border-color: var(--primary);
             color: var(--primary);
         }
@@ -751,7 +568,7 @@
             color: var(--text-primary);
             font-size: 14px;
             transition: var(--transition);
-            font-family: 'Inter', sans-serif;
+            font-family: inherit;
         }
 
         .form-group input:focus,
@@ -760,22 +577,6 @@
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
-        }
-
-        .form-group textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-
-        .error-message {
-            color: var(--error);
-            font-size: 12px;
-            margin-top: 5px;
-            display: none;
-        }
-
-        .error-message.show {
-            display: block;
         }
 
         /* ==================== MODAL ==================== */
@@ -795,14 +596,13 @@
 
         .modal.active {
             display: flex;
-            animation: fadeIn 0.3s ease;
         }
 
         .modal-content {
             background: var(--bg-primary);
             border-radius: 24px;
             width: 90%;
-            max-width: 500px;
+            max-width: 600px;
             max-height: 90vh;
             overflow-y: auto;
             border: 1px solid var(--border-color);
@@ -823,17 +623,16 @@
             color: var(--primary);
         }
 
-        .modal-close {
+        .modal-close-btn {
             background: none;
             border: none;
             font-size: 24px;
             color: var(--text-secondary);
             cursor: pointer;
             transition: var(--transition);
-            padding: 0;
         }
 
-        .modal-close:hover {
+        .modal-close-btn:hover {
             color: var(--error);
         }
 
@@ -878,108 +677,52 @@
 
         .tab-content.active {
             display: block;
-            animation: fadeIn 0.3s ease;
+            animation: slideUp 0.3s ease;
         }
 
-        /* ==================== NOTIFICATIONS & TOASTS ==================== */
-        .toast-container {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 10000;
-            pointer-events: none;
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .toast {
-            background: var(--primary);
-            color: var(--bg-primary);
-            padding: 12px 24px;
-            border-radius: 50px;
-            font-weight: 600;
-            margin-top: 10px;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            pointer-events: auto;
-            box-shadow: 0 5px 20px rgba(16, 185, 129, 0.3);
-        }
-
-        .toast.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .toast.error {
-            background: var(--error);
-            color: white;
-        }
-
-        .toast.warning {
-            background: var(--warning);
-            color: white;
-        }
-
-        .toast.info {
-            background: var(--info);
-            color: white;
-        }
-
-        .notification-popup {
-            display: none;
+        /* ==================== NOTIFICATIONS POPUP ==================== */
+        .notifications-popup {
             position: absolute;
-            top: 55px;
+            top: 70px;
             right: 0;
             width: 350px;
+            max-height: 400px;
             background: var(--bg-tertiary);
             border: 1px solid var(--border-color);
-            border-radius: 16px;
-            max-height: 400px;
+            border-radius: 12px;
+            padding: 0;
+            z-index: 2001;
+            display: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             overflow-y: auto;
-            z-index: 10001;
-            animation: slideDown 0.3s ease;
         }
 
-        .notification-popup.active {
+        .notifications-popup.active {
             display: block;
         }
 
-        .notification-header {
+        .notifications-header {
+            padding: 15px;
+            border-bottom: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .notification-header h3 {
-            font-size: 16px;
-        }
-
-        .notification-header button {
-            background: none;
-            border: none;
-            color: var(--primary);
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .notification-list {
-            padding: 0;
+            background: var(--bg-secondary);
         }
 
         .notification-item {
             padding: 12px 15px;
             border-bottom: 1px solid var(--border-color);
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
             cursor: pointer;
             transition: var(--transition);
-            display: flex;
-            gap: 12px;
-            align-items: flex-start;
         }
 
         .notification-item:hover {
@@ -987,10 +730,10 @@
         }
 
         .notification-icon {
-            width: 36px;
-            height: 36px;
-            background: rgba(16, 185, 129, 0.1);
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
+            background: rgba(16, 185, 129, 0.2);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1002,114 +745,48 @@
             flex: 1;
         }
 
-        .notification-title {
+        .notification-content strong {
+            display: block;
             font-size: 13px;
-            font-weight: 600;
-            color: var(--text-primary);
+            margin-bottom: 3px;
         }
 
-        .notification-message {
+        .notification-content p {
             font-size: 12px;
             color: var(--text-secondary);
-            margin-top: 3px;
+            margin: 0;
         }
 
         .notification-time {
             font-size: 11px;
             color: var(--text-muted);
-            margin-top: 5px;
         }
 
-        /* ==================== LEADERBOARD TABLE ==================== */
-        .leaderboard-table {
+        /* ==================== TABLES ==================== */
+        table {
             width: 100%;
+            border-collapse: collapse;
             background: var(--bg-tertiary);
-            border-radius: 16px;
+            border-radius: 12px;
             overflow: hidden;
-            border: 1px solid var(--border-color);
         }
 
-        .table-header {
-            display: grid;
-            grid-template-columns: 60px 1fr 100px 100px 120px 100px;
+        table th {
             background: var(--bg-secondary);
-            padding: 15px 20px;
+            padding: 12px;
+            text-align: left;
             font-weight: 600;
             color: var(--primary);
             border-bottom: 1px solid var(--border-color);
-            font-size: 13px;
         }
 
-        .table-row {
-            display: grid;
-            grid-template-columns: 60px 1fr 100px 100px 120px 100px;
-            padding: 15px 20px;
-            align-items: center;
+        table td {
+            padding: 12px;
             border-bottom: 1px solid var(--border-color);
-            transition: var(--transition);
         }
 
-        .table-row:hover {
+        table tr:hover {
             background: var(--bg-secondary);
-        }
-
-        .rank {
-            font-weight: 700;
-            font-size: 16px;
-        }
-
-        .rank-1 { color: var(--gold); }
-        .rank-2 { color: var(--silver); }
-        .rank-3 { color: var(--bronze); }
-
-        .team-cell {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .team-logo {
-            width: 35px;
-            height: 35px;
-            border-radius: 8px;
-            background: var(--bg-secondary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            flex-shrink: 0;
-        }
-
-        .team-logo img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .team-info {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-
-        .team-name {
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        .team-owner {
-            font-size: 11px;
-            color: var(--text-secondary);
-        }
-
-        .table-cell {
-            text-align: center;
-            font-size: 13px;
-        }
-
-        .table-cell-bold {
-            font-weight: 700;
-            color: var(--primary);
         }
 
         /* ==================== EMPTY STATE ==================== */
@@ -1120,65 +797,16 @@
         }
 
         .empty-state i {
-            font-size: 64px;
-            margin-bottom: 20px;
+            font-size: 48px;
+            margin-bottom: 15px;
             opacity: 0.5;
         }
 
         .empty-state p {
-            font-size: 16px;
-            margin-bottom: 20px;
+            font-size: 14px;
         }
 
-        /* ==================== ANIMATIONS ==================== */
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        .loading {
-            display: inline-block;
-            animation: spin 1s linear infinite;
-        }
-
-        /* ==================== UTILITY CLASSES ==================== */
-        .text-center {
-            text-align: center;
-        }
-
-        .mt-20 {
-            margin-top: 20px;
-        }
-
-        .mb-20 {
-            margin-bottom: 20px;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
+        /* ==================== LOADING SPINNER ==================== */
         .loading-spinner {
             border: 4px solid rgba(16, 185, 129, 0.1);
             border-top: 4px solid var(--primary);
@@ -1189,38 +817,64 @@
             margin: 20px auto;
         }
 
-        /* ==================== FOOTER ==================== */
-        footer {
-            margin-top: auto;
-            padding: 20px;
-            background: var(--bg-secondary);
-            border-top: 1px solid var(--border-color);
-            text-align: center;
-            color: var(--text-muted);
-            font-size: 12px;
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ==================== NOTIFICATIONS & TOASTS ==================== */
+        .toast-container {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10000;
+        }
+
+        .toast {
+            background: var(--primary);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 600;
+            margin-top: 10px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .toast.error {
+            background: var(--error);
+        }
+
+        .toast.warning {
+            background: var(--warning);
+        }
+
+        .toast.info {
+            background: var(--info);
         }
 
         /* ==================== RESPONSIVE ==================== */
         @media (max-width: 768px) {
             .topbar {
-                padding: 0 12px;
+                padding: 0 16px;
             }
 
             .brand h1 {
                 font-size: 18px;
             }
 
-            .topbar-right {
-                gap: 10px;
-            }
-
-            .veno-coins-display {
-                padding: 6px 12px;
-                font-size: 12px;
-            }
-
             .hero {
-                padding: 25px 20px;
+                padding: 30px 20px;
             }
 
             .hero h1 {
@@ -1231,7 +885,7 @@
                 flex-direction: column;
             }
 
-            .btn {
+            .hero-buttons .btn {
                 width: 100%;
                 justify-content: center;
             }
@@ -1240,653 +894,488 @@
                 grid-template-columns: 1fr;
             }
 
-            .table-header,
-            .table-row {
-                grid-template-columns: 50px 1fr 70px 70px 80px 70px;
-                font-size: 11px;
-                padding: 12px;
-            }
-
-            .quick-actions {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
             .modal-content {
                 width: 95%;
-                padding: 20px;
             }
 
             main {
                 padding: 15px;
             }
 
-            .section-header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .section-header a {
-                margin-top: 10px;
+            .tabs {
+                -webkit-overflow-scrolling: touch;
             }
         }
 
         @media (max-width: 480px) {
             .topbar {
                 height: 55px;
-                padding: 0 10px;
+                padding: 0 12px;
             }
 
             .brand h1 {
                 font-size: 16px;
             }
 
-            .topbar-right {
-                gap: 8px;
+            .topbar-icons {
+                gap: 10px;
             }
 
-            .icons {
-                gap: 8px;
+            .veno-coins-display {
+                padding: 6px 12px;
+                font-size: 12px;
             }
 
             .hero {
                 padding: 20px 15px;
-                margin-bottom: 25px;
             }
 
             .hero h1 {
-                font-size: 18px;
+                font-size: 20px;
             }
 
-            .hero p {
-                font-size: 14px;
-            }
-
-            .quick-actions {
-                grid-template-columns: 1fr;
-                gap: 10px;
+            .btn {
+                padding: 10px 20px;
+                font-size: 13px;
             }
 
             .card {
                 padding: 15px;
             }
 
-            .table-header,
-            .table-row {
-                grid-template-columns: 40px 1fr 50px 50px 60px 50px;
-                font-size: 10px;
-                gap: 5px;
-                padding: 10px;
+            .modal-content {
+                width: 98%;
+                padding: 20px;
             }
+        }
 
-            .table-cell {
-                font-size: 10px;
-            }
+        /* ==================== UTILITY CLASSES ==================== */
+        .text-center { text-align: center; }
+        .mt-20 { margin-top: 20px; }
+        .mb-20 { margin-bottom: 20px; }
+        .hidden { display: none !important; }
+        .relative { position: relative; }
 
-            .btn {
-                padding: 10px 16px;
-                font-size: 13px;
-            }
-
-            .team-cell {
-                gap: 8px;
-            }
-
-            .team-logo {
-                width: 28px;
-                height: 28px;
-            }
-
-            .notification-popup {
-                width: 300px;
-            }
-
-            .profile-popup {
-                width: 200px;
-            }
+        footer {
+            margin-top: auto;
+            padding: 20px;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 12px;
         }
     </style>
 </head>
 <body>
-    <!-- APP CONTAINER -->
     <div class="app">
-        <!-- TOPBAR -->
+        <!-- ==================== TOPBAR ==================== -->
         <header class="topbar">
-            <div class="topbar-left">
-                <button class="menu-btn" id="menuBtn"><i class="bx bx-menu"></i></button>
-                <div class="brand"><h1>🏆 Crunk Games</h1></div>
-            </div>
-
-            <div class="topbar-right">
+            <button class="menu-btn" id="menuBtn"><i class="bx bx-menu"></i></button>
+            <div class="brand"><h1>🏆 Crunk Games</h1></div>
+            <div class="topbar-icons">
                 <div class="veno-coins-display">
                     <i class="fas fa-coins"></i>
                     <span id="venoCoinsAmount">0</span>
                 </div>
-                <button class="claim-veno-btn" id="claimVenoCoinsBtn" title="Claim daily bonus">
-                    <i class="fas fa-gift"></i> Claim 10
-                </button>
-
-                <div class="notification-container" style="position: relative;">
-                    <div class="notification-bell" id="notificationBtn">
+                <div class="relative">
+                    <button class="notification-btn" id="notificationBtn">
                         <i class="bx bx-bell"></i>
-                        <span class="notification-count" id="notificationCount">0</span>
-                    </div>
-                    <div class="notification-popup" id="notificationPopup">
-                        <div class="notification-header">
-                            <h3>Notifications</h3>
-                            <button id="markAllRead">Mark all read</button>
+                        <span class="notification-badge" id="notificationBadge">3</span>
+                    </button>
+                    <div class="notifications-popup" id="notificationsPopup">
+                        <div class="notifications-header">
+                            <h3 style="font-size: 16px; margin: 0;">Notifications</h3>
+                            <button id="markAllReadBtn" style="background: none; border: none; color: var(--primary); cursor: pointer; font-size: 12px; font-weight: 600;">Mark all read</button>
                         </div>
-                        <div class="notification-list" id="notificationList"></div>
+                        <div id="notificationsList"></div>
                     </div>
                 </div>
-
-                <div class="profile-dropdown" id="profileDropdown">
-                    <img id="profileAvatarImg" class="profile-pic" src="https://ui-avatars.com/api/?name=User&background=10b981&color=fff&size=128" alt="Profile">
+                <div class="relative">
+                    <img id="profilePic" class="profile-pic" src="https://ui-avatars.com/api/?name=User&background=10b981&color=fff&size=128" alt="Profile">
                     <div class="profile-popup" id="profilePopup">
-                        <div class="account-info">
-                            <img id="popupProfileImg" src="https://ui-avatars.com/api/?name=User&background=10b981&color=fff&size=128" alt="Profile">
-                            <div>
-                                <p id="profileNameDisplay">User Name</p>
-                                <p id="profileEmailDisplay">user@example.com</p>
+                        <div class="profile-popup-header">
+                            <img id="popupProfilePic" class="profile-popup-avatar" src="https://ui-avatars.com/api/?name=User&background=10b981&color=fff&size=128" alt="Profile">
+                            <div class="profile-popup-info">
+                                <h4 id="profileDisplayName">User Name</h4>
+                                <p id="profileEmail">user@example.com</p>
                             </div>
                         </div>
-                        <div class="profile-menu">
-                            <a href="#" id="profileView" onclick="crunkApp.navigateTo('profile'); return false;">
-                                <i class="bx bx-user"></i> View Profile
-                            </a>
-                            <a href="#" id="profileLibrary" onclick="crunkApp.navigateTo('myteams'); return false;">
-                                <i class="bx bx-library"></i> My Teams
-                            </a>
-                            <a href="#" id="profileSettings" onclick="crunkApp.navigateTo('settings'); return false;">
-                                <i class="bx bx-cog"></i> Settings
-                            </a>
+                        <div class="profile-popup-menu">
+                            <a href="#" onclick="app.navigateToPage('profile'); return false;"><i class="bx bx-user"></i> View Profile</a>
+                            <a href="#" onclick="app.navigateToPage('teams'); return false;"><i class="bx bx-group"></i> My Teams</a>
+                            <a href="#" onclick="app.navigateToPage('leagues'); return false;"><i class="bx bx-trophy"></i> My Leagues</a>
+                            <button onclick="app.logout();" class="logout-btn"><i class="bx bx-log-out"></i> Logout</button>
                         </div>
-                        <button id="logoutBtn"><i class="bx bx-log-out"></i> Logout</button>
                     </div>
                 </div>
             </div>
         </header>
 
-        <!-- SIDEBAR -->
+        <!-- ==================== SIDEBAR ==================== -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <h3>Menu</h3>
-                <button class="close-sidebar" id="closeSidebar"><i class="bx bx-x"></i></button>
+                <button class="close-sidebar-btn" id="closeSidebarBtn"><i class="bx bx-x"></i></button>
             </div>
-
-            <div class="venaura-section" id="venauraIcon" title="Connect with Venaura">
-                <div class="venaura-icon">
-                    <i class="fas fa-trophy"></i>
-                </div>
-                <div class="venaura-info">
-                    <h3>Venaura App</h3>
-                    <p>Connect with Venaura</p>
-                </div>
-                <i class="bx bx-right-arrow-alt arrow-icon"></i>
-            </div>
-
             <ul class="sidebar-menu">
-                <li class="sidebar-menu-item active" data-page="home">
-                    <i class="bx bx-home"></i> Home
-                </li>
-                <li class="sidebar-menu-item" data-page="tournaments">
-                    <i class="bx bx-trophy"></i> Tournaments
-                </li>
-                <li class="sidebar-menu-item" data-page="myteams">
-                    <i class="bx bx-group"></i> My Teams
-                </li>
-                <li class="sidebar-menu-item" data-page="leagues">
-                    <i class="bx bx-calendar-event"></i> My Leagues
-                </li>
-                <li class="sidebar-menu-item" data-page="leaderboard">
-                    <i class="bx bx-bar-chart-alt-2"></i> Leaderboard
-                </li>
-                <li class="sidebar-menu-item" data-page="createleague">
-                    <i class="bx bx-plus-circle"></i> Create League
-                </li>
-                <li class="sidebar-menu-item" data-page="createteam">
-                    <i class="bx bx-plus-circle"></i> Create Team
-                </li>
-                <li class="sidebar-menu-item" data-page="profile">
-                    <i class="bx bx-user-circle"></i> Profile
-                </li>
+                <li data-page="home"><i class="bx bx-home"></i> Home</li>
+                <li data-page="leagues"><i class="bx bx-trophy"></i> Leagues</li>
+                <li data-page="teams"><i class="bx bx-group"></i> Teams</li>
+                <li data-page="leaderboard"><i class="bx bx-bar-chart-alt-2"></i> Leaderboard</li>
+                <li data-page="profile"><i class="bx bx-user-circle"></i> Profile</li>
             </ul>
-
             <div class="sidebar-footer">
-                <div class="sidebar-theme" id="menuTheme">
-                    <span><i class="bx bx-palette"></i> Theme: <span id="themeLabel">Dark</span></span>
-                    <div class="theme-toggle">
-                        <i class="bx bx-sun" style="display: none;"></i>
-                        <i class="bx bx-moon"></i>
-                    </div>
-                </div>
+                <button class="theme-toggle-btn" id="themeToggleBtn">
+                    <span><i class="bx bx-moon"></i> <span id="themeLabel">Dark</span></span>
+                    <i class="bx bx-chevron-right"></i>
+                </button>
             </div>
         </aside>
-
         <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-        <!-- MAIN CONTENT -->
-        <main id="mainContent">
+        <!-- ==================== MAIN CONTENT ==================== -->
+        <main>
             <!-- HOME PAGE -->
-            <div id="homePage" class="page active">
-                <!-- Hero Section -->
+            <div id="homePage" class="page-container active">
                 <div class="hero">
-                    <h1>⚽ Football Leagues & Tournaments</h1>
-                    <p>Create your own league, manage teams, and compete for Veno Coins!</p>
+                    <h1>⚽ Welcome to Crunk Games</h1>
+                    <p>Create leagues, build teams, and compete for Veno Coins!</p>
                     <div class="hero-buttons">
-                        <button class="btn btn-primary" id="createLeagueBtn" onclick="crunkApp.openLeagueModal()">
+                        <button class="btn btn-primary" onclick="app.openCreateLeagueModal()">
                             <i class="fas fa-plus-circle"></i> Create League
                         </button>
-                        <button class="btn btn-secondary" id="joinLeagueBtn" onclick="crunkApp.navigateTo('tournaments')">
-                            <i class="fas fa-search"></i> Find Leagues
+                        <button class="btn btn-secondary" onclick="app.navigateToPage('leagues')">
+                            <i class="fas fa-search"></i> Browse Leagues
                         </button>
                     </div>
                 </div>
 
-                <!-- Quick Actions -->
-                <div class="quick-actions">
-                    <div class="action-card" onclick="crunkApp.navigateTo('createteam')">
-                        <i class="fas fa-users"></i>
-                        <h3>Create Team</h3>
-                        <p>Build your dream team with logo & squad</p>
-                    </div>
-                    <div class="action-card" onclick="crunkApp.navigateTo('tournaments')">
-                        <i class="fas fa-door-open"></i>
-                        <h3>Join League</h3>
-                        <p>Browse and join existing leagues</p>
-                    </div>
-                    <div class="action-card" onclick="crunkApp.navigateTo('leagues')">
-                        <i class="fas fa-calendar-check"></i>
-                        <h3>My Leagues</h3>
-                        <p>View your active leagues</p>
-                    </div>
-                    <div class="action-card" onclick="crunkApp.navigateTo('leaderboard')">
-                        <i class="fas fa-trophy"></i>
-                        <h3>Leaderboard</h3>
-                        <p>Check global rankings</p>
-                    </div>
+                <div style="margin-bottom: 30px;">
+                    <h2 style="font-size: 20px; margin-bottom: 15px;"><i class="fas fa-fire"></i> Featured Leagues</h2>
+                    <div class="grid" id="featuredLeaguesGrid"></div>
                 </div>
 
-                <!-- Featured Leagues -->
-                <div class="section-header">
-                    <h2><i class="fas fa-star"></i> Featured Leagues</h2>
-                    <a href="#" onclick="crunkApp.navigateTo('tournaments'); return false;">View All <i class="bx bx-chevron-right"></i></a>
+                <div style="margin-bottom: 30px;">
+                    <h2 style="font-size: 20px; margin-bottom: 15px;"><i class="fas fa-users"></i> Active Teams</h2>
+                    <div class="grid" id="activeTeamsGrid"></div>
                 </div>
-                <div class="grid" id="featuredLeagues"></div>
 
-                <!-- Active Leagues -->
-                <div class="section-header">
-                    <h2><i class="fas fa-fire"></i> Active Leagues</h2>
+                <div>
+                    <h2 style="font-size: 20px; margin-bottom: 15px;"><i class="fas fa-trophy"></i> Top Players</h2>
+                    <div class="grid" id="topPlayersGrid"></div>
                 </div>
-                <div class="grid" id="activeLeagues"></div>
-
-                <!-- My Teams -->
-                <div class="section-header">
-                    <h2><i class="fas fa-users"></i> My Teams</h2>
-                    <a href="#" onclick="crunkApp.navigateTo('myteams'); return false;">View All <i class="bx bx-chevron-right"></i></a>
-                </div>
-                <div class="grid" id="myTeamsHome"></div>
-
-                <!-- All Players -->
-                <div class="section-header">
-                    <h2><i class="fas fa-users"></i> Top Players</h2>
-                </div>
-                <div class="grid" id="allPlayersList"></div>
             </div>
 
-            <!-- TOURNAMENTS PAGE -->
-            <div id="tournamentsPage" class="page">
+            <!-- LEAGUES PAGE -->
+            <div id="leaguesPage" class="page-container">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-                    <h2 style="font-size: 24px;"><i class="fas fa-trophy"></i> Tournaments</h2>
-                    <button class="btn btn-primary" onclick="crunkApp.openLeagueModal()">
-                        <i class="fas fa-plus"></i> Create
+                    <h2 style="font-size: 24px;"><i class="fas fa-trophy"></i> Leagues</h2>
+                    <button class="btn btn-primary" onclick="app.openCreateLeagueModal()">
+                        <i class="fas fa-plus"></i> Create New
                     </button>
                 </div>
 
-                <div class="tabs" id="tournamentTabs">
-                    <button class="tab-btn active" data-tab="active">🔥 Active</button>
-                    <button class="tab-btn" data-tab="registration">📝 Registration</button>
-                    <button class="tab-btn" data-tab="completed">✅ Completed</button>
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="allLeagues">All Leagues</button>
+                    <button class="tab-btn" data-tab="myLeagues">My Leagues</button>
+                    <button class="tab-btn" data-tab="liveLeagues">Live</button>
+                    <button class="tab-btn" data-tab="completedLeagues">Completed</button>
                 </div>
 
-                <div id="active" class="tab-content active">
-                    <div class="grid" id="activeTournaments"></div>
+                <div id="allLeagues" class="tab-content active">
+                    <div class="grid" id="allLeaguesGrid"></div>
                 </div>
-                <div id="registration" class="tab-content">
-                    <div class="grid" id="registrationTournaments"></div>
+
+                <div id="myLeagues" class="tab-content">
+                    <div class="grid" id="myLeaguesGrid"></div>
                 </div>
-                <div id="completed" class="tab-content">
-                    <div class="grid" id="completedTournaments"></div>
+
+                <div id="liveLeagues" class="tab-content">
+                    <div class="grid" id="liveLeaguesGrid"></div>
+                </div>
+
+                <div id="completedLeagues" class="tab-content">
+                    <div class="grid" id="completedLeaguesGrid"></div>
                 </div>
             </div>
 
-            <!-- MY TEAMS PAGE -->
-            <div id="myTeamsPage" class="page">
+            <!-- TEAMS PAGE -->
+            <div id="teamsPage" class="page-container">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
                     <h2 style="font-size: 24px;"><i class="fas fa-users"></i> My Teams</h2>
-                    <button class="btn btn-primary" onclick="crunkApp.openTeamModal()">
+                    <button class="btn btn-primary" onclick="app.openCreateTeamModal()">
                         <i class="fas fa-plus"></i> Create Team
                     </button>
                 </div>
-                <div class="grid" id="myTeamsList"></div>
-            </div>
 
-            <!-- MY LEAGUES PAGE -->
-            <div id="myLeaguesPage" class="page">
-                <h2 style="font-size: 24px; margin-bottom: 20px;"><i class="fas fa-calendar-event"></i> My Leagues</h2>
-
-                <div class="tabs" id="myLeagueTabs">
-                    <button class="tab-btn active" data-tab="myactive">🔥 Active</button>
-                    <button class="tab-btn" data-tab="mycompleted">✅ Completed</button>
-                </div>
-
-                <div id="myactive" class="tab-content active">
-                    <div class="grid" id="myActiveLeagues"></div>
-                </div>
-                <div id="mycompleted" class="tab-content">
-                    <div class="grid" id="myCompletedLeagues"></div>
-                </div>
+                <div class="grid" id="teamsGrid"></div>
             </div>
 
             <!-- LEADERBOARD PAGE -->
-            <div id="leaderboardPage" class="page">
-                <h2 style="font-size: 24px; margin-bottom: 20px;"><i class="fas fa-bar-chart-alt-2"></i> Global Leaderboard</h2>
+            <div id="leaderboardPage" class="page-container">
+                <h2 style="font-size: 24px; margin-bottom: 20px;"><i class="fas fa-bar-chart"></i> Global Leaderboard</h2>
 
-                <div class="tabs" id="leaderboardTabs">
-                    <button class="tab-btn active" data-tab="players">👑 Top Players</button>
-                    <button class="tab-btn" data-tab="teams">⚽ Top Teams</button>
-                    <button class="tab-btn" data-tab="coins">💰 Richest</button>
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="topPlayers">Top Players</button>
+                    <button class="tab-btn" data-tab="topTeams">Top Teams</button>
+                    <button class="tab-btn" data-tab="richestPlayers">Richest Players</button>
                 </div>
 
-                <div id="players" class="tab-content active">
-                    <div class="leaderboard-table">
-                        <div class="table-header">
-                            <div>Rank</div>
-                            <div>Player</div>
-                            <div>Wins</div>
-                            <div>Losses</div>
-                            <div>Win Rate</div>
-                            <div>Coins</div>
-                        </div>
-                        <div id="playersLeaderboard"></div>
+                <div id="topPlayers" class="tab-content active">
+                    <div style="overflow-x: auto;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width: 50px;">Rank</th>
+                                    <th>Player</th>
+                                    <th style="width: 80px;">Wins</th>
+                                    <th style="width: 120px;">Coins</th>
+                                </tr>
+                            </thead>
+                            <tbody id="topPlayersTable"></tbody>
+                        </table>
                     </div>
                 </div>
 
-                <div id="teams" class="tab-content">
-                    <div class="leaderboard-table">
-                        <div class="table-header">
-                            <div>Rank</div>
-                            <div>Team</div>
-                            <div>Wins</div>
-                            <div>Losses</div>
-                            <div>Win Rate</div>
-                            <div>Points</div>
-                        </div>
-                        <div id="teamsLeaderboard"></div>
+                <div id="topTeams" class="tab-content">
+                    <div style="overflow-x: auto;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width: 50px;">Rank</th>
+                                    <th>Team</th>
+                                    <th style="width: 80px;">Wins</th>
+                                    <th style="width: 100px;">Rating</th>
+                                </tr>
+                            </thead>
+                            <tbody id="topTeamsTable"></tbody>
+                        </table>
                     </div>
                 </div>
 
-                <div id="coins" class="tab-content">
-                    <div class="leaderboard-table">
-                        <div class="table-header">
-                            <div>Rank</div>
-                            <div>Player</div>
-                            <div>Veno Coins</div>
-                            <div>Leagues Won</div>
-                            <div>Total Played</div>
-                            <div>Status</div>
-                        </div>
-                        <div id="coinsLeaderboard"></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- CREATE LEAGUE PAGE -->
-            <div id="createLeaguePage" class="page">
-                <div style="max-width: 700px; margin: 0 auto;">
-                    <h2 style="font-size: 24px; margin-bottom: 20px;"><i class="fas fa-plus-circle"></i> Create New League</h2>
-
-                    <div class="card" style="padding: 30px;">
-                        <form id="createLeagueForm" onsubmit="crunkApp.handleCreateLeague(event)">
-                            <div class="form-group">
-                                <label>League Name *</label>
-                                <input type="text" id="leagueName" placeholder="e.g., Champions Cup 2024" required>
-                                <span class="error-message" id="leagueNameError">League name is required</span>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Game Type *</label>
-                                <select id="gameType" required>
-                                    <option value="">Select a game type</option>
-                                    <option value="eFootball">eFootball</option>
-                                    <option value="FC">EA Sports FC</option>
-                                    <option value="DLS">Dream League Soccer</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label>League Format *</label>
-                                <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px;">
-                                    <button type="button" class="format-option active" data-format="league">League (Round Robin)</button>
-                                    <button type="button" class="format-option" data-format="cup">Cup (Knockout)</button>
-                                </div>
-                                <input type="hidden" id="leagueFormat" value="league">
-                            </div>
-
-                            <div class="form-group">
-                                <label>Max Teams (4-32) *</label>
-                                <input type="number" id="maxTeams" min="4" max="32" value="16" required>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Entry Fee (Veno Coins) *</label>
-                                <input type="number" id="entryFee" min="0" value="50" required>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Description (Optional)</label>
-                                <textarea id="leagueDescription" placeholder="Describe your league rules, schedule, etc."></textarea>
-                            </div>
-
-                            <button type="submit" class="btn btn-primary" style="width: 100%;">
-                                <i class="fas fa-trophy"></i> Create League
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
-            <!-- CREATE TEAM PAGE -->
-            <div id="createTeamPage" class="page">
-                <div style="max-width: 700px; margin: 0 auto;">
-                    <h2 style="font-size: 24px; margin-bottom: 20px;"><i class="fas fa-plus-circle"></i> Create New Team</h2>
-
-                    <div class="card" style="padding: 30px;">
-                        <form id="createTeamForm" onsubmit="crunkApp.handleCreateTeam(event)">
-                            <div class="form-group" style="text-align: center; margin-bottom: 30px;">
-                                <label style="display: block; margin-bottom: 15px;">Team Logo</label>
-                                <div style="width: 100px; height: 100px; margin: 0 auto 15px; border-radius: 12px; background: var(--bg-secondary); display: flex; align-items: center; justify-content: center; border: 2px dashed var(--border-color); overflow: hidden; cursor: pointer;" id="logoPreview" onclick="document.getElementById('teamLogo').click()">
-                                    <img id="logoImg" style="width: 100%; height: 100%; object-fit: cover; display: none;">
-                                    <i class="fas fa-image" style="font-size: 40px; color: var(--text-secondary);"></i>
-                                </div>
-                                <input type="file" id="teamLogo" accept="image/*" style="display: none;">
-                                <p style="font-size: 12px; color: var(--text-secondary);">Click to upload logo</p>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Team Name *</label>
-                                <input type="text" id="teamName" placeholder="Your team name" required>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Game Type *</label>
-                                <select id="teamGameType" required>
-                                    <option value="">Select a game type</option>
-                                    <option value="eFootball">eFootball</option>
-                                    <option value="FC">EA Sports FC</option>
-                                    <option value="DLS">Dream League Soccer</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Formation</label>
-                                <select id="teamFormation">
-                                    <option value="4-4-2">4-4-2</option>
-                                    <option value="4-3-3">4-3-3</option>
-                                    <option value="5-3-2">5-3-2</option>
-                                    <option value="3-5-2">3-5-2</option>
-                                    <option value="4-1-4-1">4-1-4-1</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Team Color</label>
-                                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                                    <button type="button" class="team-color-btn" data-color="red" style="background: #ef4444; width: 40px; height: 40px; border-radius: 8px; border: none; cursor: pointer;"></button>
-                                    <button type="button" class="team-color-btn" data-color="blue" style="background: #3b82f6; width: 40px; height: 40px; border-radius: 8px; border: none; cursor: pointer;"></button>
-                                    <button type="button" class="team-color-btn" data-color="green" style="background: #10b981; width: 40px; height: 40px; border-radius: 8px; border: none; cursor: pointer; border: 2px solid white;"></button>
-                                    <button type="button" class="team-color-btn" data-color="yellow" style="background: #f59e0b; width: 40px; height: 40px; border-radius: 8px; border: none; cursor: pointer;"></button>
-                                    <button type="button" class="team-color-btn" data-color="purple" style="background: #8b5cf6; width: 40px; height: 40px; border-radius: 8px; border: none; cursor: pointer;"></button>
-                                </div>
-                                <input type="hidden" id="teamColor" value="green">
-                            </div>
-
-                            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 20px;">
-                                <i class="fas fa-users"></i> Create Team
-                            </button>
-                        </form>
+                <div id="richestPlayers" class="tab-content">
+                    <div style="overflow-x: auto;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width: 50px;">Rank</th>
+                                    <th>Player</th>
+                                    <th style="width: 120px;">Veno Coins</th>
+                                    <th style="width: 100px;">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="richestPlayersTable"></tbody>
+                        </table>
                     </div>
                 </div>
             </div>
 
             <!-- PROFILE PAGE -->
-            <div id="profilePage" class="page">
+            <div id="profilePage" class="page-container">
                 <div style="max-width: 600px; margin: 0 auto;">
-                    <h2 style="font-size: 24px; margin-bottom: 20px;"><i class="fas fa-user-circle"></i> My Profile</h2>
-
-                    <div class="card" style="text-align: center; padding: 30px; margin-bottom: 20px;">
-                        <img id="profileAvatarLarge" src="https://ui-avatars.com/api/?name=User&background=10b981&color=fff&size=128" style="width: 100px; height: 100px; border-radius: 50%; margin-bottom: 15px; border: 3px solid var(--primary); object-fit: cover;">
-                        <h3 id="profileNameLarge">User Name</h3>
-                        <p id="profileEmailLarge" style="color: var(--text-secondary); margin-bottom: 20px;">user@example.com</p>
-
+                    <div class="card" style="text-align: center; margin-bottom: 30px;">
+                        <img id="profilePageAvatar" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 15px; border: 3px solid var(--primary);" src="https://ui-avatars.com/api/?name=User&background=10b981&color=fff&size=128" alt="Profile">
+                        <h2 id="profilePageName">User Name</h2>
+                        <p id="profilePageEmail" style="color: var(--text-secondary); margin-bottom: 15px;">user@example.com</p>
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; padding: 20px 0; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);">
                             <div>
                                 <div style="font-size: 24px; font-weight: bold; color: var(--primary);" id="profileTeamsCount">0</div>
                                 <div style="font-size: 12px; color: var(--text-secondary);">Teams Created</div>
                             </div>
                             <div>
-                                <div style="font-size: 24px; font-weight: bold; color: #fbbf24;" id="profileCoins">0</div>
+                                <div style="font-size: 24px; font-weight: bold; color: var(--gold);" id="profileCoinsCount">💰 0</div>
                                 <div style="font-size: 12px; color: var(--text-secondary);">Veno Coins</div>
                             </div>
                         </div>
-
-                        <button class="btn btn-primary" onclick="crunkApp.editProfile()">
+                        <button class="btn btn-secondary" onclick="app.openEditProfileModal()">
                             <i class="fas fa-edit"></i> Edit Profile
                         </button>
                     </div>
 
-                    <div class="card" style="padding: 20px;">
-                        <h3 style="margin-bottom: 15px;">Account Settings</h3>
-                        <button class="btn btn-secondary" style="width: 100%;" onclick="crunkApp.changePassword()">
-                            <i class="fas fa-lock"></i> Change Password
-                        </button>
+                    <div class="card">
+                        <h3 style="margin-bottom: 15px;">My Statistics</h3>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div style="padding: 15px; background: var(--bg-secondary); border-radius: 12px; text-align: center;">
+                                <div style="font-size: 18px; font-weight: bold; color: var(--success);" id="profileWinsCount">0</div>
+                                <div style="font-size: 12px; color: var(--text-secondary);">League Wins</div>
+                            </div>
+                            <div style="padding: 15px; background: var(--bg-secondary); border-radius: 12px; text-align: center;">
+                                <div style="font-size: 18px; font-weight: bold; color: var(--info);" id="profileLeaguesCount">0</div>
+                                <div style="font-size: 12px; color: var(--text-secondary);">Leagues Joined</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </main>
 
-        <!-- FOOTER -->
+        <!-- ==================== FOOTER ==================== -->
         <footer>
-            <p>&copy; 2024 Crunk Games. All rights reserved. | Play tournaments, create teams, and earn Veno Coins!</p>
+            <p>&copy; 2024 Crunk Games. All rights reserved. | Build your legacy, one match at a time</p>
         </footer>
     </div>
 
-    <!-- MODALS -->
-    <!-- League Modal -->
-    <div class="modal" id="leagueModal">
+    <!-- ==================== MODALS ==================== -->
+    <!-- CREATE LEAGUE MODAL -->
+    <div class="modal" id="createLeagueModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Create League</h2>
-                <button class="modal-close" onclick="crunkApp.closeAllModals()"><i class="fas fa-times"></i></button>
+                <h2>Create New League</h2>
+                <button class="modal-close-btn" onclick="app.closeModal()">&times;</button>
             </div>
-            <form id="leagueFormModal" onsubmit="crunkApp.handleCreateLeague(event)">
+            <form onsubmit="app.createLeague(event)">
                 <div class="form-group">
                     <label>League Name *</label>
-                    <input type="text" id="leagueNameModal" placeholder="e.g., Champions Cup 2024" required>
+                    <input type="text" id="leagueName" required placeholder="e.g., Champions League 2024">
                 </div>
                 <div class="form-group">
                     <label>Game Type *</label>
-                    <select id="gameTypeModal" required>
+                    <select id="gameType" required>
                         <option value="">Select a game type</option>
                         <option value="eFootball">eFootball</option>
                         <option value="FC">EA Sports FC</option>
                         <option value="DLS">Dream League Soccer</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>League Format *</label>
+                    <select id="leagueFormat" required>
+                        <option value="">Select format</option>
+                        <option value="league">League (Round Robin)</option>
+                        <option value="group">Group Stage + Knockout</option>
+                        <option value="cup">Cup (Knockout)</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label>Max Teams (4-32) *</label>
-                    <input type="number" id="maxTeamsModal" min="4" max="32" value="16" required>
+                    <input type="number" id="maxTeams" min="4" max="32" value="16" required>
                 </div>
                 <div class="form-group">
                     <label>Entry Fee (Veno Coins) *</label>
-                    <input type="number" id="entryFeeModal" min="0" value="50" required>
+                    <input type="number" id="entryFee" min="0" value="50" required>
                 </div>
-                <button type="submit" class="btn btn-primary" style="width: 100%;">
-                    <i class="fas fa-trophy"></i> Create League
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="leagueDescription" rows="3" placeholder="Describe your league rules, schedule, etc."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">
+                    <i class="fas fa-check"></i> Create League
                 </button>
             </form>
         </div>
     </div>
 
-    <!-- Team Modal -->
-    <div class="modal" id="teamModal">
+    <!-- CREATE TEAM MODAL -->
+    <div class="modal" id="createTeamModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Create Team</h2>
-                <button class="modal-close" onclick="crunkApp.closeAllModals()"><i class="fas fa-times"></i></button>
+                <h2>Create New Team</h2>
+                <button class="modal-close-btn" onclick="app.closeModal()">&times;</button>
             </div>
-            <form id="teamFormModal" onsubmit="crunkApp.handleCreateTeam(event)">
+            <form onsubmit="app.createTeam(event)">
                 <div class="form-group">
                     <label>Team Name *</label>
-                    <input type="text" id="teamNameModal" placeholder="Your team name" required>
+                    <input type="text" id="teamName" required placeholder="e.g., FC Manchester">
+                </div>
+                <div class="form-group">
+                    <label>Short Name (3-5 letters) *</label>
+                    <input type="text" id="teamShortName" maxlength="5" required placeholder="e.g., MAN">
+                </div>
+                <div class="form-group">
+                    <label>Home Stadium</label>
+                    <input type="text" id="homeStadium" placeholder="e.g., Old Trafford">
                 </div>
                 <div class="form-group">
                     <label>Game Type *</label>
-                    <select id="teamGameTypeModal" required>
+                    <select id="teamGameType" required>
                         <option value="">Select a game type</option>
                         <option value="eFootball">eFootball</option>
                         <option value="FC">EA Sports FC</option>
                         <option value="DLS">Dream League Soccer</option>
                     </select>
                 </div>
-                <button type="submit" class="btn btn-primary" style="width: 100%;">
-                    <i class="fas fa-users"></i> Create Team
+                <div class="form-group">
+                    <label>Formation *</label>
+                    <select id="teamFormation" required>
+                        <option value="">Select formation</option>
+                        <option value="4-3-3">4-3-3</option>
+                        <option value="4-4-2">4-4-2</option>
+                        <option value="3-5-2">3-5-2</option>
+                        <option value="5-3-2">5-3-2</option>
+                        <option value="4-2-3-1">4-2-3-1</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Starting XI Players (separated by comma)</label>
+                    <textarea id="teamPlayers" rows="3" placeholder="Player Name 1, Player Name 2, ..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">
+                    <i class="fas fa-check"></i> Create Team
                 </button>
             </form>
         </div>
     </div>
 
-    <!-- TOAST CONTAINER -->
+    <!-- EDIT PROFILE MODAL -->
+    <div class="modal" id="editProfileModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Profile</h2>
+                <button class="modal-close-btn" onclick="app.closeModal()">&times;</button>
+            </div>
+            <form onsubmit="app.updateProfile(event)">
+                <div class="form-group">
+                    <label>Display Name *</label>
+                    <input type="text" id="editDisplayName" required placeholder="Your display name">
+                </div>
+                <div class="form-group">
+                    <label>Email *</label>
+                    <input type="email" id="editEmail" required placeholder="Your email">
+                </div>
+                <div class="form-group">
+                    <label>Avatar URL</label>
+                    <input type="url" id="editAvatar" placeholder="https://example.com/avatar.jpg">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- JOIN LEAGUE MODAL -->
+    <div class="modal" id="joinLeagueModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Join League</h2>
+                <button class="modal-close-btn" onclick="app.closeModal()">&times;</button>
+            </div>
+            <div id="joinLeagueContent"></div>
+        </div>
+    </div>
+
+    <!-- ==================== TOAST CONTAINER ==================== -->
     <div class="toast-container" id="toastContainer"></div>
 
-    <!-- MAIN APPLICATION SCRIPT -->
+    <!-- ==================== MAIN SCRIPT ==================== -->
     <script>
         /***********************************
-         *  CRUNK GAMES APPLICATION
-         *  Complete Single-File Solution
+         *    CRUNK GAMES APPLICATION
          ***********************************/
 
-        const crunkApp = {
-            // ==================== CONFIGURATION ====================
-            API_BASE: "https://api.crunkgames.com",
+        const app = {
+            // ==================== CONFIG ====================
             STORAGE_KEYS: {
                 USER: "crunkUser",
                 LEAGUES: "leagues",
                 TEAMS: "userTeams",
                 COINS: "userCoins",
                 NOTIFICATIONS: "notifications",
-                THEME: "theme",
-                LAST_CLAIM: "lastVenoClaim"
+                THEME: "theme"
             },
+
+            API_BASE: "https://api.example.com",
 
             // ==================== STATE ====================
             state: {
@@ -1896,120 +1385,83 @@
                 teams: [],
                 users: [],
                 notifications: [],
-                sidebarOpen: false
+                theme: "dark"
             },
 
             // ==================== INITIALIZATION ====================
             init() {
-                console.log("🚀 Initializing Crunk Games Application...");
+                console.log("🚀 Initializing Crunk Games...");
                 this.setupEventListeners();
                 this.loadUserData();
-                this.renderPage("home");
-                this.updateCoinsDisplay();
-                this.loadTheme();
                 this.generateMockData();
+                this.updateCoinsDisplay();
+                this.updateNotifications();
+                this.loadTheme();
+                this.renderHomePage();
                 console.log("✅ App initialized successfully");
+                
+                // Real-time updates every 5 seconds
+                setInterval(() => this.updateRealTimeData(), 5000);
             },
 
             // ==================== EVENT LISTENERS ====================
             setupEventListeners() {
-                // Menu & Sidebar
+                // Menu
                 document.getElementById("menuBtn").addEventListener("click", () => this.toggleSidebar());
-                document.getElementById("closeSidebar").addEventListener("click", () => this.toggleSidebar());
+                document.getElementById("closeSidebarBtn").addEventListener("click", () => this.toggleSidebar());
                 document.getElementById("sidebarOverlay").addEventListener("click", () => this.toggleSidebar());
 
                 // Sidebar Navigation
-                document.querySelectorAll(".sidebar-menu-item").forEach(item => {
-                    item.addEventListener("click", (e) => {
+                document.querySelectorAll(".sidebar-menu li").forEach(li => {
+                    li.addEventListener("click", (e) => {
                         const page = e.currentTarget.dataset.page;
-                        this.navigateTo(page);
-                        this.closeSidebar();
+                        this.navigateToPage(page);
+                        this.toggleSidebar();
                     });
                 });
 
-                // Profile Dropdown
-                document.getElementById("profileDropdown").addEventListener("click", (e) => {
-                    e.stopPropagation();
-                    const popup = document.getElementById("profilePopup");
-                    popup.classList.toggle("active");
-                });
+                // Profile & Notifications
+                document.getElementById("profilePic").addEventListener("click", () => this.toggleProfilePopup());
+                document.getElementById("notificationBtn").addEventListener("click", () => this.toggleNotificationsPopup());
+                document.getElementById("markAllReadBtn").addEventListener("click", () => this.markAllNotificationsRead());
+                document.getElementById("themeToggleBtn").addEventListener("click", () => this.toggleTheme());
 
-                // Notification Bell
-                document.getElementById("notificationBtn").addEventListener("click", (e) => {
-                    e.stopPropagation();
-                    const popup = document.getElementById("notificationPopup");
-                    popup.classList.toggle("active");
-                });
-
-                // Logout
-                document.getElementById("logoutBtn").addEventListener("click", () => this.logoutUser());
-
-                // Claim Veno Coins
-                document.getElementById("claimVenoCoinsBtn").addEventListener("click", () => this.claimDailyCoins());
-
-                // Theme Toggle
-                document.getElementById("menuTheme").addEventListener("click", () => this.toggleTheme());
-
-                // Format Selection
-                document.querySelectorAll(".format-option").forEach(btn => {
-                    btn.addEventListener("click", (e) => {
-                        e.preventDefault();
-                        document.querySelectorAll(".format-option").forEach(b => b.classList.remove("active"));
-                        e.target.classList.add("active");
-                        document.getElementById("leagueFormat").value = e.target.dataset.format;
-                    });
-                });
-
-                // Team Color Selection
-                document.querySelectorAll(".team-color-btn").forEach(btn => {
-                    btn.addEventListener("click", (e) => {
-                        e.preventDefault();
-                        document.querySelectorAll(".team-color-btn").forEach(b => b.style.border = "none");
-                        e.target.style.border = "2px solid white";
-                        document.getElementById("teamColor").value = e.target.dataset.color;
-                    });
-                });
-
-                // Tab Switching
+                // Tab buttons
                 document.querySelectorAll(".tab-btn").forEach(btn => {
-                    btn.addEventListener("click", (e) => {
-                        const tabName = e.target.dataset.tab;
-                        const parent = e.target.closest(".tabs");
-                        parent.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-                        parent.parentElement.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
-                        e.target.classList.add("active");
-                        document.getElementById(tabName).classList.add("active");
-                    });
+                    btn.addEventListener("click", (e) => this.switchTab(e.target.dataset.tab));
                 });
 
-                // Team Logo Upload
-                const logoInput = document.getElementById("teamLogo");
-                if (logoInput) {
-                    logoInput.addEventListener("change", (e) => {
-                        const file = e.target.files[0];
-                        if (file) {
-                            const reader = new FileReader();
-                            reader.onload = function(event) {
-                                const img = document.getElementById("logoImg");
-                                const icon = document.querySelector("#logoPreview i");
-                                img.src = event.target.result;
-                                img.style.display = "block";
-                                icon.style.display = "none";
-                            };
-                            reader.readAsDataURL(file);
-                        }
+                // Close modals on click outside
+                document.querySelectorAll(".modal").forEach(modal => {
+                    modal.addEventListener("click", (e) => {
+                        if (e.target === modal) this.closeModal();
                     });
+                });
+            },
+
+            // ==================== THEME ====================
+            loadTheme() {
+                const savedTheme = localStorage.getItem(this.STORAGE_KEYS.THEME) || "dark";
+                this.state.theme = savedTheme;
+                if (savedTheme === "light") {
+                    document.documentElement.style.setProperty("--bg-primary", "#f3f4f6");
+                    document.documentElement.style.setProperty("--bg-secondary", "#ffffff");
+                    document.documentElement.style.setProperty("--bg-tertiary", "#e5e7eb");
+                    document.documentElement.style.setProperty("--border-color", "#d1d5db");
+                    document.documentElement.style.setProperty("--text-primary", "#111827");
+                    document.documentElement.style.setProperty("--text-secondary", "#4b5563");
+                    document.getElementById("themeLabel").innerText = "Light";
+                } else {
+                    document.getElementById("themeLabel").innerText = "Dark";
                 }
+            },
 
-                // Close modals when clicking outside
-                document.addEventListener("click", (e) => {
-                    if (!e.target.closest(".profile-dropdown")) {
-                        document.getElementById("profilePopup").classList.remove("active");
-                    }
-                    if (!e.target.closest(".notification-container")) {
-                        document.getElementById("notificationPopup").classList.remove("active");
-                    }
-                });
+            toggleTheme() {
+                const newTheme = this.state.theme === "dark" ? "light" : "dark";
+                this.state.theme = newTheme;
+                localStorage.setItem(this.STORAGE_KEYS.THEME, newTheme);
+                this.loadTheme();
+                this.showToast(`Theme changed to ${newTheme}`, "info");
             },
 
             // ==================== SIDEBAR ====================
@@ -2018,282 +1470,305 @@
                 const overlay = document.getElementById("sidebarOverlay");
                 sidebar.classList.toggle("open");
                 overlay.classList.toggle("active");
-                this.state.sidebarOpen = sidebar.classList.contains("open");
-                document.body.style.overflow = this.state.sidebarOpen ? "hidden" : "";
             },
 
-            closeSidebar() {
-                const sidebar = document.getElementById("sidebar");
-                const overlay = document.getElementById("sidebarOverlay");
-                sidebar.classList.remove("open");
-                overlay.classList.remove("active");
-                this.state.sidebarOpen = false;
-                document.body.style.overflow = "";
+            // ==================== PROFILE POPUP ====================
+            toggleProfilePopup() {
+                const popup = document.getElementById("profilePopup");
+                popup.classList.toggle("active");
+                document.getElementById("notificationsPopup").classList.remove("active");
             },
 
-            // ==================== PAGE ROUTING ====================
-            navigateTo(pageName) {
-                document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-                document.querySelectorAll(".sidebar-menu-item").forEach(item => item.classList.remove("active"));
+            // ==================== NOTIFICATIONS ====================
+            toggleNotificationsPopup() {
+                const popup = document.getElementById("notificationsPopup");
+                popup.classList.toggle("active");
+                document.getElementById("profilePopup").classList.remove("active");
+            },
 
-                const pageElement = document.getElementById(pageName + "Page");
+            updateNotifications() {
+                // Generate mock notifications
+                const mockNotifications = [
+                    { id: 1, title: "New Challenge", message: "Pro Player challenged you!", icon: "fa-trophy", time: "2 mins ago", read: false },
+                    { id: 2, title: "League Update", message: "Championship League has started!", icon: "fa-fire", time: "1 hour ago", read: false },
+                    { id: 3, title: "Coins Earned", message: "You earned 500 Veno Coins!", icon: "fa-coins", time: "3 hours ago", read: true }
+                ];
+
+                this.state.notifications = mockNotifications;
+                this.renderNotifications();
+            },
+
+            renderNotifications() {
+                const list = document.getElementById("notificationsList");
+                const unreadCount = this.state.notifications.filter(n => !n.read).length;
+                document.getElementById("notificationBadge").innerText = unreadCount;
+
+                list.innerHTML = this.state.notifications.map(notif => `
+                    <div class="notification-item" onclick="app.markNotificationRead(${notif.id})">
+                        <div class="notification-icon"><i class="fas ${notif.icon}"></i></div>
+                        <div class="notification-content">
+                            <strong>${notif.title}</strong>
+                            <p>${notif.message}</p>
+                            <div class="notification-time">${notif.time}</div>
+                        </div>
+                    </div>
+                `).join("");
+            },
+
+            markNotificationRead(id) {
+                const notif = this.state.notifications.find(n => n.id === id);
+                if (notif) notif.read = true;
+                this.renderNotifications();
+            },
+
+            markAllNotificationsRead() {
+                this.state.notifications.forEach(n => n.read = true);
+                this.renderNotifications();
+            },
+
+            // ==================== NAVIGATION ====================
+            navigateToPage(page) {
+                // Hide all pages
+                document.querySelectorAll(".page-container").forEach(p => p.classList.remove("active"));
+
+                // Show selected page
+                const pageElement = document.getElementById(page + "Page");
                 if (pageElement) {
                     pageElement.classList.add("active");
-                    const menuItem = document.querySelector(`[data-page="${pageName}"]`);
-                    if (menuItem) menuItem.classList.add("active");
-                    this.renderPage(pageName);
-                } else {
-                    this.renderPage("home");
+                    this.state.currentPage = page;
+
+                    // Update sidebar active
+                    document.querySelectorAll(".sidebar-menu li").forEach(li => li.classList.remove("active"));
+                    document.querySelector(`.sidebar-menu li[data-page="${page}"]`)?.classList.add("active");
+
+                    // Close popups
+                    document.getElementById("profilePopup").classList.remove("active");
+                    document.getElementById("notificationsPopup").classList.remove("active");
+
+                    // Render page content
+                    if (page === "home") this.renderHomePage();
+                    else if (page === "leagues") this.renderLeaguesPage();
+                    else if (page === "teams") this.renderTeamsPage();
+                    else if (page === "leaderboard") this.renderLeaderboardPage();
+                    else if (page === "profile") this.renderProfilePage();
                 }
             },
 
-            renderPage(pageName) {
-                this.state.currentPage = pageName;
+            // ==================== PAGES ==================== 
 
-                switch (pageName) {
-                    case "home":
-                        this.renderHomePage();
-                        break;
-                    case "tournaments":
-                        this.renderTournamentsPage();
-                        break;
-                    case "myteams":
-                        this.renderMyTeamsPage();
-                        break;
-                    case "leagues":
-                        this.renderMyLeaguesPage();
-                        break;
-                    case "leaderboard":
-                        this.renderLeaderboardPage();
-                        break;
-                    case "createleague":
-                        break;
-                    case "createteam":
-                        break;
-                    case "profile":
-                        this.renderProfilePage();
-                        break;
-                    case "settings":
-                        break;
-                }
-            },
-
-            // ==================== PAGE RENDERS ====================
             renderHomePage() {
-                const featured = this.state.leagues.slice(0, 3);
-                const active = this.state.leagues.filter(l => l.status === "live").slice(0, 3);
-                const myTeams = this.state.teams.slice(0, 3);
-                const topPlayers = this.state.users.sort((a, b) => (b.wins || 0) - (a.wins || 0)).slice(0, 4);
+                // Featured Leagues
+                const featuredLeagues = this.state.leagues.slice(0, 3);
+                document.getElementById("featuredLeaguesGrid").innerHTML = featuredLeagues.length > 0
+                    ? featuredLeagues.map(l => this.createLeagueCard(l)).join("")
+                    : '<div class="empty-state"><i class="fas fa-inbox"></i><p>No leagues available yet</p></div>';
 
-                document.getElementById("featuredLeagues").innerHTML = featured.length ? featured.map(l => this.renderLeagueCard(l)).join("") : '<div class="empty-state" style="grid-column: 1/-1;"><i class="fas fa-trophy"></i><p>No leagues yet</p></div>';
-                document.getElementById("activeLeagues").innerHTML = active.length ? active.map(l => this.renderLeagueCard(l)).join("") : '<div class="empty-state" style="grid-column: 1/-1;"><i class="fas fa-fire"></i><p>No active leagues</p></div>';
-                document.getElementById("myTeamsHome").innerHTML = myTeams.length ? myTeams.map(t => this.renderTeamCard(t)).join("") : '<div class="empty-state" style="grid-column: 1/-1;"><i class="fas fa-users"></i><p>No teams yet</p></div>';
-                document.getElementById("allPlayersList").innerHTML = topPlayers.length ? topPlayers.map(u => this.renderPlayerCard(u)).join("") : '<div class="empty-state" style="grid-column: 1/-1;"><i class="fas fa-users"></i><p>No players yet</p></div>';
+                // Active Teams
+                const activeTeams = this.state.teams.slice(0, 3);
+                document.getElementById("activeTeamsGrid").innerHTML = activeTeams.length > 0
+                    ? activeTeams.map(t => this.createTeamCard(t)).join("")
+                    : '<div class="empty-state"><i class="fas fa-inbox"></i><p>No teams created yet</p></div>';
+
+                // Top Players
+                const topPlayers = this.state.users.sort((a, b) => (b.coins || 0) - (a.coins || 0)).slice(0, 3);
+                document.getElementById("topPlayersGrid").innerHTML = topPlayers.map(u => `
+                    <div class="card">
+                        <div class="card-header">
+                            <span>${u.displayName}</span>
+                            <span class="card-badge" style="background: ${u.rank === 1 ? 'rgba(251,191,36,0.2)' : 'rgba(52,212,168,0.2)'}; color: ${u.rank === 1 ? 'var(--gold)' : 'var(--primary)'};">
+                                #${u.rank || Math.floor(Math.random() * 100)}
+                            </span>
+                        </div>
+                        <div class="card-meta">
+                            <span class="meta-item"><i class="fas fa-trophy"></i> ${u.wins || 0} Wins</span>
+                            <span class="meta-item"><i class="fas fa-coins"></i> ${u.coins || 0}</span>
+                        </div>
+                        <div class="card-content" style="text-align: center;">
+                            <img src="${u.photoURL}" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover; margin-bottom: 10px;">
+                            <p style="margin: 0; font-size: 12px; color: var(--text-secondary);">${u.email}</p>
+                        </div>
+                    </div>
+                `).join("");
             },
 
-            renderTournamentsPage() {
-                const active = this.state.leagues.filter(l => l.status === "live");
-                const registration = this.state.leagues.filter(l => l.status === "registration");
-                const completed = this.state.leagues.filter(l => l.status === "completed");
+            renderLeaguesPage() {
+                const allLeagues = this.state.leagues;
+                const myLeagues = allLeagues.filter(l => l.ownerId === this.state.currentUser?.uid);
+                const liveLeagues = allLeagues.filter(l => l.status === "live");
+                const completedLeagues = allLeagues.filter(l => l.status === "completed");
 
-                document.getElementById("activeTournaments").innerHTML = active.length ? active.map(l => this.renderLeagueCard(l)).join("") : '<div class="empty-state" style="grid-column: 1/-1;"><i class="fas fa-fire"></i><p>No active tournaments</p></div>';
-                document.getElementById("registrationTournaments").innerHTML = registration.length ? registration.map(l => this.renderLeagueCard(l)).join("") : '<div class="empty-state" style="grid-column: 1/-1;"><i class="fas fa-clipboard-list"></i><p>No registration tournaments</p></div>';
-                document.getElementById("completedTournaments").innerHTML = completed.length ? completed.map(l => this.renderLeagueCard(l)).join("") : '<div class="empty-state" style="grid-column: 1/-1;"><i class="fas fa-check-circle"></i><p>No completed tournaments</p></div>';
+                document.getElementById("allLeaguesGrid").innerHTML = allLeagues.map(l => this.createLeagueCard(l)).join("");
+                document.getElementById("myLeaguesGrid").innerHTML = myLeagues.length > 0 ? myLeagues.map(l => this.createLeagueCard(l)).join("") : '<div class="empty-state"><i class="fas fa-inbox"></i><p>You haven\'t created any leagues</p></div>';
+                document.getElementById("liveLeaguesGrid").innerHTML = liveLeagues.map(l => this.createLeagueCard(l)).join("");
+                document.getElementById("completedLeaguesGrid").innerHTML = completedLeagues.map(l => this.createLeagueCard(l)).join("");
             },
 
-            renderMyTeamsPage() {
-                const myTeams = this.state.teams;
-                document.getElementById("myTeamsList").innerHTML = myTeams.length ? myTeams.map(t => this.renderTeamCard(t)).join("") : '<div class="empty-state" style="grid-column: 1/-1;"><i class="fas fa-users"></i><p>You don\'t have any teams yet. Create one!</p><button class="btn btn-primary" onclick="crunkApp.openTeamModal()" style="margin-top: 15px;">Create Team</button></div>';
-            },
-
-            renderMyLeaguesPage() {
-                const myLeagues = this.state.leagues.filter(l => l.ownerId === this.state.currentUser?.uid);
-                const active = myLeagues.filter(l => l.status === "live");
-                const completed = myLeagues.filter(l => l.status === "completed");
-
-                document.getElementById("myActiveLeagues").innerHTML = active.length ? active.map(l => this.renderLeagueCard(l)).join("") : '<div class="empty-state" style="grid-column: 1/-1;"><i class="fas fa-fire"></i><p>No active leagues</p></div>';
-                document.getElementById("myCompletedLeagues").innerHTML = completed.length ? completed.map(l => this.renderLeagueCard(l)).join("") : '<div class="empty-state" style="grid-column: 1/-1;"><i class="fas fa-check-circle"></i><p>No completed leagues</p></div>';
+            renderTeamsPage() {
+                document.getElementById("teamsGrid").innerHTML = this.state.teams.map(t => this.createTeamCard(t)).join("");
             },
 
             renderLeaderboardPage() {
                 const sortedUsers = [...this.state.users].sort((a, b) => (b.wins || 0) - (a.wins || 0));
-                const sortedTeams = [...this.state.teams].sort((a, b) => (b.wins || 0) - (a.wins || 0));
-                const richest = [...this.state.users].sort((a, b) => (b.coins || 0) - (a.coins || 0));
+                const richestUsers = [...this.state.users].sort((a, b) => (b.coins || 0) - (a.coins || 0));
+                const topTeams = [...this.state.teams].sort((a, b) => (b.wins || 0) - (a.wins || 0));
 
-                document.getElementById("playersLeaderboard").innerHTML = sortedUsers.length ? sortedUsers.slice(0, 50).map((u, i) => `
-                    <div class="table-row">
-                        <div class="table-cell rank rank-${i < 3 ? i + 1 : ''}">#${i + 1}</div>
-                        <div class="team-cell">
-                            <img src="${u.photoURL}" style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover;">
-                            <div class="team-info">
-                                <div class="team-name">${u.displayName}</div>
-                                <div class="team-owner">${u.email}</div>
-                            </div>
-                        </div>
-                        <div class="table-cell table-cell-bold">${u.wins || 0}</div>
-                        <div class="table-cell">${u.losses || 0}</div>
-                        <div class="table-cell table-cell-bold">${u.wins ? Math.round((u.wins / ((u.wins || 0) + (u.losses || 0))) * 100) : 0}%</div>
-                        <div class="table-cell" style="color: #fbbf24;">💰 ${u.coins || 0}</div>
-                    </div>
-                `).join("") : '<div class="table-row" style="grid-column: 1/-1; text-align: center;"><p>No players yet</p></div>';
+                // Top Players
+                document.getElementById("topPlayersTable").innerHTML = sortedUsers.map((u, i) => `
+                    <tr>
+                        <td><strong>${i + 1}</strong></td>
+                        <td style="display: flex; align-items: center; gap: 10px;">
+                            <img src="${u.photoURL}" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">
+                            ${u.displayName}
+                        </td>
+                        <td>${u.wins || 0}</td>
+                        <td style="color: var(--gold);">💰 ${u.coins || 0}</td>
+                    </tr>
+                `).join("");
 
-                document.getElementById("teamsLeaderboard").innerHTML = sortedTeams.length ? sortedTeams.slice(0, 50).map((t, i) => `
-                    <div class="table-row">
-                        <div class="table-cell rank rank-${i < 3 ? i + 1 : ''}">#${i + 1}</div>
-                        <div class="team-cell">
-                            <div class="team-logo">${t.logo ? `<img src="${t.logo}" style="width: 100%; height: 100%; object-fit: cover;">` : '<i class="fas fa-shield-alt"></i>'}</div>
-                            <div class="team-info">
-                                <div class="team-name">${t.name}</div>
-                                <div class="team-owner">${t.gameType}</div>
-                            </div>
-                        </div>
-                        <div class="table-cell table-cell-bold">${t.wins || 0}</div>
-                        <div class="table-cell">${t.losses || 0}</div>
-                        <div class="table-cell table-cell-bold">${t.wins ? Math.round((t.wins / ((t.wins || 0) + (t.losses || 0))) * 100) : 0}%</div>
-                        <div class="table-cell table-cell-bold">${(t.wins || 0) * 3}</div>
-                    </div>
-                `).join("") : '<div class="table-row" style="grid-column: 1/-1; text-align: center;"><p>No teams yet</p></div>';
+                // Top Teams
+                document.getElementById("topTeamsTable").innerHTML = topTeams.map((t, i) => `
+                    <tr>
+                        <td><strong>${i + 1}</strong></td>
+                        <td>${t.name}</td>
+                        <td>${t.wins || 0}</td>
+                        <td>${t.formation}</td>
+                    </tr>
+                `).join("");
 
-                document.getElementById("coinsLeaderboard").innerHTML = richest.length ? richest.slice(0, 50).map((u, i) => `
-                    <div class="table-row">
-                        <div class="table-cell rank rank-${i < 3 ? i + 1 : ''}">#${i + 1}</div>
-                        <div class="team-cell">
-                            <img src="${u.photoURL}" style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover;">
-                            <div class="team-info">
-                                <div class="team-name">${u.displayName}</div>
-                                <div class="team-owner">${u.email}</div>
-                            </div>
-                        </div>
-                        <div class="table-cell" style="color: #fbbf24; font-weight: bold;">💰 ${u.coins || 0}</div>
-                        <div class="table-cell">${u.leaguesWon || 0}</div>
-                        <div class="table-cell">${u.totalPlayed || 0}</div>
-                        <div class="table-cell">${u.coins >= 10000 ? '🏆 Elite' : u.coins >= 5000 ? '⭐ Pro' : '🆕 Rookie'}</div>
-                    </div>
-                `).join("") : '<div class="table-row" style="grid-column: 1/-1; text-align: center;"><p>No players yet</p></div>';
+                // Richest Players
+                document.getElementById("richestPlayersTable").innerHTML = richestUsers.map((u, i) => `
+                    <tr>
+                        <td><strong>${i + 1}</strong></td>
+                        <td>${u.displayName}</td>
+                        <td style="color: var(--gold); font-weight: 600;">💰 ${u.coins || 0}</td>
+                        <td>${u.coins > 5000 ? '🏆 Elite' : u.coins > 2000 ? '⭐ Pro' : '🆕 Rookie'}</td>
+                    </tr>
+                `).join("");
             },
 
             renderProfilePage() {
                 const user = this.state.currentUser;
                 if (!user) {
-                    document.getElementById("profilePage").innerHTML = '<div class="empty-state"><i class="fas fa-user-circle"></i><p>Please login to view your profile</p></div>';
+                    document.getElementById("profilePage").innerHTML = '<div class="empty-state"><i class="fas fa-lock"></i><p>Please login to view your profile</p></div>';
                     return;
                 }
 
-                document.getElementById("profileAvatarLarge").src = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName)}&background=10b981&color=fff`;
-                document.getElementById("profileNameLarge").innerText = user.displayName;
-                document.getElementById("profileEmailLarge").innerText = user.email;
+                document.getElementById("profilePageAvatar").src = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName)}&background=10b981&color=fff&size=128`;
+                document.getElementById("profilePageName").innerText = user.displayName;
+                document.getElementById("profilePageEmail").innerText = user.email;
                 document.getElementById("profileTeamsCount").innerText = this.state.teams.length;
-                document.getElementById("profileCoins").innerText = this.getCoins();
+                document.getElementById("profileCoinsCount").innerText = `💰 ${this.getCoins()}`;
+                document.getElementById("profileWinsCount").innerText = user.leagueWins || 0;
+                document.getElementById("profileLeaguesCount").innerText = this.state.leagues.filter(l => l.teams?.some(t => t.ownerId === user.uid)).length;
             },
 
-            // ==================== CARD RENDERERS ====================
-            renderLeagueCard(league) {
+            // ==================== CARD GENERATORS ====================
+            createLeagueCard(league) {
                 return `
-                    <div class="card">
+                    <div class="card" onclick="app.viewLeague('${league.id}')">
                         <div class="card-header">
                             ${league.name}
-                            <span class="card-status status-${league.status}">${league.status === 'registration' ? 'Registration' : league.status === 'live' ? 'Live' : 'Completed'}</span>
+                            <span class="card-badge" style="background: ${league.status === 'live' ? 'rgba(16,185,129,0.2)' : 'rgba(107,114,128,0.2)'}; color: ${league.status === 'live' ? 'var(--primary)' : 'var(--text-muted)'};">
+                                ${league.status.toUpperCase()}
+                            </span>
                         </div>
                         <div class="card-meta">
                             <span class="meta-item">🎮 ${league.gameType}</span>
                             <span class="meta-item">👥 ${league.teams?.length || 0}/${league.maxTeams}</span>
-                            <span class="meta-item">💰 ${league.prizePool ? Math.round(league.prizePool) : 0} VC</span>
+                            <span class="meta-item">💰 ${league.prizePool || 0}</span>
                         </div>
-                        <div class="card-content">
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <span style="color: var(--text-secondary); font-size: 13px;">Entry Fee</span>
-                                <span style="color: var(--primary); font-weight: 700;">${league.entryFee} VC</span>
-                            </div>
+                        <div class="card-content" style="text-align: center;">
+                            <p style="margin: 0;">Entry Fee: <strong>${league.entryFee} Veno Coins</strong></p>
                         </div>
                         <div class="card-footer">
-                            <button class="btn btn-primary" onclick="crunkApp.joinLeague('${league.id}')">Join</button>
-                            <button class="btn btn-secondary" onclick="crunkApp.viewLeague('${league.id}')">View</button>
+                            <button onclick="event.stopPropagation(); app.joinLeague('${league.id}');">Join</button>
+                            <button onclick="event.stopPropagation(); app.viewLeagueDetails('${league.id}');">View</button>
                         </div>
                     </div>
                 `;
             },
 
-            renderTeamCard(team) {
+            createTeamCard(team) {
                 return `
                     <div class="card">
-                        <div class="card-header">
-                            ${team.logo ? `<img src="${team.logo}" style="width: 30px; height: 30px; border-radius: 6px; object-fit: cover;">` : '<i class="fas fa-shield-alt" style="color: var(--primary);"></i>'} ${team.name}
-                        </div>
+                        <div class="card-header">⚽ ${team.name}</div>
                         <div class="card-meta">
-                            <span class="meta-item">🎮 ${team.gameType}</span>
-                            <span class="meta-item">📐 ${team.formation}</span>
+                            <span class="meta-item">${team.gameType}</span>
+                            <span class="meta-item">${team.formation}</span>
                         </div>
-                        <div class="card-content">
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; text-align: center;">
-                                <div>
-                                    <div style="font-size: 18px; font-weight: 700; color: var(--primary);">${team.wins || 0}</div>
-                                    <div style="font-size: 11px; color: var(--text-secondary);">Wins</div>
-                                </div>
-                                <div>
-                                    <div style="font-size: 18px; font-weight: 700; color: var(--primary);">${team.players?.length || 0}</div>
-                                    <div style="font-size: 11px; color: var(--text-secondary);">Players</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-footer">
-                            <button class="btn btn-primary" onclick="crunkApp.editTeam('${team.id}')">Edit</button>
-                            <button class="btn btn-secondary" onclick="crunkApp.viewTeam('${team.id}')">View</button>
-                        </div>
-                    </div>
-                `;
-            },
-
-            renderPlayerCard(user) {
-                return `
-                    <div class="card">
-                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-                            <img src="${user.photoURL}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary);">
+                        <div class="card-content" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; text-align: center;">
                             <div>
-                                <div class="card-header" style="margin: 0; font-size: 16px;">${user.displayName}</div>
-                                <div style="font-size: 11px; color: var(--text-secondary);">Level ${Math.floor(Math.random() * 50) + 1}</div>
+                                <div style="font-size: 18px; font-weight: bold; color: var(--primary);">${team.wins || 0}</div>
+                                <div style="font-size: 11px; color: var(--text-secondary);">Wins</div>
+                            </div>
+                            <div>
+                                <div style="font-size: 18px; font-weight: bold; color: var(--primary);">${team.players?.length || 0}</div>
+                                <div style="font-size: 11px; color: var(--text-secondary);">Players</div>
                             </div>
                         </div>
-                        <div class="card-meta">
-                            <span class="meta-item">⚽ ${user.wins || 0} wins</span>
-                            <span class="meta-item">🏆 ${user.leaguesWon || 0} leagues</span>
-                        </div>
                         <div class="card-footer">
-                            <button class="btn btn-primary" onclick="crunkApp.challengeUser('${user.uid}')">Challenge</button>
-                            <button class="btn btn-secondary" onclick="crunkApp.viewUserProfile('${user.uid}')">Profile</button>
+                            <button onclick="app.editTeam('${team.id}');">Edit</button>
+                            <button onclick="app.viewTeam('${team.id}');">View</button>
                         </div>
                     </div>
                 `;
             },
 
-            // ==================== LEAGUE ACTIONS ====================
-            openLeagueModal() {
+            // ==================== TAB SWITCHING ====================
+            switchTab(tabName) {
+                // Hide all tabs
+                document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
+                document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+
+                // Show selected tab
+                const tabElement = document.getElementById(tabName);
+                if (tabElement) {
+                    tabElement.classList.add("active");
+                    document.querySelector(`.tab-btn[data-tab="${tabName}"]`)?.classList.add("active");
+                }
+            },
+
+            // ==================== MODALS ====================
+            openCreateLeagueModal() {
                 if (!this.state.currentUser) {
                     this.showToast("Please login first", "error");
                     return;
                 }
-                document.getElementById("leagueModal").classList.add("active");
+                document.getElementById("createLeagueModal").classList.add("active");
             },
 
-            handleCreateLeague(event) {
-                event.preventDefault();
-
-                const leagueName = document.getElementById("leagueNameModal")?.value || document.getElementById("leagueName")?.value;
-                const gameType = document.getElementById("gameTypeModal")?.value || document.getElementById("gameType")?.value;
-                const maxTeams = parseInt(document.getElementById("maxTeamsModal")?.value || document.getElementById("maxTeams")?.value);
-                const entryFee = parseInt(document.getElementById("entryFeeModal")?.value || document.getElementById("entryFee")?.value);
-
-                if (!leagueName || !gameType) {
-                    this.showToast("Please fill all required fields", "error");
+            openCreateTeamModal() {
+                if (!this.state.currentUser) {
+                    this.showToast("Please login first", "error");
                     return;
                 }
+                document.getElementById("createTeamModal").classList.add("active");
+            },
+
+            openEditProfileModal() {
+                if (!this.state.currentUser) return;
+                document.getElementById("editDisplayName").value = this.state.currentUser.displayName;
+                document.getElementById("editEmail").value = this.state.currentUser.email;
+                document.getElementById("editAvatar").value = this.state.currentUser.photoURL || "";
+                document.getElementById("editProfileModal").classList.add("active");
+            },
+
+            closeModal() {
+                document.querySelectorAll(".modal").forEach(m => m.classList.remove("active"));
+            },
+
+            // ==================== LEAGUE ACTIONS ====================
+            createLeague(e) {
+                e.preventDefault();
 
                 const league = {
                     id: "league_" + Date.now(),
-                    name: leagueName,
-                    gameType: gameType,
-                    maxTeams: maxTeams,
-                    entryFee: entryFee,
-                    prizePool: maxTeams * entryFee * 0.8,
+                    name: document.getElementById("leagueName").value,
+                    gameType: document.getElementById("gameType").value,
+                    format: document.getElementById("leagueFormat").value,
+                    maxTeams: parseInt(document.getElementById("maxTeams").value),
+                    entryFee: parseInt(document.getElementById("entryFee").value),
+                    description: document.getElementById("leagueDescription").value,
                     status: "registration",
                     ownerId: this.state.currentUser.uid,
                     teams: [],
@@ -2301,12 +1776,14 @@
                     createdAt: new Date().toISOString()
                 };
 
+                league.prizePool = league.maxTeams * league.entryFee * 0.8;
+
                 this.state.leagues.push(league);
                 this.saveToStorage("leagues", this.state.leagues);
                 this.showToast("League created successfully!", "success");
-                this.closeAllModals();
-                if (document.getElementById("leagueFormModal")) document.getElementById("leagueFormModal").reset();
-                this.navigateTo("tournaments");
+                this.closeModal();
+                document.getElementById("createLeagueModal").querySelector("form").reset();
+                this.renderLeaguesPage();
             },
 
             joinLeague(leagueId) {
@@ -2316,19 +1793,16 @@
                 }
 
                 const league = this.state.leagues.find(l => l.id === leagueId);
-                if (!league) {
-                    this.showToast("League not found", "error");
+                if (!league) return;
+
+                const userCoins = this.getCoins();
+                if (userCoins < league.entryFee) {
+                    this.showToast(`You need ${league.entryFee} Veno Coins to join`, "error");
                     return;
                 }
 
                 if (league.teams.some(t => t.ownerId === this.state.currentUser.uid)) {
                     this.showToast("You already joined this league", "info");
-                    return;
-                }
-
-                const userCoins = this.getCoins();
-                if (userCoins < league.entryFee) {
-                    this.showToast(`You need ${league.entryFee} Veno Coins to join`, "error");
                     return;
                 }
 
@@ -2342,313 +1816,205 @@
 
                 this.saveToStorage("leagues", this.state.leagues);
                 this.showToast("Successfully joined the league!", "success");
-                this.addNotification({
-                    id: "notif_" + Date.now(),
-                    title: "League Joined",
-                    message: `You joined ${league.name}`,
-                    icon: "🏆",
-                    timestamp: new Date().toISOString(),
-                    read: false
-                });
+                this.renderLeaguesPage();
+            },
+
+            viewLeagueDetails(leagueId) {
+                const league = this.state.leagues.find(l => l.id === leagueId);
+                if (!league) return;
+                this.showToast(`Viewing ${league.name}`, "info");
             },
 
             viewLeague(leagueId) {
-                const league = this.state.leagues.find(l => l.id === leagueId);
-                if (!league) return;
-                this.showToast("View details coming soon!", "info");
+                this.viewLeagueDetails(leagueId);
             },
 
             // ==================== TEAM ACTIONS ====================
-            openTeamModal() {
-                if (!this.state.currentUser) {
-                    this.showToast("Please login first", "error");
-                    return;
-                }
-                document.getElementById("teamModal").classList.add("active");
-            },
-
-            handleCreateTeam(event) {
-                event.preventDefault();
-
-                const teamName = document.getElementById("teamNameModal")?.value || document.getElementById("teamName")?.value;
-                const gameType = document.getElementById("teamGameTypeModal")?.value || document.getElementById("teamGameType")?.value;
-
-                if (!teamName || !gameType) {
-                    this.showToast("Please fill all required fields", "error");
-                    return;
-                }
+            createTeam(e) {
+                e.preventDefault();
 
                 const team = {
                     id: "team_" + Date.now(),
-                    name: teamName,
-                    gameType: gameType,
-                    formation: document.getElementById("teamFormation")?.value || "4-4-2",
-                    color: document.getElementById("teamColor")?.value || "green",
-                    logo: document.getElementById("logoImg")?.src || null,
-                    ownerId: this.state.currentUser.uid,
-                    players: [],
+                    name: document.getElementById("teamName").value,
+                    shortName: document.getElementById("teamShortName").value,
+                    stadium: document.getElementById("homeStadium").value,
+                    gameType: document.getElementById("teamGameType").value,
+                    formation: document.getElementById("teamFormation").value,
+                    players: document.getElementById("teamPlayers").value.split(",").map(p => p.trim()).filter(p => p),
                     wins: 0,
-                    losses: 0,
                     draws: 0,
+                    losses: 0,
+                    ownerId: this.state.currentUser.uid,
                     createdAt: new Date().toISOString()
                 };
 
                 this.state.teams.push(team);
                 this.saveToStorage("teams", this.state.teams);
                 this.showToast("Team created successfully!", "success");
-                this.closeAllModals();
-                if (document.getElementById("teamFormModal")) document.getElementById("teamFormModal").reset();
-                this.renderHomePage();
-                this.addNotification({
-                    id: "notif_" + Date.now(),
-                    title: "Team Created",
-                    message: `Team "${team.name}" created successfully`,
-                    icon: "⚽",
-                    timestamp: new Date().toISOString(),
-                    read: false
-                });
+                this.closeModal();
+                document.getElementById("createTeamModal").querySelector("form").reset();
+                this.renderTeamsPage();
             },
 
             editTeam(teamId) {
-                this.showToast("Edit team feature coming soon!", "info");
+                this.showToast("Edit team feature coming soon", "info");
             },
 
             viewTeam(teamId) {
-                this.showToast("Team details coming soon!", "info");
+                const team = this.state.teams.find(t => t.id === teamId);
+                if (team) this.showToast(`Viewing ${team.name}`, "info");
             },
 
-            // ==================== USER ACTIONS ====================
-            challengeUser(userId) {
-                const user = this.state.users.find(u => u.uid === userId);
-                if (!user) return;
-                this.showToast(`Challenge sent to ${user.displayName}!`, "success");
-                this.addNotification({
-                    id: "notif_" + Date.now(),
-                    title: "Challenge Received",
-                    message: `${this.state.currentUser?.displayName} challenged you to a match`,
-                    icon: "⚔️",
-                    timestamp: new Date().toISOString(),
-                    read: false
-                });
+            // ==================== PROFILE ====================
+            updateProfile(e) {
+                e.preventDefault();
+
+                this.state.currentUser.displayName = document.getElementById("editDisplayName").value;
+                this.state.currentUser.email = document.getElementById("editEmail").value;
+                this.state.currentUser.photoURL = document.getElementById("editAvatar").value || `https://ui-avatars.com/api/?name=${encodeURIComponent(this.state.currentUser.displayName)}&background=10b981&color=fff&size=128`;
+
+                this.saveToStorage("user", this.state.currentUser);
+                this.updateProfileDisplay();
+                this.showToast("Profile updated successfully!", "success");
+                this.closeModal();
             },
 
-            viewUserProfile(userId) {
-                this.showToast("User profile coming soon!", "info");
+            updateProfileDisplay() {
+                const user = this.state.currentUser;
+                document.getElementById("profileDisplayName").innerText = user.displayName;
+                document.getElementById("profileEmail").innerText = user.email;
+                document.getElementById("profilePic").src = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName)}&background=10b981&color=fff&size=128`;
+                document.getElementById("popupProfilePic").src = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName)}&background=10b981&color=fff&size=128`;
             },
 
-            // ==================== NOTIFICATIONS ====================
-            addNotification(notification) {
-                this.state.notifications.unshift(notification);
-                this.saveToStorage("notifications", this.state.notifications);
-                this.updateNotificationCount();
-                this.renderNotifications();
-            },
-
-            renderNotifications() {
-                const list = document.getElementById("notificationList");
-                if (this.state.notifications.length === 0) {
-                    list.innerHTML = '<div class="empty-state" style="padding: 20px; border-radius: 12px;"><p>No notifications</p></div>';
-                    return;
+            logout() {
+                if (confirm("Are you sure you want to logout?")) {
+                    localStorage.removeItem(this.STORAGE_KEYS.USER);
+                    this.state.currentUser = null;
+                    this.showToast("Logged out successfully", "success");
+                    location.reload();
                 }
-                list.innerHTML = this.state.notifications.slice(0, 10).map(notif => `
-                    <div class="notification-item" onclick="crunkApp.markNotificationRead('${notif.id}')">
-                        <div class="notification-icon">${notif.icon || '🔔'}</div>
-                        <div class="notification-content">
-                            <div class="notification-title">${notif.title}</div>
-                            <div class="notification-message">${notif.message}</div>
-                            <div class="notification-time">${new Date(notif.timestamp).toLocaleTimeString()}</div>
-                        </div>
-                    </div>
-                `).join("");
-            },
-
-            updateNotificationCount() {
-                const count = this.state.notifications.filter(n => !n.read).length;
-                document.getElementById("notificationCount").innerText = count;
-                document.getElementById("notificationCount").style.display = count > 0 ? "flex" : "none";
-            },
-
-            markNotificationRead(notifId) {
-                const notif = this.state.notifications.find(n => n.id === notifId);
-                if (notif) notif.read = true;
-                this.saveToStorage("notifications", this.state.notifications);
-                this.updateNotificationCount();
-                this.renderNotifications();
             },
 
             // ==================== USER MANAGEMENT ====================
             loadUserData() {
-                try {
-                    const user = localStorage.getItem(this.STORAGE_KEYS.USER);
-                    if (user) {
-                        this.state.currentUser = JSON.parse(user);
-                        this.updateProfileDisplay();
-                    }
-
-                    this.state.leagues = JSON.parse(localStorage.getItem(this.STORAGE_KEYS.LEAGUES) || "[]");
-                    this.state.teams = JSON.parse(localStorage.getItem(this.STORAGE_KEYS.TEAMS) || "[]");
-                    this.state.users = JSON.parse(localStorage.getItem("users") || "[]");
-                    this.state.notifications = JSON.parse(localStorage.getItem(this.STORAGE_KEYS.NOTIFICATIONS) || "[]");
-
-                    this.updateNotificationCount();
-                    this.renderNotifications();
-                } catch (error) {
-                    console.error("Error loading user data:", error);
+                // Try to load user from localStorage
+                const savedUser = localStorage.getItem(this.STORAGE_KEYS.USER);
+                if (savedUser) {
+                    this.state.currentUser = JSON.parse(savedUser);
+                } else {
+                    // Create demo user
+                    this.state.currentUser = {
+                        uid: "user_demo_" + Date.now(),
+                        displayName: "Player",
+                        email: "player@crunkgames.com",
+                        photoURL: "https://ui-avatars.com/api/?name=Player&background=10b981&color=fff&size=128",
+                        leagueWins: 0
+                    };
+                    this.saveToStorage("user", this.state.currentUser);
                 }
+
+                this.state.leagues = JSON.parse(localStorage.getItem(this.STORAGE_KEYS.LEAGUES) || "[]");
+                this.state.teams = JSON.parse(localStorage.getItem(this.STORAGE_KEYS.TEAMS) || "[]");
+                this.state.users = JSON.parse(localStorage.getItem("users") || "[]");
+
+                this.updateProfileDisplay();
             },
 
             generateMockData() {
+                // Generate mock users if not exists
                 if (this.state.users.length === 0) {
                     this.state.users = [
-                        {
-                            uid: "user_1",
-                            displayName: "Pro Player",
-                            email: "pro@crunk.com",
-                            photoURL: "https://ui-avatars.com/api/?name=Pro+Player&background=10b981&color=fff",
-                            wins: 45,
-                            losses: 5,
-                            coins: 5000,
-                            leaguesWon: 3,
-                            totalPlayed: 50
-                        },
-                        {
-                            uid: "user_2",
-                            displayName: "Gaming Master",
-                            email: "master@crunk.com",
-                            photoURL: "https://ui-avatars.com/api/?name=Gaming+Master&background=f59e0b&color=fff",
-                            wins: 38,
-                            losses: 8,
-                            coins: 4200,
-                            leaguesWon: 2,
-                            totalPlayed: 46
-                        },
-                        {
-                            uid: "user_3",
-                            displayName: "Champion",
-                            email: "champ@crunk.com",
-                            photoURL: "https://ui-avatars.com/api/?name=Champion&background=3b82f6&color=fff",
-                            wins: 52,
-                            losses: 3,
-                            coins: 6100,
-                            leaguesWon: 4,
-                            totalPlayed: 55
-                        },
-                        {
-                            uid: "user_4",
-                            displayName: "Rising Star",
-                            email: "star@crunk.com",
-                            photoURL: "https://ui-avatars.com/api/?name=Rising+Star&background=8b5cf6&color=fff",
-                            wins: 28,
-                            losses: 12,
-                            coins: 2800,
-                            leaguesWon: 1,
-                            totalPlayed: 40
-                        }
+                        { uid: "user_1", displayName: "Pro Player", email: "pro@example.com", photoURL: "https://ui-avatars.com/api/?name=Pro+Player&background=10b981&color=fff", wins: 45, coins: 5000, rank: 1 },
+                        { uid: "user_2", displayName: "Gaming Master", email: "master@example.com", photoURL: "https://ui-avatars.com/api/?name=Gaming+Master&background=f59e0b&color=fff", wins: 38, coins: 4200, rank: 2 },
+                        { uid: "user_3", displayName: "Champion", email: "champ@example.com", photoURL: "https://ui-avatars.com/api/?name=Champion&background=3b82f6&color=fff", wins: 52, coins: 6100, rank: 3 },
+                        { uid: "user_4", displayName: "Rising Star", email: "star@example.com", photoURL: "https://ui-avatars.com/api/?name=Rising+Star&background=8b5cf6&color=fff", wins: 28, coins: 2800, rank: 4 }
                     ];
-                    this.saveToStorage("users", this.state.users);
+                    localStorage.setItem("users", JSON.stringify(this.state.users));
                 }
 
+                // Generate mock leagues if not exists
                 if (this.state.leagues.length === 0) {
                     this.state.leagues = [
                         {
                             id: "league_1",
                             name: "Champions League 2024",
                             gameType: "eFootball",
-                            maxTeams: 16,
-                            entryFee: 100,
-                            prizePool: 1280,
+                            format: "league",
+                            maxTeams: 8,
+                            entryFee: 50,
+                            prizePool: 320,
                             status: "live",
                             ownerId: "user_1",
-                            teams: [
-                                { id: "t1", name: "Team Alpha", ownerId: "user_1" },
-                                { id: "t2", name: "Team Beta", ownerId: "user_2" }
-                            ],
+                            teams: [],
                             matches: [],
                             createdAt: new Date().toISOString()
                         },
                         {
                             id: "league_2",
-                            name: "Elite Cup 2024",
+                            name: "Premier Division",
                             gameType: "FC",
-                            maxTeams: 8,
-                            entryFee: 50,
-                            prizePool: 320,
+                            format: "league",
+                            maxTeams: 12,
+                            entryFee: 75,
+                            prizePool: 720,
                             status: "registration",
-                            ownerId: "user_3",
+                            ownerId: "user_2",
                             teams: [],
                             matches: [],
                             createdAt: new Date().toISOString()
                         },
                         {
                             id: "league_3",
-                            name: "DLS Masters",
+                            name: "Elite Cup Tournament",
                             gameType: "DLS",
-                            maxTeams: 32,
-                            entryFee: 200,
-                            prizePool: 4800,
-                            status: "completed",
-                            ownerId: "user_4",
-                            teams: [
-                                { id: "t3", name: "Dream Team", ownerId: "user_3", wins: 10 }
-                            ],
+                            format: "cup",
+                            maxTeams: 16,
+                            entryFee: 100,
+                            prizePool: 1280,
+                            status: "live",
+                            ownerId: "user_3",
+                            teams: [],
                             matches: [],
                             createdAt: new Date().toISOString()
                         }
                     ];
-                    this.saveToStorage("leagues", this.state.leagues);
+                    localStorage.setItem(this.STORAGE_KEYS.LEAGUES, JSON.stringify(this.state.leagues));
                 }
-            },
 
-            updateProfileDisplay() {
-                const user = this.state.currentUser;
-                if (user) {
-                    const avatar = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName)}&background=10b981&color=fff`;
-                    document.getElementById("profileAvatarImg").src = avatar;
-                    document.getElementById("popupProfileImg").src = avatar;
-                    document.getElementById("profileNameDisplay").innerText = user.displayName || "User";
-                    document.getElementById("profileEmailDisplay").innerText = user.email || "";
+                // Generate mock teams if not exists
+                if (this.state.teams.length === 0) {
+                    this.state.teams = [
+                        { id: "team_1", name: "FC Barcelona", shortName: "FCB", gameType: "eFootball", formation: "4-3-3", players: ["Messi", "Ronaldinho", "Xavi"], wins: 10, draws: 2, losses: 1, ownerId: "user_1", createdAt: new Date().toISOString() },
+                        { id: "team_2", name: "Manchester United", shortName: "MAN", gameType: "FC", formation: "4-2-3-1", players: ["Rooney", "Ferguson", "Giggs"], wins: 12, draws: 1, losses: 2, ownerId: "user_2", createdAt: new Date().toISOString() },
+                        { id: "team_3", name: "Liverpool FC", shortName: "LIV", gameType: "DLS", formation: "4-4-2", players: ["Gerrard", "Torres", "Benitez"], wins: 8, draws: 3, losses: 4, ownerId: "user_3", createdAt: new Date().toISOString() }
+                    ];
+                    localStorage.setItem(this.STORAGE_KEYS.TEAMS, JSON.stringify(this.state.teams));
                 }
-            },
-
-            logoutUser() {
-                if (confirm("Are you sure you want to logout?")) {
-                    localStorage.removeItem(this.STORAGE_KEYS.USER);
-                    this.state.currentUser = null;
-                    this.navigateTo("home");
-                    this.showToast("Logged out successfully", "success");
-                    this.updateProfileDisplay();
-                }
-            },
-
-            editProfile() {
-                this.showToast("Edit profile coming soon!", "info");
-            },
-
-            changePassword() {
-                this.showToast("Change password coming soon!", "info");
             },
 
             // ==================== COINS SYSTEM ====================
             getCoins() {
                 if (!this.state.currentUser) return 0;
                 const coinsData = JSON.parse(localStorage.getItem(this.STORAGE_KEYS.COINS) || "{}");
-                return coinsData[this.state.currentUser.uid] || 100;
+                return coinsData[this.state.currentUser.uid] || 1000; // Default 1000 coins
             },
 
             addCoins(amount) {
                 if (!this.state.currentUser) return;
                 const coinsData = JSON.parse(localStorage.getItem(this.STORAGE_KEYS.COINS) || "{}");
-                coinsData[this.state.currentUser.uid] = (coinsData[this.state.currentUser.uid] || 100) + amount;
+                coinsData[this.state.currentUser.uid] = (coinsData[this.state.currentUser.uid] || 1000) + amount;
                 localStorage.setItem(this.STORAGE_KEYS.COINS, JSON.stringify(coinsData));
                 this.updateCoinsDisplay();
+                this.showToast(`+${amount} Veno Coins`, "success");
             },
 
             deductCoins(amount) {
                 if (!this.state.currentUser) return false;
                 const coinsData = JSON.parse(localStorage.getItem(this.STORAGE_KEYS.COINS) || "{}");
-                const currentCoins = coinsData[this.state.currentUser.uid] || 100;
-                if (currentCoins >= amount) {
-                    coinsData[this.state.currentUser.uid] = currentCoins - amount;
+                const current = coinsData[this.state.currentUser.uid] || 1000;
+                if (current >= amount) {
+                    coinsData[this.state.currentUser.uid] = current - amount;
                     localStorage.setItem(this.STORAGE_KEYS.COINS, JSON.stringify(coinsData));
                     this.updateCoinsDisplay();
                     return true;
@@ -2657,94 +2023,49 @@
             },
 
             updateCoinsDisplay() {
-                const coinsSpan = document.getElementById("venoCoinsAmount");
-                if (coinsSpan) coinsSpan.textContent = this.getCoins();
-            },
-
-            claimDailyCoins() {
-                if (!this.state.currentUser) {
-                    this.showToast("Please login first", "error");
-                    return;
-                }
-
-                const lastClaim = localStorage.getItem(this.STORAGE_KEYS.LAST_CLAIM);
-                const now = Date.now();
-
-                if (lastClaim && (now - parseInt(lastClaim)) < 24 * 60 * 60 * 1000) {
-                    const remainingTime = 24 * 60 * 60 * 1000 - (now - parseInt(lastClaim));
-                    const hours = Math.ceil(remainingTime / (60 * 60 * 1000));
-                    this.showToast(`You can claim again in ${hours}h`, "error");
-                    return;
-                }
-
-                this.addCoins(10);
-                localStorage.setItem(this.STORAGE_KEYS.LAST_CLAIM, now.toString());
-                this.showToast("🎉 You claimed 10 Veno Coins!", "success");
-                this.addNotification({
-                    id: "notif_" + Date.now(),
-                    title: "Veno Coins Claimed",
-                    message: "You received 10 Veno Coins as daily bonus",
-                    icon: "💰",
-                    timestamp: new Date().toISOString(),
-                    read: false
-                });
-            },
-
-            // ==================== THEME ====================
-            toggleTheme() {
-                document.body.classList.toggle("light-theme");
-                const isLight = document.body.classList.contains("light-theme");
-                document.getElementById("themeLabel").innerText = isLight ? "Light" : "Dark";
-                localStorage.setItem(this.STORAGE_KEYS.THEME, isLight ? "light" : "dark");
-
-                const sun = document.querySelector("#menuTheme .bx-sun");
-                const moon = document.querySelector("#menuTheme .bx-moon");
-                if (sun && moon) {
-                    sun.style.display = isLight ? "inline" : "none";
-                    moon.style.display = isLight ? "none" : "inline";
-                }
-            },
-
-            loadTheme() {
-                const theme = localStorage.getItem(this.STORAGE_KEYS.THEME);
-                if (theme === "light") {
-                    document.body.classList.add("light-theme");
-                    document.getElementById("themeLabel").innerText = "Light";
-                    const sun = document.querySelector("#menuTheme .bx-sun");
-                    const moon = document.querySelector("#menuTheme .bx-moon");
-                    if (sun && moon) {
-                        sun.style.display = "inline";
-                        moon.style.display = "none";
-                    }
-                }
-            },
-
-            // ==================== MODALS ====================
-            closeAllModals() {
-                document.querySelectorAll(".modal").forEach(m => m.classList.remove("active"));
+                document.getElementById("venoCoinsAmount").innerText = this.getCoins();
             },
 
             // ==================== STORAGE ====================
             saveToStorage(key, data) {
                 try {
-                    localStorage.setItem(this.STORAGE_KEYS[key.toUpperCase()] || key, JSON.stringify(data));
+                    const storageKey = this.STORAGE_KEYS[key.toUpperCase()] || key;
+                    localStorage.setItem(storageKey, JSON.stringify(data));
                 } catch (error) {
                     console.error("Error saving to localStorage:", error);
                 }
             },
 
-            // ==================== NOTIFICATIONS ====================
+            // ==================== REAL-TIME UPDATES ====================
+            updateRealTimeData() {
+                // Simulate real-time updates
+                if (this.state.leagues.length > 0) {
+                    // Randomly update a league status
+                    const randomLeague = this.state.leagues[Math.floor(Math.random() * this.state.leagues.length)];
+                    if (Math.random() > 0.8) {
+                        randomLeague.status = randomLeague.status === "registration" ? "live" : "completed";
+                    }
+                }
+
+                // Add random notifications occasionally
+                if (Math.random() > 0.9) {
+                    const notifications = [
+                        { id: Date.now(), title: "New Challenge", message: "You have a new challenge!", icon: "fa-trophy", time: "just now", read: false },
+                        { id: Date.now(), title: "Match Started", message: "Your match has started!", icon: "fa-play", time: "just now", read: false },
+                        { id: Date.now(), title: "Coins Earned", message: "You earned coins!", icon: "fa-coins", time: "just now", read: false }
+                    ];
+                    const notif = notifications[Math.floor(Math.random() * notifications.length)];
+                    this.state.notifications.unshift(notif);
+                    this.renderNotifications();
+                }
+            },
+
+            // ==================== TOASTS ====================
             showToast(message, type = "success") {
                 const container = document.getElementById("toastContainer");
                 const toast = document.createElement("div");
                 toast.className = `toast ${type}`;
-                const icons = {
-                    success: "fa-check-circle",
-                    error: "fa-exclamation-circle",
-                    warning: "fa-exclamation-triangle",
-                    info: "fa-info-circle"
-                };
-                toast.innerHTML = `<i class="fas ${icons[type] || icons.info}"></i> ${message}`;
+                toast.innerHTML = `<i class="fas ${this.getToastIcon(type)}"></i> ${message}`;
                 container.appendChild(toast);
 
                 setTimeout(() => toast.classList.add("show"), 10);
@@ -2752,34 +2073,31 @@
                     toast.classList.remove("show");
                     setTimeout(() => toast.remove(), 300);
                 }, 3000);
+            },
+
+            getToastIcon(type) {
+                const icons = {
+                    success: "fa-check-circle",
+                    error: "fa-exclamation-circle",
+                    warning: "fa-exclamation-triangle",
+                    info: "fa-info-circle"
+                };
+                return icons[type] || icons.info;
             }
         };
 
-        // ==================== INITIALIZE APP ====================
+        // ==================== INITIALIZE ====================
         document.addEventListener("DOMContentLoaded", () => {
-            crunkApp.init();
-
-            // Mock login for demo
-            if (!localStorage.getItem("crunkUser")) {
-                const demoUser = {
-                    uid: "demo_user_" + Date.now(),
-                    displayName: "Demo Player",
-                    email: "demo@crunk.com",
-                    photoURL: "https://ui-avatars.com/api/?name=Demo+Player&background=10b981&color=fff"
-                };
-                localStorage.setItem("crunkUser", JSON.stringify(demoUser));
-                crunkApp.state.currentUser = demoUser;
-                crunkApp.updateProfileDisplay();
-                crunkApp.addCoins(100);
-            }
+            app.init();
         });
 
-        // Service Worker Registration (PWA)
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js').catch(() => {});
-            });
-        }
+        // Close popups when clicking outside
+        document.addEventListener("click", (e) => {
+            if (!e.target.closest(".relative") && !e.target.closest(".profile-pic")) {
+                document.getElementById("profilePopup").classList.remove("active");
+                document.getElementById("notificationsPopup").classList.remove("active");
+            }
+        });
     </script>
 </body>
 </html>
