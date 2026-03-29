@@ -1,1005 +1,1809 @@
-// app.jsx - Complete Crunk Games Frontend with Firebase Backend Integration
-
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { 
-  getAuth, 
-  createUserWithEmailAndPassword, 
-  signInWithEmailAndPassword,
-  signInWithPopup,
-  GoogleAuthProvider,
-  onAuthStateChanged,
-  signOut 
-} from 'firebase/auth';
-import { 
-  getFirestore, 
-  collection, 
-  addDoc, 
-  getDocs, 
-  query, 
-  where,
-  doc,
-  updateDoc,
-  getDoc,
-  onSnapshot,
-  deleteDoc,
-  writeBatch
-} from 'firebase/firestore';
-import { initializeApp } from 'firebase/app';
-
-// ========================================
-// FIREBASE INITIALIZATION
-// ========================================
-const firebaseConfig = {
-  apiKey: "AIzaSyBW0Sz7TODfa8tQJTfNUaLhfK9qJhdA1yE",
-  authDomain: "crunck-app.firebaseapp.com",
-  projectId: "crunck-app",
-  storageBucket: "crunck-app.firebasestorage.app",
-  messagingSenderId: "475953302982",
-  appId: "1:475953302982:web:607e08379adb12f985f6c7"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-const googleProvider = new GoogleAuthProvider();
-
-// ========================================
-// MAIN APP COMPONENT
-// ========================================
-export default function CrunkGamesApp() {
-  const [currentPage, setCurrentPage] = useState('login');
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [userProfile, setUserProfile] = useState(null);
-  const [venoCoins, setVenoCoins] = useState(0);
-  const [notifications, setNotifications] = useState([]);
-  const [leagues, setLeagues] = useState([]);
-  const [teams, setTeams] = useState([]);
-  const [selectedLeague, setSelectedLeague] = useState(null);
-  const [darkTheme, setDarkTheme] = useState(true);
-  const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
-
-  // ========================================
-  // AUTHENTICATION HANDLING
-  // ========================================
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (authUser) => {
-      try {
-        if (authUser) {
-          setUser(authUser);
-          
-          // Load user profile from Firestore
-          const userDoc = await getDoc(doc(db, 'users', authUser.uid));
-          if (userDoc.exists()) {
-            setUserProfile(userDoc.data());
-            setVenoCoins(userDoc.data().venoCoins || 100);
-          } else {
-            // Create new user profile
-            const newProfile = {
-              uid: authUser.uid,
-              email: authUser.email,
-              displayName: authUser.displayName || 'Player',
-              photoURL: authUser.photoURL || `https://ui-avatars.com/api/?name=${authUser.displayName}&background=10b981&color=fff`,
-              venoCoins: 100,
-              createdAt: new Date().toISOString(),
-              status: 'online'
-            };
-            await addDoc(collection(db, 'users'), newProfile);
-            setUserProfile(newProfile);
-            setVenoCoins(100);
-          }
-          
-          setCurrentPage('home');
-          loadLeagues(authUser.uid);
-          loadTeams(authUser.uid);
-          setNotifications([]);
-        } else {
-          setUser(null);
-          setUserProfile(null);
-          setCurrentPage('login');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Crunk Games - Premium Gaming Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-      } catch (error) {
-        console.error('Auth error:', error);
-        showToast('Authentication error', 'error');
-      } finally {
-        setLoading(false);
-      }
-    });
 
-    return unsubscribe;
-  }, []);
+        :root {
+            --gold: #FFD700;
+            --gold-accent: #FFC300;
+            --gold-dark: #B6862C;
+            --gold-light: #FFF8DC;
+            --black: #0F0F0F;
+            --black-alt: #1A1A1A;
+            --black-light: #2A2A2A;
+            --gray: #333333;
+            --text-primary: #FFFFFF;
+            --text-secondary: #D4AF37;
+            --border-gold: rgba(255, 215, 0, 0.3);
+            --shadow: 0 10px 40px rgba(255, 215, 0, 0.15);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
-  // ========================================
-  // DATA LOADING FUNCTIONS
-  // ========================================
-  const loadLeagues = useCallback(async (userId) => {
-    try {
-      const q = query(collection(db, 'leagues'));
-      const snapshot = await getDocs(q);
-      const leaguesList = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-      setLeagues(leaguesList);
-    } catch (error) {
-      console.error('Error loading leagues:', error);
-    }
-  }, []);
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
 
-  const loadTeams = useCallback(async (userId) => {
-    try {
-      const q = query(collection(db, 'teams'), where('ownerId', '==', userId));
-      const snapshot = await getDocs(q);
-      const teamsList = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-      setTeams(teamsList);
-    } catch (error) {
-      console.error('Error loading teams:', error);
-    }
-  }, []);
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--black);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
 
-  // ========================================
-  // AUTHENTICATION FUNCTIONS
-  // ========================================
-  const handleLogin = async (email, password) => {
-    try {
-      setLoading(true);
-      await signInWithEmailAndPassword(auth, email, password);
-      showToast('Login successful!', 'success');
-    } catch (error) {
-      console.error('Login error:', error);
-      showToast(error.message || 'Login failed', 'error');
-    } finally {
-      setLoading(false);
-    }
-  };
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
 
-  const handleRegister = async (email, password, displayName) => {
-    try {
-      setLoading(true);
-      const result = await createUserWithEmailAndPassword(auth, email, password);
-      
-      // Create user profile in Firestore
-      const userProfile = {
-        uid: result.user.uid,
-        email,
-        displayName: displayName || 'Player',
-        photoURL: `https://ui-avatars.com/api/?name=${displayName}&background=10b981&color=fff`,
-        venoCoins: 100,
-        createdAt: new Date().toISOString(),
-        status: 'online'
-      };
-      
-      await addDoc(collection(db, 'users'), userProfile);
-      setUserProfile(userProfile);
-      setVenoCoins(100);
-      showToast('Account created successfully!', 'success');
-    } catch (error) {
-      console.error('Register error:', error);
-      showToast(error.message || 'Registration failed', 'error');
-    } finally {
-      setLoading(false);
-    }
-  };
+        ::-webkit-scrollbar-track {
+            background: var(--black-alt);
+        }
 
-  const handleGoogleLogin = async () => {
-    try {
-      setLoading(true);
-      const result = await signInWithPopup(auth, googleProvider);
-      
-      // Check if user exists, if not create profile
-      const userDoc = await getDoc(doc(db, 'users', result.user.uid));
-      if (!userDoc.exists()) {
-        const newProfile = {
-          uid: result.user.uid,
-          email: result.user.email,
-          displayName: result.user.displayName,
-          photoURL: result.user.photoURL,
-          venoCoins: 100,
-          createdAt: new Date().toISOString(),
-          status: 'online'
-        };
-        await addDoc(collection(db, 'users'), newProfile);
-      }
-      
-      showToast('Google login successful!', 'success');
-    } catch (error) {
-      console.error('Google login error:', error);
-      showToast(error.message || 'Google login failed', 'error');
-    } finally {
-      setLoading(false);
-    }
-  };
+        ::-webkit-scrollbar-thumb {
+            background: var(--gold-dark);
+            border-radius: 10px;
+        }
 
-  const handleLogout = async () => {
-    try {
-      await signOut(auth);
-      showToast('Logged out successfully', 'success');
-    } catch (error) {
-      console.error('Logout error:', error);
-      showToast('Logout failed', 'error');
-    }
-  };
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--gold);
+        }
 
-  // ========================================
-  // LEAGUE FUNCTIONS
-  // ========================================
-  const createLeague = async (leagueData) => {
-    try {
-      setLoading(true);
-      const league = {
-        ...leagueData,
-        ownerId: user.uid,
-        ownerName: userProfile.displayName,
-        teams: [],
-        matches: [],
-        status: 'registration',
-        createdAt: new Date().toISOString()
-      };
-      
-      const docRef = await addDoc(collection(db, 'leagues'), league);
-      showToast('League created successfully!', 'success');
-      loadLeagues(user.uid);
-      return docRef.id;
-    } catch (error) {
-      console.error('Error creating league:', error);
-      showToast('Failed to create league', 'error');
-    } finally {
-      setLoading(false);
-    }
-  };
+        .app-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: linear-gradient(135deg, var(--black) 0%, var(--black-alt) 100%);
+        }
 
-  const joinLeague = async (leagueId) => {
-    try {
-      setLoading(true);
-      const league = leagues.find(l => l.id === leagueId);
-      
-      if (!league) {
-        showToast('League not found', 'error');
-        return;
-      }
-      
-      if (venoCoins < league.entryFee) {
-        showToast(`Insufficient Veno Coins. Need ${league.entryFee}, you have ${venoCoins}`, 'error');
-        return;
-      }
-      
-      // Deduct entry fee
-      const newCoins = venoCoins - league.entryFee;
-      setVenoCoins(newCoins);
-      
-      // Update user coins
-      if (userProfile.firestoreId) {
-        await updateDoc(doc(db, 'users', userProfile.firestoreId), {
-          venoCoins: newCoins
-        });
-      }
-      
-      // Add team to league
-      const teamName = `${userProfile.displayName}'s Team`;
-      const newTeam = {
-        id: `team_${Date.now()}`,
-        name: teamName,
-        ownerId: user.uid,
-        ownerName: userProfile.displayName,
-        wins: 0,
-        losses: 0,
-        draws: 0
-      };
-      
-      const updatedTeams = [...(league.teams || []), newTeam];
-      const leagueRef = doc(db, 'leagues', leagueId);
-      await updateDoc(leagueRef, { teams: updatedTeams });
-      
-      showToast(`Successfully joined ${league.name}!`, 'success');
-      loadLeagues(user.uid);
-    } catch (error) {
-      console.error('Error joining league:', error);
-      showToast('Failed to join league', 'error');
-    } finally {
-      setLoading(false);
-    }
-  };
+        /* ==================== HEADER ==================== */
+        .header {
+            background: linear-gradient(90deg, var(--black-alt) 0%, var(--black-light) 100%);
+            border-bottom: 2px solid var(--border-gold);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 5px 25px rgba(255, 215, 0, 0.1);
+        }
 
-  // ========================================
-  // TEAM FUNCTIONS
-  // ========================================
-  const createTeam = async (teamData) => {
-    try {
-      setLoading(true);
-      const team = {
-        ...teamData,
-        ownerId: user.uid,
-        ownerName: userProfile.displayName,
-        wins: 0,
-        losses: 0,
-        draws: 0,
-        createdAt: new Date().toISOString()
-      };
-      
-      const docRef = await addDoc(collection(db, 'teams'), team);
-      showToast('Team created successfully!', 'success');
-      loadTeams(user.uid);
-      return docRef.id;
-    } catch (error) {
-      console.error('Error creating team:', error);
-      showToast('Failed to create team', 'error');
-    } finally {
-      setLoading(false);
-    }
-  };
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
 
-  // ========================================
-  // COINS FUNCTIONS
-  // ========================================
-  const claimDailyCoins = async () => {
-    try {
-      const today = new Date().toDateString();
-      const lastClaim = localStorage.getItem('lastCoinClaim');
-      
-      if (lastClaim === today) {
-        showToast('You already claimed coins today!', 'error');
-        return;
-      }
-      
-      const newCoins = venoCoins + 10;
-      setVenoCoins(newCoins);
-      localStorage.setItem('lastCoinClaim', today);
-      
-      if (userProfile.firestoreId) {
-        await updateDoc(doc(db, 'users', userProfile.firestoreId), {
-          venoCoins: newCoins
-        });
-      }
-      
-      showToast('🎉 Claimed 10 Veno Coins!', 'success');
-    } catch (error) {
-      console.error('Error claiming coins:', error);
-      showToast('Failed to claim coins', 'error');
-    }
-  };
+        .logo:hover {
+            transform: scale(1.05);
+        }
 
-  // ========================================
-  // TOAST NOTIFICATION
-  // ========================================
-  const showToast = (message, type = 'success') => {
-    setToast({ show: true, message, type });
-    setTimeout(() => setToast({ show: false, message: '', type: 'success' }), 3000);
-  };
+        .logo-icon {
+            font-size: 2rem;
+            color: var(--gold);
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+        }
 
-  // ========================================
-  // RENDER FUNCTIONS
-  // ========================================
-  const renderLoginPage = () => (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center px-4">
-      <div className="w-full max-w-md">
-        <LoginForm 
-          onLogin={handleLogin}
-          onRegister={handleRegister}
-          onGoogleLogin={handleGoogleLogin}
-          loading={loading}
-        />
-      </div>
-    </div>
-  );
+        .logo-text h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 0;
+        }
 
-  const renderHomePage = () => (
-    <div className="min-h-screen bg-slate-950">
-      <Navbar 
-        user={userProfile}
-        venoCoins={venoCoins}
-        onClaimCoins={claimDailyCoins}
-        onLogout={handleLogout}
-        darkTheme={darkTheme}
-        onThemeToggle={() => setDarkTheme(!darkTheme)}
-      />
-      <HeroSection 
-        onCreateLeague={() => setCurrentPage('createLeague')}
-        onJoinLeague={() => setCurrentPage('joinLeague')}
-        onCreateTeam={() => setCurrentPage('createTeam')}
-      />
-      <FeaturedLeagues 
-        leagues={leagues.filter(l => l.status === 'registration').slice(0, 6)}
-        onJoin={joinLeague}
-      />
-      <Footer />
-    </div>
-  );
+        .header-center {
+            display: flex;
+            gap: 2rem;
+            flex: 1;
+            justify-content: center;
+        }
 
-  const renderCreateLeaguePage = () => (
-    <div className="min-h-screen bg-slate-950 pt-20">
-      <div className="max-w-2xl mx-auto px-4">
-        <CreateLeagueForm 
-          onSubmit={(data) => {
-            createLeague(data);
-            setCurrentPage('home');
-          }}
-          onCancel={() => setCurrentPage('home')}
-        />
-      </div>
-    </div>
-  );
+        .nav-link {
+            color: var(--text-primary);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: var(--transition);
+            font-weight: 500;
+            position: relative;
+        }
 
-  const renderCreateTeamPage = () => (
-    <div className="min-h-screen bg-slate-950 pt-20">
-      <div className="max-w-2xl mx-auto px-4">
-        <CreateTeamForm 
-          onSubmit={(data) => {
-            createTeam(data);
-            setCurrentPage('home');
-          }}
-          onCancel={() => setCurrentPage('home')}
-        />
-      </div>
-    </div>
-  );
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--gold);
+            background: rgba(255, 215, 0, 0.1);
+        }
 
-  if (loading && !user) {
-    return <LoadingScreen />;
-  }
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -0.5rem;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--gold);
+        }
 
-  return (
-    <div className={darkTheme ? 'dark' : ''}>
-      {!user ? renderLoginPage() : 
-       currentPage === 'home' ? renderHomePage() :
-       currentPage === 'createLeague' ? renderCreateLeaguePage() :
-       currentPage === 'createTeam' ? renderCreateTeamPage() :
-       renderHomePage()}
-      
-      {toast.show && <Toast message={toast.message} type={toast.type} />}
-    </div>
-  );
-}
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
 
-// ========================================
-// COMPONENT: LOGIN FORM
-// ========================================
-function LoginForm({ onLogin, onRegister, onGoogleLogin, loading }) {
-  const [isLogin, setIsLogin] = useState(true);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [displayName, setDisplayName] = useState('');
+        .coins-display {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 215, 0, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-gold);
+            transition: var(--transition);
+        }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (isLogin) {
-      onLogin(email, password);
-    } else {
-      onRegister(email, password, displayName);
-    }
-  };
+        .coins-display:hover {
+            background: rgba(255, 215, 0, 0.2);
+        }
 
-  return (
-    <div className="bg-slate-800 rounded-2xl p-8 shadow-2xl border border-emerald-500/20">
-      <div className="text-center mb-8">
-        <h1 className="text-4xl font-bold text-white mb-2">⚽ Crunk Games</h1>
-        <p className="text-slate-400">Play, Create, Compete & Earn</p>
-      </div>
+        .coins-display i {
+            color: var(--gold);
+            font-size: 1.2rem;
+        }
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {!isLogin && (
-          <input
-            type="text"
-            placeholder="Display Name"
-            value={displayName}
-            onChange={(e) => setDisplayName(e.target.value)}
-            className="w-full px-4 py-2 bg-slate-700 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-            required
-          />
-        )}
-        
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="w-full px-4 py-2 bg-slate-700 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-          required
-        />
-        
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full px-4 py-2 bg-slate-700 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-          required
-        />
-        
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 text-white py-2 rounded-lg font-semibold hover:shadow-lg transition disabled:opacity-50"
-        >
-          {loading ? 'Loading...' : isLogin ? 'Login' : 'Register'}
-        </button>
-      </form>
+        .coins-amount {
+            font-weight: 700;
+            color: var(--gold);
+            font-size: 1.1rem;
+        }
 
-      <div className="my-4">
-        <button
-          onClick={onGoogleLogin}
-          disabled={loading}
-          className="w-full bg-white text-slate-900 py-2 rounded-lg font-semibold hover:shadow-lg transition flex items-center justify-center gap-2 disabled:opacity-50"
-        >
-          🔍 Sign in with Google
-        </button>
-      </div>
+        .profile-section {
+            position: relative;
+        }
 
-      <p className="text-center text-slate-400 text-sm mt-4">
-        {isLogin ? "Don't have an account? " : 'Already have an account? '}
-        <button
-          onClick={() => setIsLogin(!isLogin)}
-          className="text-emerald-400 hover:text-emerald-300 font-semibold"
-        >
-          {isLogin ? 'Register' : 'Login'}
-        </button>
-      </p>
-    </div>
-  );
-}
+        .profile-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--gold);
+            cursor: pointer;
+            overflow: hidden;
+            transition: var(--transition);
+            background: var(--black-light);
+        }
 
-// ========================================
-// COMPONENT: NAVBAR
-// ========================================
-function Navbar({ user, venoCoins, onClaimCoins, onLogout, darkTheme, onThemeToggle }) {
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+        .profile-btn:hover {
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+        }
 
-  return (
-    <nav className="fixed top-0 left-0 right-0 bg-slate-800 border-b border-slate-700 z-50">
-      <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-emerald-400">🏆 Crunk Games</h1>
-        
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2 bg-emerald-500/10 px-3 py-1 rounded-full">
-            <span className="text-yellow-400">💰</span>
-            <span className="text-white font-bold">{venoCoins}</span>
-          </div>
+        .profile-btn img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
 
-          <button
-            onClick={onClaimCoins}
-            className="bg-emerald-500 hover:bg-emerald-600 text-white px-3 py-1 rounded-full text-sm font-semibold transition"
-          >
-            Claim 10
-          </button>
+        .profile-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--black-light);
+            border: 1px solid var(--border-gold);
+            border-radius: 12px;
+            padding: 1rem;
+            min-width: 250px;
+            margin-top: 0.5rem;
+            display: none;
+            box-shadow: var(--shadow);
+            z-index: 1001;
+        }
 
-          <div className="relative">
-            <button
-              onClick={() => setDropdownOpen(!dropdownOpen)}
-              className="w-10 h-10 bg-gradient-to-r from-emerald-400 to-blue-500 rounded-full flex items-center justify-center text-white font-bold"
-            >
-              {user?.displayName?.[0] || 'U'}
-            </button>
+        .profile-dropdown.active {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
 
-            {dropdownOpen && (
-              <div className="absolute right-0 mt-2 bg-slate-700 rounded-lg shadow-xl min-w-48 border border-slate-600">
-                <div className="p-3 border-b border-slate-600">
-                  <p className="text-white font-semibold">{user?.displayName}</p>
-                  <p className="text-slate-400 text-sm">{user?.email}</p>
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .profile-info {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-gold);
+        }
+
+        .profile-info img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid var(--gold);
+        }
+
+        .profile-info-text h3 {
+            color: var(--gold);
+            margin: 0 0 0.25rem 0;
+        }
+
+        .profile-info-text p {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin: 0;
+        }
+
+        .profile-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .profile-menu-item {
+            padding: 0.75rem;
+            color: var(--text-primary);
+            cursor: pointer;
+            border-radius: 6px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .profile-menu-item:hover {
+            background: rgba(255, 215, 0, 0.1);
+            color: var(--gold);
+        }
+
+        .logout-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-accent) 100%);
+            color: var(--black);
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255, 215, 0, 0.3);
+        }
+
+        /* ==================== SIDEBAR ==================== */
+        .sidebar {
+            position: fixed;
+            left: -300px;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: var(--black-alt);
+            border-right: 1px solid var(--border-gold);
+            transition: var(--transition);
+            z-index: 999;
+            overflow-y: auto;
+            padding-top: 70px;
+        }
+
+        .sidebar.open {
+            left: 0;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 1rem;
+        }
+
+        .sidebar-menu-item {
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+            cursor: pointer;
+            border-radius: 8px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .sidebar-menu-item:hover,
+        .sidebar-menu-item.active {
+            background: rgba(255, 215, 0, 0.1);
+            color: var(--gold);
+            transform: translateX(5px);
+        }
+
+        .sidebar-menu-item i {
+            font-size: 1.2rem;
+            width: 25px;
+        }
+
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 998;
+        }
+
+        .sidebar-overlay.active {
+            display: block;
+        }
+
+        /* ==================== MAIN CONTENT ==================== */
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: var(--gold);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .section-title i {
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+        }
+
+        /* ==================== HERO SECTION ==================== */
+        .hero {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 195, 0, 0.05) 100%);
+            border: 1px solid var(--border-gold);
+            border-radius: 16px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: var(--gold);
+            margin-bottom: 1rem;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+        }
+
+        .hero p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* ==================== BUTTONS ==================== */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-accent) 100%);
+            color: var(--black);
+            box-shadow: 0 5px 20px rgba(255, 215, 0, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(255, 215, 0, 0.5);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 215, 0, 0.1);
+            color: var(--gold);
+            border: 2px solid var(--gold);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 215, 0, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* ==================== CARDS GRID ==================== */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .card {
+            background: linear-gradient(135deg, var(--black-light) 0%, var(--black-alt) 100%);
+            border: 1px solid var(--border-gold);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: var(--transition);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.1), transparent);
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--gold);
+            box-shadow: 0 10px 40px rgba(255, 215, 0, 0.2);
+        }
+
+        .card:hover::before {
+            left: 100%;
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            color: var(--gold);
+            margin-bottom: 1rem;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            color: var(--gold);
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .card-description {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .card-stats {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-gold);
+        }
+
+        .stat {
+            flex: 1;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            color: var(--gold);
+            font-weight: 800;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+        }
+
+        /* ==================== FORM ELEMENTS ==================== */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--black-light);
+            border: 1px solid var(--border-gold);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-family: inherit;
+            transition: var(--transition);
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+            background: var(--black-alt);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        /* ==================== MODAL ==================== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: var(--black-alt);
+            border: 1px solid var(--border-gold);
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow);
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-gold);
+        }
+
+        .modal-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: var(--gold);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            color: var(--gold);
+            transform: rotate(90deg);
+        }
+
+        /* ==================== TABLE ==================== */
+        .table-container {
+            overflow-x: auto;
+            margin-bottom: 2rem;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--black-light);
+            border: 1px solid var(--border-gold);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .table thead {
+            background: rgba(255, 215, 0, 0.1);
+            border-bottom: 2px solid var(--gold);
+        }
+
+        .table th {
+            padding: 1rem;
+            text-align: left;
+            color: var(--gold);
+            font-weight: 700;
+        }
+
+        .table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-gold);
+            color: var(--text-primary);
+        }
+
+        .table tbody tr:hover {
+            background: rgba(255, 215, 0, 0.05);
+        }
+
+        .table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* ==================== TOAST ==================== */
+        .toast-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 3000;
+            max-width: 400px;
+        }
+
+        .toast {
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-accent) 100%);
+            color: var(--black);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            animation: slideInRight 0.3s ease;
+            box-shadow: var(--shadow);
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .toast i {
+            font-size: 1.5rem;
+        }
+
+        .toast.error {
+            background: linear-gradient(135deg, #FF6B6B 0%, #FF4757 100%);
+            color: white;
+        }
+
+        .toast.info {
+            background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%);
+            color: white;
+        }
+
+        /* ==================== LOADING ==================== */
+        .loading-spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255, 215, 0, 0.2);
+            border-top-color: var(--gold);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ==================== RESPONSIVE ==================== */
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+            }
+
+            .header-center {
+                display: none;
+            }
+
+            .hero {
+                padding: 2rem 1rem;
+            }
+
+            .hero h2 {
+                font-size: 1.8rem;
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .modal-content {
+                width: 95%;
+                padding: 1.5rem;
+            }
+
+            .toast-container {
+                right: 1rem;
+                left: 1rem;
+                max-width: none;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo-text h1 {
+                font-size: 1.2rem;
+            }
+
+            .section-title {
+                font-size: 1.3rem;
+            }
+
+            .hero h2 {
+                font-size: 1.5rem;
+            }
+
+            .card {
+                padding: 1rem;
+            }
+
+            .table th, .table td {
+                padding: 0.75rem 0.5rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* ==================== MENU TOGGLE ==================== */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--gold);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .menu-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+        }
+
+        /* ==================== EMPTY STATE ==================== */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: var(--gold);
+            opacity: 0.3;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state h3 {
+            color: var(--gold);
+            margin-bottom: 0.5rem;
+        }
+
+        /* ==================== BADGES ==================== */
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            background: rgba(255, 215, 0, 0.2);
+            color: var(--gold);
+            border: 1px solid var(--gold);
+        }
+
+        .badge.success {
+            background: rgba(76, 205, 196, 0.2);
+            color: #4ECDC4;
+            border-color: #4ECDC4;
+        }
+
+        .badge.warning {
+            background: rgba(255, 107, 107, 0.2);
+            color: #FF6B6B;
+            border-color: #FF6B6B;
+        }
+
+        /* ==================== ANIMATIONS ==================== */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-crown"></i>
                 </div>
-                <button
-                  onClick={onThemeToggle}
-                  className="w-full text-left px-4 py-2 text-slate-300 hover:bg-slate-600 transition"
-                >
-                  {darkTheme ? '☀️ Light Mode' : '🌙 Dark Mode'}
-                </button>
-                <button
-                  onClick={onLogout}
-                  className="w-full text-left px-4 py-2 text-red-400 hover:bg-slate-600 transition"
-                >
-                  🚪 Logout
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-    </nav>
-  );
-}
-
-// ========================================
-// COMPONENT: HERO SECTION
-// ========================================
-function HeroSection({ onCreateLeague, onJoinLeague, onCreateTeam }) {
-  return (
-    <div className="pt-20 pb-12 px-4 bg-gradient-to-b from-slate-900 via-slate-950 to-slate-950">
-      <div className="max-w-4xl mx-auto text-center mb-12">
-        <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-          ⚽ Football Leagues & Tournaments
-        </h2>
-        <p className="text-xl text-slate-400 mb-8">
-          Create your own league, manage teams, and compete for Veno Coins!
-        </p>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <button
-            onClick={onCreateLeague}
-            className="bg-gradient-to-r from-emerald-500 to-emerald-600 hover:shadow-lg text-white py-3 rounded-lg font-semibold transition transform hover:scale-105"
-          >
-            ➕ Create League
-          </button>
-          <button
-            onClick={onJoinLeague}
-            className="bg-gradient-to-r from-blue-500 to-blue-600 hover:shadow-lg text-white py-3 rounded-lg font-semibold transition transform hover:scale-105"
-          >
-            🔍 Find Leagues
-          </button>
-          <button
-            onClick={onCreateTeam}
-            className="bg-gradient-to-r from-purple-500 to-purple-600 hover:shadow-lg text-white py-3 rounded-lg font-semibold transition transform hover:scale-105"
-          >
-            ⚽ Create Team
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ========================================
-// COMPONENT: FEATURED LEAGUES
-// ========================================
-function FeaturedLeagues({ leagues, onJoin }) {
-  return (
-    <div className="max-w-6xl mx-auto px-4 py-12">
-      <h3 className="text-2xl font-bold text-white mb-6">⭐ Featured Leagues</h3>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {leagues.map((league) => (
-          <div key={league.id} className="bg-slate-800 rounded-lg p-6 border border-slate-700 hover:border-emerald-500 transition">
-            <h4 className="text-lg font-bold text-white mb-2">{league.name}</h4>
-            <p className="text-slate-400 text-sm mb-3">{league.description}</p>
-            
-            <div className="grid grid-cols-2 gap-2 mb-4 text-sm">
-              <div className="bg-slate-700 p-2 rounded">
-                <p className="text-slate-400">Teams</p>
-                <p className="text-emerald-400 font-bold">{league.teams?.length || 0}/{league.maxTeams}</p>
-              </div>
-              <div className="bg-slate-700 p-2 rounded">
-                <p className="text-slate-400">Prize Pool</p>
-                <p className="text-yellow-400 font-bold">{league.prizePool} VC</p>
-              </div>
+                <div class="logo-text">
+                    <h1>CRUNK GAMES</h1>
+                </div>
             </div>
 
-            <button
-              onClick={() => onJoin(league.id)}
-              className="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-2 rounded-lg font-semibold transition"
-            >
-              Join Now
-            </button>
-          </div>
-        ))}
-      </div>
+            <div class="header-center">
+                <a href="#" class="nav-link active" data-page="home">Home</a>
+                <a href="#" class="nav-link" data-page="tournaments">Tournaments</a>
+                <a href="#" class="nav-link" data-page="leagues">Leagues</a>
+                <a href="#" class="nav-link" data-page="teams">Teams</a>
+            </div>
+
+            <div class="header-right">
+                <div class="coins-display">
+                    <i class="fas fa-coins"></i>
+                    <span class="coins-amount" id="coinsDisplay">0</span>
+                </div>
+
+                <div class="profile-section">
+                    <button class="profile-btn" id="profileBtn">
+                        <img src="https://via.placeholder.com/40" alt="Profile" id="profileImage">
+                    </button>
+                    <div class="profile-dropdown" id="profileDropdown">
+                        <div class="profile-info">
+                            <img src="https://via.placeholder.com/50" alt="Profile" id="dropdownImage">
+                            <div class="profile-info-text">
+                                <h3 id="profileName">Player Name</h3>
+                                <p id="profileEmail">email@example.com</p>
+                            </div>
+                        </div>
+                        <div class="profile-menu">
+                            <div class="profile-menu-item" id="profileSettingsMenu">
+                                <i class="fas fa-user"></i>
+                                <span>Profile Settings</span>
+                            </div>
+                            <div class="profile-menu-item" id="myTeamsMenu">
+                                <i class="fas fa-users"></i>
+                                <span>My Teams</span>
+                            </div>
+                            <div class="profile-menu-item" id="myLeaguesMenu">
+                                <i class="fas fa-trophy"></i>
+                                <span>My Leagues</span>
+                            </div>
+                        </div>
+                        <button class="logout-btn" id="logoutBtn">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </button>
+                    </div>
+                </div>
+
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <ul class="sidebar-menu">
+                <li class="sidebar-menu-item active" data-page="home">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </li>
+                <li class="sidebar-menu-item" data-page="tournaments">
+                    <i class="fas fa-gamepad"></i>
+                    <span>Tournaments</span>
+                </li>
+                <li class="sidebar-menu-item" data-page="leagues">
+                    <i class="fas fa-trophy"></i>
+                    <span>Leagues</span>
+                </li>
+                <li class="sidebar-menu-item" data-page="teams">
+                    <i class="fas fa-users"></i>
+                    <span>Teams</span>
+                </li>
+                <li class="sidebar-menu-item" data-page="leaderboard">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Leaderboard</span>
+                </li>
+                <li class="sidebar-menu-item" data-page="create-league">
+                    <i class="fas fa-plus-circle"></i>
+                    <span>Create League</span>
+                </li>
+                <li class="sidebar-menu-item" data-page="create-team">
+                    <i class="fas fa-plus-circle"></i>
+                    <span>Create Team</span>
+                </li>
+            </ul>
+        </aside>
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Home Page -->
+            <section id="homePage" class="page active">
+                <div class="hero">
+                    <div class="hero-content">
+                        <h2>⚽ Welcome to CRUNK GAMES</h2>
+                        <p>Create leagues, manage teams, and compete for premium rewards</p>
+                        <div class="hero-buttons">
+                            <button class="btn btn-primary" id="createLeagueBtnHero">
+                                <i class="fas fa-plus"></i> Create League
+                            </button>
+                            <button class="btn btn-secondary" id="joinLeagueBtnHero">
+                                <i class="fas fa-search"></i> Find Leagues
+                            </button>
+                            <button class="btn btn-secondary" id="claimCoinsBtn">
+                                <i class="fas fa-gift"></i> Claim Daily Bonus
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <h2 class="section-title">
+                    <i class="fas fa-star"></i> Featured Tournaments
+                </h2>
+                <div class="cards-grid" id="featuredGrid">
+                    <!-- Featured items will be added here -->
+                </div>
+
+                <h2 class="section-title">
+                    <i class="fas fa-fire"></i> Active Leagues
+                </h2>
+                <div class="cards-grid" id="activeLeaguesGrid">
+                    <!-- Active leagues will be added here -->
+                </div>
+
+                <h2 class="section-title">
+                    <i class="fas fa-users"></i> My Teams
+                </h2>
+                <div class="cards-grid" id="myTeamsGrid">
+                    <!-- My teams will be added here -->
+                </div>
+            </section>
+
+            <!-- Tournaments Page -->
+            <section id="tournamentsPage" class="page">
+                <h2 class="section-title">
+                    <i class="fas fa-gamepad"></i> All Tournaments
+                </h2>
+                <div class="cards-grid" id="tournamentsGrid">
+                    <!-- Tournaments will be added here -->
+                </div>
+            </section>
+
+            <!-- Leagues Page -->
+            <section id="leaguesPage" class="page">
+                <h2 class="section-title">
+                    <i class="fas fa-trophy"></i> All Leagues
+                </h2>
+                <div class="cards-grid" id="leaguesGrid">
+                    <!-- Leagues will be added here -->
+                </div>
+            </section>
+
+            <!-- Teams Page -->
+            <section id="teamsPage" class="page">
+                <h2 class="section-title">
+                    <i class="fas fa-users"></i> All Teams
+                </h2>
+                <div class="cards-grid" id="teamsGrid">
+                    <!-- Teams will be added here -->
+                </div>
+            </section>
+
+            <!-- Leaderboard Page -->
+            <section id="leaderboardPage" class="page">
+                <h2 class="section-title">
+                    <i class="fas fa-chart-line"></i> Leaderboard
+                </h2>
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Player</th>
+                                <th>Coins</th>
+                                <th>Leagues Won</th>
+                                <th>Matches</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leaderboardBody">
+                            <!-- Leaderboard data will be added here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Create League Page -->
+            <section id="createLeaguePage" class="page">
+                <h2 class="section-title">
+                    <i class="fas fa-plus-circle"></i> Create New League
+                </h2>
+                <div style="max-width: 600px; margin: 0 auto;">
+                    <form id="createLeagueForm">
+                        <div class="form-group">
+                            <label class="form-label">League Name *</label>
+                            <input type="text" class="form-input" id="leagueName" placeholder="Enter league name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Game Type *</label>
+                            <select class="form-select" id="gameType" required>
+                                <option value="">Select game type</option>
+                                <option value="eFootball">eFootball</option>
+                                <option value="FC">FC (FIFA/EA Sports)</option>
+                                <option value="DLS">Dream League Soccer</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Format *</label>
+                            <select class="form-select" id="leagueFormat" required>
+                                <option value="">Select format</option>
+                                <option value="round-robin">Round Robin</option>
+                                <option value="knockout">Knockout</option>
+                                <option value="groups">Group Stage</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Max Teams (4-32) *</label>
+                            <input type="number" class="form-input" id="maxTeams" min="4" max="32" value="16" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Entry Fee (Coins) *</label>
+                            <input type="number" class="form-input" id="entryFee" min="0" value="100" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Description</label>
+                            <textarea class="form-textarea" id="leagueDescription" placeholder="Describe your league"></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">
+                            <i class="fas fa-check"></i> Create League
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Create Team Page -->
+            <section id="createTeamPage" class="page">
+                <h2 class="section-title">
+                    <i class="fas fa-plus-circle"></i> Create New Team
+                </h2>
+                <div style="max-width: 600px; margin: 0 auto;">
+                    <form id="createTeamForm">
+                        <div class="form-group">
+                            <label class="form-label">Team Name *</label>
+                            <input type="text" class="form-input" id="teamName" placeholder="Enter team name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Short Name (3-5 characters) *</label>
+                            <input type="text" class="form-input" id="teamShort" placeholder="e.g., FCB" maxlength="5" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Home Stadium</label>
+                            <input type="text" class="form-input" id="teamStadium" placeholder="Enter stadium name">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Formation *</label>
+                            <select class="form-select" id="teamFormation" required>
+                                <option value="">Select formation</option>
+                                <option value="4-4-2">4-4-2</option>
+                                <option value="4-3-3">4-3-3</option>
+                                <option value="3-5-2">3-5-2</option>
+                                <option value="5-3-2">5-3-2</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Team Description</label>
+                            <textarea class="form-textarea" id="teamDescription" placeholder="Describe your team"></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">
+                            <i class="fas fa-check"></i> Create Team
+                        </button>
+                    </form>
+                </div>
+            </section>
+        </main>
     </div>
-  );
-}
 
-// ========================================
-// COMPONENT: CREATE LEAGUE FORM
-// ========================================
-function CreateLeagueForm({ onSubmit, onCancel }) {
-  const [formData, setFormData] = useState({
-    name: '',
-    description: '',
-    gameType: 'eFootball',
-    format: 'league',
-    maxTeams: 16,
-    entryFee: 50,
-    prizePool: 800
-  });
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSubmit(formData);
-  };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: isNaN(value) ? value : parseInt(value)
-    }));
-  };
-
-  return (
-    <div className="bg-slate-800 rounded-lg p-8 border border-slate-700">
-      <h2 className="text-2xl font-bold text-white mb-6">Create New League</h2>
-
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block text-slate-300 font-semibold mb-2">League Name *</label>
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            placeholder="e.g., Champions League 2024"
-            className="w-full px-4 py-2 bg-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-            required
-          />
+    <!-- Modals -->
+    <div class="modal" id="leagueDetailModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="leagueDetailTitle">League Details</h2>
+                <button class="modal-close" onclick="closeModal('leagueDetailModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div id="leagueDetailContent"></div>
         </div>
-
-        <div>
-          <label className="block text-slate-300 font-semibold mb-2">Description</label>
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            placeholder="Describe your league rules..."
-            className="w-full px-4 py-2 bg-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 h-20 resize-none"
-          />
-        </div>
-
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-slate-300 font-semibold mb-2">Game Type *</label>
-            <select
-              name="gameType"
-              value={formData.gameType}
-              onChange={handleChange}
-              className="w-full px-4 py-2 bg-slate-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-            >
-              <option value="eFootball">eFootball</option>
-              <option value="FC">FC (FIFA/EA Sports FC)</option>
-              <option value="DLS">Dream League Soccer</option>
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-slate-300 font-semibold mb-2">Format *</label>
-            <select
-              name="format"
-              value={formData.format}
-              onChange={handleChange}
-              className="w-full px-4 py-2 bg-slate-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-            >
-              <option value="league">Round Robin</option>
-              <option value="group">Group + Knockout</option>
-              <option value="cup">Cup (Knockout)</option>
-            </select>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-slate-300 font-semibold mb-2">Max Teams</label>
-            <input
-              type="number"
-              name="maxTeams"
-              value={formData.maxTeams}
-              onChange={handleChange}
-              min="4"
-              max="32"
-              className="w-full px-4 py-2 bg-slate-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-            />
-          </div>
-
-          <div>
-            <label className="block text-slate-300 font-semibold mb-2">Entry Fee (VC)</label>
-            <input
-              type="number"
-              name="entryFee"
-              value={formData.entryFee}
-              onChange={handleChange}
-              min="0"
-              className="w-full px-4 py-2 bg-slate-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-            />
-          </div>
-        </div>
-
-        <div className="flex gap-3">
-          <button
-            type="submit"
-            className="flex-1 bg-emerald-500 hover:bg-emerald-600 text-white py-2 rounded-lg font-semibold transition"
-          >
-            Create League
-          </button>
-          <button
-            type="button"
-            onClick={onCancel}
-            className="flex-1 bg-slate-700 hover:bg-slate-600 text-white py-2 rounded-lg font-semibold transition"
-          >
-            Cancel
-          </button>
-        </div>
-      </form>
     </div>
-  );
-}
 
-// ========================================
-// COMPONENT: CREATE TEAM FORM
-// ========================================
-function CreateTeamForm({ onSubmit, onCancel }) {
-  const [formData, setFormData] = useState({
-    name: '',
-    shortName: '',
-    stadium: '',
-    gameType: 'eFootball',
-    formation: '4-4-2',
-    players: []
-  });
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (formData.name.trim()) {
-      onSubmit(formData);
-    }
-  };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  return (
-    <div className="bg-slate-800 rounded-lg p-8 border border-slate-700">
-      <h2 className="text-2xl font-bold text-white mb-6">Create New Team</h2>
-
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block text-slate-300 font-semibold mb-2">Team Name *</label>
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            placeholder="e.g., FC Barcelona"
-            className="w-full px-4 py-2 bg-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-            required
-          />
+    <div class="modal" id="teamDetailModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="teamDetailTitle">Team Details</h2>
+                <button class="modal-close" onclick="closeModal('teamDetailModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div id="teamDetailContent"></div>
         </div>
-
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-slate-300 font-semibold mb-2">Short Name</label>
-            <input
-              type="text"
-              name="shortName"
-              value={formData.shortName}
-              onChange={handleChange}
-              placeholder="e.g., FCB"
-              maxLength="5"
-              className="w-full px-4 py-2 bg-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-            />
-          </div>
-
-          <div>
-            <label className="block text-slate-300 font-semibold mb-2">Stadium</label>
-            <input
-              type="text"
-              name="stadium"
-              value={formData.stadium}
-              onChange={handleChange}
-              placeholder="e.g., Camp Nou"
-              className="w-full px-4 py-2 bg-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-            />
-          </div>
-        </div>
-
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-slate-300 font-semibold mb-2">Game Type</label>
-            <select
-              name="gameType"
-              value={formData.gameType}
-              onChange={handleChange}
-              className="w-full px-4 py-2 bg-slate-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-            >
-              <option value="eFootball">eFootball</option>
-              <option value="FC">FC (FIFA/EA Sports FC)</option>
-              <option value="DLS">Dream League Soccer</option>
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-slate-300 font-semibold mb-2">Formation</label>
-            <select
-              name="formation"
-              value={formData.formation}
-              onChange={handleChange}
-              className="w-full px-4 py-2 bg-slate-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-            >
-              <option value="4-3-3">4-3-3</option>
-              <option value="4-4-2">4-4-2</option>
-              <option value="3-5-2">3-5-2</option>
-              <option value="5-3-2">5-3-2</option>
-              <option value="4-2-3-1">4-2-3-1</option>
-            </select>
-          </div>
-        </div>
-
-        <div className="flex gap-3">
-          <button
-            type="submit"
-            className="flex-1 bg-emerald-500 hover:bg-emerald-600 text-white py-2 rounded-lg font-semibold transition"
-          >
-            Create Team
-          </button>
-          <button
-            type="button"
-            onClick={onCancel}
-            className="flex-1 bg-slate-700 hover:bg-slate-600 text-white py-2 rounded-lg font-semibold transition"
-          >
-            Cancel
-          </button>
-        </div>
-      </form>
     </div>
-  );
-}
 
-// ========================================
-// COMPONENT: FOOTER
-// ========================================
-function Footer() {
-  return (
-    <footer className="bg-slate-800 border-t border-slate-700 mt-12">
-      <div className="max-w-6xl mx-auto px-4 py-8">
-        <div className="flex flex-col md:flex-row justify-between items-center">
-          <p className="text-slate-400">© 2024 Crunk Games | Play. Create. Compete. Earn.</p>
-          <div className="flex gap-4 mt-4 md:mt-0">
-            <a href="#" className="text-slate-400 hover:text-emerald-400 transition">Terms</a>
-            <a href="#" className="text-slate-400 hover:text-emerald-400 transition">Privacy</a>
-            <a href="#" className="text-slate-400 hover:text-emerald-400 transition">Help</a>
-          </div>
-        </div>
-      </div>
-    </footer>
-  );
-}
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
 
-// ========================================
-// COMPONENT: LOADING SCREEN
-// ========================================
-function LoadingScreen() {
-  return (
-    <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-      <div className="text-center">
-        <div className="w-16 h-16 border-4 border-emerald-500/30 border-t-emerald-500 rounded-full animate-spin mx-auto mb-4"></div>
-        <p className="text-white text-lg">Loading...</p>
-      </div>
-    </div>
-  );
-}
+    <script>
+        // ==================== STATE MANAGEMENT ====================
+        const app = {
+            currentUser: null,
+            leagues: [],
+            teams: [],
+            players: [],
+            coins: 0,
+            notifications: [],
+        };
 
-// ========================================
-// COMPONENT: TOAST
-// ========================================
-function Toast({ message, type }) {
-  const bgColor = type === 'success' ? 'bg-emerald-500' : type === 'error' ? 'bg-red-500' : 'bg-blue-500';
-  
-  return (
-    <div className={`fixed bottom-6 left-6 ${bgColor} text-white px-6 py-3 rounded-lg shadow-lg animate-fade-in`}>
-      {type === 'success' && '✅ '}
-      {type === 'error' && '❌ '}
-      {type === 'info' && 'ℹ️ '}
-      {message}
-    </div>
-  );
-}
+        // ==================== INITIALIZATION ====================
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeApp();
+            setupEventListeners();
+            loadData();
+            renderHomePage();
+        });
 
-// ========================================
-// CSS (Add to your stylesheet or use with Tailwind)
-// ========================================
-const styles = `
-  @keyframes fade-in {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
+        function initializeApp() {
+            // Load user from localStorage
+            const savedUser = localStorage.getItem('crunkUser');
+            if (savedUser) {
+                app.currentUser = JSON.parse(savedUser);
+                updateProfileUI();
+            } else {
+                // Create demo user
+                app.currentUser = {
+                    id: 'user_' + Date.now(),
+                    name: 'Guest Player',
+                    email: 'guest@crunkgames.com',
+                    avatar: 'https://via.placeholder.com/40?text=G'
+                };
+                saveUser();
+            }
 
-  .animate-fade-in {
-    animation: fade-in 0.3s ease-out;
-  }
-`;
+            // Load coins
+            app.coins = parseInt(localStorage.getItem('crunkCoins') || '1000');
+            updateCoinsDisplay();
+
+            // Load data
+            app.leagues = JSON.parse(localStorage.getItem('crunkLeagues') || '[]');
+            app.teams = JSON.parse(localStorage.getItem('crunkTeams') || '[]');
+            app.players = JSON.parse(localStorage.getItem('crunkPlayers') || '[]');
+        }
+
+        function setupEventListeners() {
+            // Navigation
+            document.querySelectorAll('[data-page]').forEach(el => {
+                el.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const page = el.dataset.page;
+                    navigateTo(page);
+                    closeSidebar();
+                });
+            });
+
+            // Profile button
+            document.getElementById('profileBtn').addEventListener('click', () => {
+                document.getElementById('profileDropdown').classList.toggle('active');
+            });
+
+            // Menu toggle
+            document.getElementById('menuToggle').addEventListener('click', () => {
+                toggleSidebar();
+            });
+
+            document.getElementById('sidebarOverlay').addEventListener('click', () => {
+                closeSidebar();
+            });
+
+            // Logout
+            document.getElementById('logoutBtn').addEventListener('click', () => {
+                logout();
+            });
+
+            // Claim coins
+            document.getElementById('claimCoinsBtn').addEventListener('click', () => {
+                claimDailyBonus();
+            });
+
+            // Create league button
+            document.getElementById('createLeagueBtnHero').addEventListener('click', () => {
+                navigateTo('create-league');
+            });
+
+            document.getElementById('createLeagueForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                createLeague();
+            });
+
+            document.getElementById('createTeamForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                createTeam();
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.profile-section')) {
+                    document.getElementById('profileDropdown').classList.remove('active');
+                }
+            });
+        }
+
+        // ==================== NAVIGATION ====================
+        function navigateTo(page) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(p => {
+                p.classList.remove('active');
+            });
+
+            // Show selected page
+            document.getElementById(page + 'Page').classList.add('active');
+
+            // Update active nav
+            document.querySelectorAll('[data-page]').forEach(el => {
+                el.classList.remove('active');
+            });
+            document.querySelector(`[data-page="${page}"]`)?.classList.add('active');
+
+            // Render page content
+            switch (page) {
+                case 'home':
+                    renderHomePage();
+                    break;
+                case 'tournaments':
+                    renderTournamentsPage();
+                    break;
+                case 'leagues':
+                    renderLeaguesPage();
+                    break;
+                case 'teams':
+                    renderTeamsPage();
+                    break;
+                case 'leaderboard':
+                    renderLeaderboardPage();
+                    break;
+            }
+
+            window.scrollTo(0, 0);
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('sidebarOverlay').classList.toggle('active');
+        }
+
+        function closeSidebar() {
+            document.getElementById('sidebar').classList.remove('open');
+            document.getElementById('sidebarOverlay').classList.remove('active');
+        }
+
+        // ==================== RENDER FUNCTIONS ====================
+        function renderHomePage() {
+            // Featured tournaments
+            const featuredGrid = document.getElementById('featuredGrid');
+            if (app.leagues.length === 0) {
+                featuredGrid.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-inbox"></i>
+                        <h3>No Tournaments Yet</h3>
+                        <p>Be the first to create one!</p>
+                    </div>
+                `;
+            } else {
+                featuredGrid.innerHTML = app.leagues.slice(0, 3).map(league => createLeagueCard(league)).join('');
+            }
+
+            // Active leagues
+            const activeGrid = document.getElementById('activeLeaguesGrid');
+            activeGrid.innerHTML = app.leagues.filter(l => l.status === 'active').length > 0
+                ? app.leagues.filter(l => l.status === 'active').map(league => createLeagueCard(league)).join('')
+                : '<div class="empty-state" style="grid-column: 1/-1;"><i class="fas fa-inbox"></i><h3>No Active Leagues</h3></div>';
+
+            // My teams
+            const myTeamsGrid = document.getElementById('myTeamsGrid');
+            myTeamsGrid.innerHTML = app.teams.length > 0
+                ? app.teams.map(team => createTeamCard(team)).join('')
+                : '<div class="empty-state" style="grid-column: 1/-1;"><i class="fas fa-inbox"></i><h3>No Teams Yet</h3><p>Create your first team to get started!</p></div>';
+        }
+
+        function renderTournamentsPage() {
+            const grid = document.getElementById('tournamentsGrid');
+            const tournaments = app.leagues.filter(l => l.type === 'tournament');
+            grid.innerHTML = tournaments.length > 0
+                ? tournaments.map(tournament => createLeagueCard(tournament)).join('')
+                : '<div class="empty-state" style="grid-column: 1/-1;"><i class="fas fa-inbox"></i><h3>No Tournaments Available</h3></div>';
+        }
+
+        function renderLeaguesPage() {
+            const grid = document.getElementById('leaguesGrid');
+            const leagues = app.leagues.filter(l => l.type === 'league');
+            grid.innerHTML = leagues.length > 0
+                ? leagues.map(league => createLeagueCard(league)).join('')
+                : '<div class="empty-state" style="grid-column: 1/-1;"><i class="fas fa-inbox"></i><h3>No Leagues Available</h3></div>';
+        }
+
+        function renderTeamsPage() {
+            const grid = document.getElementById('teamsGrid');
+            grid.innerHTML = app.teams.length > 0
+                ? app.teams.map(team => createTeamCard(team)).join('')
+                : '<div class="empty-state" style="grid-column: 1/-1;"><i class="fas fa-inbox"></i><h3>No Teams Available</h3></div>';
+        }
+
+        function renderLeaderboardPage() {
+            const tbody = document.getElementById('leaderboardBody');
+            const leaderboard = app.players
+                .sort((a, b) => (b.coins || 0) - (a.coins || 0))
+                .slice(0, 20);
+
+            tbody.innerHTML = leaderboard.map((player, index) => `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td>${player.name}</td>
+                    <td><span class="badge">${player.coins || 0}</span></td>
+                    <td>${player.leaguesWon || 0}</td>
+                    <td>${player.matches || 0}</td>
+                </tr>
+            `).join('');
+
+            if (leaderboard.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="5" style="text-align: center; color: var(--text-secondary);">No players yet</td>
+                    </tr>
+                `;
+            }
+        }
+
+        // ==================== CARD CREATORS ====================
+        function createLeagueCard(league) {
+            return `
+                <div class="card" onclick="showLeagueDetail('${league.id}')">
+                    <div class="card-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <div class="card-title">${league.name}</div>
+                    <div class="card-description">${league.description || league.gameType}</div>
+                    <div class="card-stats">
+                        <div class="stat">
+                            <div class="stat-value">${league.teams ? league.teams.length : 0}</div>
+                            <div class="stat-label">Teams</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">${league.maxTeams || 16}</div>
+                            <div class="stat-label">Max</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">${league.entryFee || 0}</div>
+                            <div class="stat-label">Fee</div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+                        <span class="badge">${league.status || 'active'}</span>
+                        <span class="badge">${league.format || 'league'}</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        function createTeamCard(team) {
+            return `
+                <div class="card" onclick="showTeamDetail('${team.id}')">
+                    <div class="card-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="card-title">${team.name}</div>
+                    <div class="card-description">${team.stadium || team.formation}</div>
+                    <div class="card-stats">
+                        <div class="stat">
+                            <div class="stat-value">${team.players ? team.players.length : 0}</div>
+                            <div class="stat-label">Players</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">${team.wins || 0}</div>
+                            <div class="stat-label">Wins</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">${team.coins || 0}</div>
+                            <div class="stat-label">Coins</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ==================== MODAL FUNCTIONS ====================
+        function showLeagueDetail(leagueId) {
+            const league = app.leagues.find(l => l.id === leagueId);
+            if (!league) return;
+
+            const content = document.getElementById('leagueDetailContent');
+            content.innerHTML = `
+                <div>
+                    <h3 style="color: var(--gold); margin-bottom: 1rem;">${league.name}</h3>
+                    <p><strong>Game Type:</strong> ${league.gameType}</p>
+                    <p><strong>Format:</strong> ${league.format}</p>
+                    <p><strong>Teams:</strong> ${league.teams ? league.teams.length : 0}/${league.maxTeams}</p>
+                    <p><strong>Entry Fee:</strong> <span class="badge">${league.entryFee}</span></p>
+                    <p><strong>Description:</strong> ${league.description || 'N/A'}</p>
+                    <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+                        <button class="btn btn-primary" onclick="joinLeague('${leagueId}')">
+                            <i class="fas fa-plus"></i> Join League
+                        </button>
+                        <button class="btn btn-secondary" onclick="closeModal('leagueDetailModal')">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('leagueDetailTitle').textContent = league.name;
+            document.getElementById('leagueDetailModal').classList.add('active');
+        }
+
+        function showTeamDetail(teamId) {
+            const team = app.teams.find(t => t.id === teamId);
+            if (!team) return;
+
+            const content = document.getElementById('teamDetailContent');
+            content.innerHTML = `
+                <div>
+                    <h3 style="color: var(--gold); margin-bottom: 1rem;">${team.name}</h3>
+                    <p><strong>Short Name:</strong> ${team.shortName}</p>
+                    <p><strong>Stadium:</strong> ${team.stadium || 'N/A'}</p>
+                    <p><strong>Formation:</strong> ${team.formation}</p>
+                    <p><strong>Players:</strong> ${team.players ? team.players.length : 0}</p>
+                    <p><strong>Description:</strong> ${team.description || 'N/A'}</p>
+                    <div style="margin-top: 2rem;">
+                        <button class="btn btn-secondary" onclick="closeModal('teamDetailModal')">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('teamDetailTitle').textContent = team.name;
+            document.getElementById('teamDetailModal').classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        // ==================== FORM FUNCTIONS ====================
+        function createLeague() {
+            const name = document.getElementById('leagueName').value;
+            const gameType = document.getElementById('gameType').value;
+            const format = document.getElementById('leagueFormat').value;
+            const maxTeams = parseInt(document.getElementById('maxTeams').value);
+            const entryFee = parseInt(document.getElementById('entryFee').value);
+            const description = document.getElementById('leagueDescription').value;
+
+            if (!name || !gameType || !format) {
+                showToast('Please fill in all required fields', 'error');
+                return;
+            }
+
+            const league = {
+                id: 'league_' + Date.now(),
+                name,
+                gameType,
+                format,
+                maxTeams,
+                entryFee,
+                description,
+                status: 'active',
+                teams: [],
+                createdAt: new Date().toISOString(),
+                creator: app.currentUser.id
+            };
+
+            app.leagues.push(league);
+            saveLeagues();
+
+            document.getElementById('createLeagueForm').reset();
+            showToast('League created successfully!', 'success');
+            navigateTo('home');
+        }
+
+        function createTeam() {
+            const name = document.getElementById('teamName').value;
+            const shortName = document.getElementById('teamShort').value;
+            const stadium = document.getElementById('teamStadium').value;
+            const formation = document.getElementById('teamFormation').value;
+            const description = document.getElementById('teamDescription').value;
+
+            if (!name || !shortName || !formation) {
+                showToast('Please fill in all required fields', 'error');
+                return;
+            }
+
+            const team = {
+                id: 'team_' + Date.now(),
+                name,
+                shortName,
+                stadium,
+                formation,
+                description,
+                players: [],
+                wins: 0,
+                draws: 0,
+                losses: 0,
+                coins: 0,
+                createdAt: new Date().toISOString(),
+                creator: app.currentUser.id
+            };
+
+            app.teams.push(team);
+            saveTeams();
+
+            document.getElementById('createTeamForm').reset();
+            showToast('Team created successfully!', 'success');
+            navigateTo('home');
+        }
+
+        function joinLeague(leagueId) {
+            const league = app.leagues.find(l => l.id === leagueId);
+            if (!league) return;
+
+            if (league.entryFee > app.coins) {
+                showToast('Not enough coins to join this league', 'error');
+                return;
+            }
+
+            if (!league.teams) league.teams = [];
+
+            if (league.teams.some(t => t.creator === app.currentUser.id)) {
+                showToast('You already joined this league', 'warning');
+                return;
+            }
+
+            league.teams.push({
+                id: 'team_' + Date.now(),
+                creator: app.currentUser.id,
+                creatorName: app.currentUser.name,
+                joinedAt: new Date().toISOString()
+            });
+
+            app.coins -= league.entryFee;
+            saveLeagues();
+            saveCoins();
+            updateCoinsDisplay();
+
+            showToast(`Joined ${league.name}! Entry fee: ${league.entryFee} coins`, 'success');
+            closeModal('leagueDetailModal');
+            navigateTo('home');
+        }
+
+        // ==================== UTILITY FUNCTIONS ====================
+        function claimDailyBonus() {
+            const lastClaim = localStorage.getItem('lastCoinsClaimDate');
+            const today = new Date().toDateString();
+
+            if (lastClaim === today) {
+                showToast('You already claimed your daily bonus today!', 'warning');
+                return;
+            }
+
+            const bonusAmount = 100;
+            app.coins += bonusAmount;
+            localStorage.setItem('lastCoinsClaimDate', today);
+            saveCoins();
+            updateCoinsDisplay();
+
+            showToast(`🎉 Claimed ${bonusAmount} bonus coins!`, 'success');
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('crunkUser');
+                app.currentUser = null;
+                location.reload();
+            }
+        }
+
+        function updateCoinsDisplay() {
+            document.getElementById('coinsDisplay').textContent = app.coins;
+        }
+
+        function updateProfileUI() {
+            if (app.currentUser) {
+                document.getElementById('profileName').textContent = app.currentUser.name;
+                document.getElementById('profileEmail').textContent = app.currentUser.email;
+                document.getElementById('profileImage').src = app.currentUser.avatar;
+                document.getElementById('dropdownImage').src = app.currentUser.avatar;
+            }
+        }
+
+        function saveUser() {
+            localStorage.setItem('crunkUser', JSON.stringify(app.currentUser));
+        }
+
+        function saveCoins() {
+            localStorage.setItem('crunkCoins', app.coins.toString());
+        }
+
+        function saveLeagues() {
+            localStorage.setItem('crunkLeagues', JSON.stringify(app.leagues));
+        }
+
+        function saveTeams() {
+            localStorage.setItem('crunkTeams', JSON.stringify(app.teams));
+        }
+
+        function loadData() {
+            app.leagues = JSON.parse(localStorage.getItem('crunkLeagues') || '[]');
+            app.teams = JSON.parse(localStorage.getItem('crunkTeams') || '[]');
+        }
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+
+            const icons = {
+                success: 'fas fa-check-circle',
+                error: 'fas fa-exclamation-circle',
+                warning: 'fas fa-exclamation-triangle',
+                info: 'fas fa-info-circle'
+            };
+
+            toast.innerHTML = `
+                <i class="${icons[type]}"></i>
+                <span>${message}</span>
+            `;
+
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
