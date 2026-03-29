@@ -3,27 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <meta name="description" content="Veno-Arena - Football Tournaments & Leagues. Play, Compete, Earn Veno Coins!">
-    <meta name="theme-color" content="#10b981">
-    <title>Veno-Arena - Football Tournaments & Leagues</title>
+    <title>Crunk Games - Complete Web App</title>
     
-    <!-- Boxicons -->
+    <!-- External Libraries -->
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-    
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
-        /* ===================== ROOT VARIABLES ===================== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        /* ================== GLOBAL VARIABLES & RESET ================== */
         :root {
             --primary: #10b981;
             --primary-dark: #059669;
@@ -39,261 +27,73 @@
             --error: #ef4444;
             --warning: #f59e0b;
             --info: #3b82f6;
-            --gold: #fbbf24;
-            --silver: #94a3b8;
-            --bronze: #cd7f32;
             --transition: all 0.3s ease;
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
         }
 
-        body.light-theme {
-            --primary: #059669;
-            --primary-dark: #047857;
-            --primary-light: #10b981;
-            --bg-primary: #f3f4f6;
-            --bg-secondary: #ffffff;
-            --bg-tertiary: #e5e7eb;
-            --border-color: #d1d5db;
-            --text-primary: #111827;
-            --text-secondary: #4b5563;
-            --text-muted: #9ca3af;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        /* ===================== GLOBAL STYLES ===================== */
-        html {
-            scroll-behavior: smooth;
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
         }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: var(--bg-primary);
             color: var(--text-primary);
-            line-height: 1.6;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
+            line-height: 1.5;
         }
 
         .app {
-            min-height: 100vh;
             display: flex;
             flex-direction: column;
-        }
-
-        /* ===================== LOGIN PAGE ===================== */
-        .login-container {
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            background: linear-gradient(135deg, #05070d 0%, #0f172a 100%);
         }
 
-        .login-card {
-            background: var(--bg-secondary);
-            border-radius: 24px;
-            padding: 40px 30px;
-            border: 1px solid var(--border-color);
-            text-align: center;
-            max-width: 400px;
-            width: 100%;
-            animation: slideUp 0.5s ease;
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .logo-icon {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            border-radius: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 15px;
-            box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3);
-        }
-
-        .logo-icon i {
-            font-size: 40px;
-            color: white;
-        }
-
-        .login-card h1 {
-            font-size: 28px;
-            color: var(--primary);
-            margin-bottom: 5px;
-            font-weight: 700;
-        }
-
-        .tagline {
-            color: var(--text-secondary);
-            font-size: 14px;
-            margin-bottom: 30px;
-        }
-
-        .google-btn {
-            width: 100%;
-            padding: 14px;
-            background: white;
-            border: none;
-            border-radius: 40px;
-            font-size: 16px;
-            font-weight: 600;
-            color: #111;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-
-        .google-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(16, 185, 129, 0.3);
-        }
-
-        .google-btn:active {
-            transform: translateY(0);
-        }
-
-        .google-btn i {
-            color: #4285f4;
-            font-size: 20px;
-        }
-
-        .divider {
-            text-align: center;
-            margin: 20px 0;
-            position: relative;
-        }
-
-        .divider::before,
-        .divider::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            width: calc(50% - 70px);
-            height: 1px;
-            background: var(--border-color);
-        }
-
-        .divider::before {
-            left: 0;
-        }
-
-        .divider::after {
-            right: 0;
-        }
-
-        .divider span {
-            background: var(--bg-secondary);
-            padding: 0 15px;
-            color: var(--text-secondary);
-            font-size: 13px;
-        }
-
-        .login-form-group {
-            margin-bottom: 15px;
-            text-align: left;
-        }
-
-        .login-form-group input {
-            width: 100%;
-            padding: 14px 16px;
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            color: var(--text-primary);
-            font-size: 14px;
-            transition: var(--transition);
-        }
-
-        .login-form-group input:focus {
-            outline: none;
-            border-color: var(--primary);
-            background: rgba(16, 185, 129, 0.05);
-        }
-
-        .login-btn {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            border: none;
-            border-radius: 40px;
-            color: white;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            margin-top: 10px;
-        }
-
-        .login-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(16, 185, 129, 0.4);
-        }
-
-        .login-btn:active {
-            transform: translateY(0);
-        }
-
-        /* ===================== MAIN APP CONTAINER ===================== */
-        .main-app {
-            display: none;
-        }
-
-        .main-app.active {
-            display: flex;
-        }
-
-        /* ===================== TOPBAR ===================== */
+        /* ================== TOPBAR ================== */
         .topbar {
             height: 70px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 24px;
+            padding: 0 20px;
             background: var(--bg-secondary);
             border-bottom: 1px solid var(--border-color);
             position: sticky;
             top: 0;
-            z-index: 100;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .menu {
-            font-size: 24px;
-            cursor: pointer;
-            color: var(--primary);
-            transition: var(--transition);
-            padding: 8px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .menu:hover {
-            background: rgba(16, 185, 129, 0.1);
-            transform: scale(1.1);
+            z-index: 1000;
+            backdrop-filter: blur(10px);
         }
 
         .brand h1 {
-            font-size: 20px;
-            font-weight: 700;
+            font-size: 24px;
             color: var(--primary);
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .menu-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--primary);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+
+        .menu-btn:hover {
+            background: rgba(16, 185, 129, 0.1);
+            transform: scale(1.1);
         }
 
         .icons {
@@ -302,56 +102,25 @@
             gap: 20px;
         }
 
-        .veno-coins-container {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
         .veno-coins-display {
             display: flex;
             align-items: center;
             gap: 8px;
-            padding: 8px 14px;
             background: rgba(16, 185, 129, 0.1);
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            border-radius: 30px;
+            padding: 8px 16px;
+            border-radius: 40px;
+            border: 1px solid rgba(16, 185, 129, 0.2);
         }
 
         .veno-coins-display i {
             color: #fbbf24;
-            font-size: 16px;
+            font-size: 18px;
         }
 
         .veno-coins-display span {
             font-weight: 700;
             font-size: 16px;
             color: var(--primary);
-        }
-
-        .claim-veno-btn {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            border: none;
-            color: white;
-            padding: 8px 14px;
-            border-radius: 30px;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .claim-veno-btn:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-        }
-
-        .claim-veno-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
         }
 
         .profile-pic {
@@ -368,101 +137,7 @@
             transform: scale(1.05);
         }
 
-        .profile-dropdown {
-            position: relative;
-            cursor: pointer;
-        }
-
-        .profile-popup {
-            display: none;
-            position: absolute;
-            top: calc(100% + 10px);
-            right: 0;
-            width: 280px;
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 16px;
-            z-index: 1001;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-            animation: slideDown 0.3s ease;
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .profile-popup.active {
-            display: block;
-        }
-
-        .account-info {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-            margin-bottom: 16px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .account-info img {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .account-info div p {
-            font-size: 13px;
-            margin: 2px 0;
-        }
-
-        .profile-menu a {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 10px 12px;
-            border-radius: 10px;
-            color: var(--text-primary);
-            text-decoration: none;
-            transition: var(--transition);
-            margin-bottom: 5px;
-        }
-
-        .profile-menu a:hover {
-            background: rgba(16, 185, 129, 0.1);
-            color: var(--primary);
-        }
-
-        .profile-menu a i {
-            width: 20px;
-        }
-
-        #logoutBtn {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 10px;
-            background: #ef4444;
-            color: white;
-            cursor: pointer;
-            font-weight: 600;
-            margin-top: 10px;
-            transition: var(--transition);
-        }
-
-        #logoutBtn:hover {
-            background: #dc2626;
-        }
-
-        /* ===================== SIDEBAR ===================== */
+        /* ================== SIDEBAR ================== */
         .sidebar {
             position: fixed;
             left: -300px;
@@ -474,7 +149,6 @@
             transition: var(--transition);
             z-index: 2000;
             overflow-y: auto;
-            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
         }
 
         .sidebar.open {
@@ -492,62 +166,22 @@
         .sidebar-header h3 {
             color: var(--primary);
             font-size: 20px;
-            font-weight: 700;
         }
 
         .close-sidebar {
+            background: none;
+            border: none;
             font-size: 24px;
             cursor: pointer;
-            padding: 8px;
+            color: var(--text-secondary);
             transition: var(--transition);
+            padding: 8px;
             border-radius: 50%;
         }
 
         .close-sidebar:hover {
-            background: rgba(16, 185, 129, 0.1);
-        }
-
-        .venaura-section {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 15px;
-            margin: 10px 15px;
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05));
-            border-radius: 16px;
-            cursor: pointer;
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            transition: var(--transition);
-        }
-
-        .venaura-section:hover {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(16, 185, 129, 0.1));
-            border-color: var(--primary);
-        }
-
-        .venaura-icon {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            color: white;
-            flex-shrink: 0;
-        }
-
-        .venaura-info h3 {
-            font-size: 14px;
-            font-weight: 600;
-            margin: 0;
-        }
-
-        .venaura-info p {
-            font-size: 12px;
-            color: var(--text-secondary);
-            margin: 2px 0 0 0;
+            color: #ff5555;
+            transform: rotate(90deg);
         }
 
         .sidebar-menu {
@@ -564,39 +198,17 @@
             cursor: pointer;
             transition: var(--transition);
             margin-bottom: 5px;
-            color: var(--text-primary);
-            font-weight: 500;
+        }
+
+        .sidebar-menu li:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateX(5px);
         }
 
         .sidebar-menu li i {
             width: 24px;
             color: var(--primary);
-        }
-
-        .sidebar-menu li:hover {
-            background: rgba(16, 185, 129, 0.1);
-            color: var(--primary);
-        }
-
-        .sidebar-footer {
-            padding: 20px;
-            border-top: 1px solid var(--border-color);
-            margin-top: auto;
-        }
-
-        .sidebar-theme {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px 16px;
-            background: var(--bg-tertiary);
-            border-radius: 12px;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .sidebar-theme:hover {
-            background: rgba(16, 185, 129, 0.1);
         }
 
         .sidebar-overlay {
@@ -607,509 +219,288 @@
             height: 100%;
             background: rgba(0, 0, 0, 0.5);
             z-index: 1999;
-            opacity: 0;
-            visibility: hidden;
-            transition: var(--transition);
-            backdrop-filter: blur(4px);
+            display: none;
+            backdrop-filter: blur(3px);
         }
 
         .sidebar-overlay.active {
-            opacity: 1;
-            visibility: visible;
+            display: block;
         }
 
-        /* ===================== MAIN CONTENT ===================== */
-        .tournaments-main {
+        /* ================== MAIN CONTENT ================== */
+        main {
             flex: 1;
-            padding-bottom: 40px;
             overflow-y: auto;
+            padding: 20px;
         }
 
-        /* ===================== HERO SECTION ===================== */
-        .tournaments-hero {
+        .hero {
             background: linear-gradient(135deg, #1a2a3a, #0f172a);
             border-radius: 24px;
-            margin: 20px;
             padding: 40px;
-            position: relative;
-            overflow: hidden;
-            border: 1px solid rgba(16, 185, 129, 0.1);
+            margin-bottom: 40px;
+            text-align: center;
         }
 
-        .tournaments-hero::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -10%;
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(16, 185, 129, 0.1), transparent);
-            border-radius: 50%;
-        }
-
-        .tournaments-hero h1 {
-            font-size: 32px;
+        .hero h1 {
+            font-size: 36px;
             margin-bottom: 12px;
             background: linear-gradient(135deg, #fff, var(--primary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
-            position: relative;
-            z-index: 1;
         }
 
-        .tournaments-hero p {
-            color: #9ca3af;
-            margin-bottom: 24px;
-            position: relative;
-            z-index: 1;
+        .hero p {
+            color: var(--text-secondary);
+            font-size: 16px;
+            margin-bottom: 20px;
         }
 
-        .hero-buttons {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            position: relative;
-            z-index: 1;
-        }
-
-        .btn-primary,
-        .btn-secondary {
+        .btn {
             padding: 12px 24px;
             border-radius: 30px;
             font-weight: 600;
             cursor: pointer;
-            transition: var(--transition);
             border: none;
-            display: flex;
+            transition: var(--transition);
+            display: inline-flex;
             align-items: center;
             gap: 8px;
-            font-size: 15px;
         }
 
         .btn-primary {
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
         }
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+            box-shadow: 0 5px 20px rgba(16, 185, 129, 0.4);
         }
 
         .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
+            background: transparent;
             color: white;
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.15);
-            border-color: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.1);
         }
 
-        /* ===================== QUICK ACTIONS ===================== */
-        .quick-actions {
+        /* ================== GRID & CARDS ================== */
+        .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 20px;
-            padding: 0 20px;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
         }
 
-        .action-card {
+        .card {
             background: var(--bg-tertiary);
-            border-radius: 16px;
-            padding: 24px 20px;
-            text-align: center;
-            cursor: pointer;
-            transition: var(--transition);
             border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 20px;
+            transition: var(--transition);
+            cursor: pointer;
         }
 
-        .action-card:hover {
+        .card:hover {
             transform: translateY(-5px);
             border-color: var(--primary);
-            background: rgba(16, 185, 129, 0.05);
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.2);
         }
 
-        .action-card i {
-            font-size: 40px;
-            color: var(--primary);
+        .card-header {
+            font-size: 18px;
+            font-weight: 700;
             margin-bottom: 12px;
         }
 
-        .action-card h3 {
-            font-size: 18px;
-            margin-bottom: 6px;
+        .card-meta {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+        }
+
+        .meta-item {
+            background: var(--bg-secondary);
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .card-footer {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .card-footer button {
+            flex: 1;
+            padding: 8px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        /* ================== FORMS ================== */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
             font-weight: 600;
         }
 
-        .action-card p {
-            font-size: 13px;
-            color: var(--text-secondary);
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 14px;
+            transition: var(--transition);
         }
 
-        /* ===================== SECTIONS ===================== */
-        .featured-section,
-        .active-section,
-        .teams-section {
-            padding: 0 20px;
-            margin-bottom: 40px;
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
         }
 
-        .section-header {
+        /* ================== MODAL ================== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-primary);
+            border-radius: 24px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+            padding: 30px;
+        }
+
+        .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
-        }
-
-        .section-header h2 {
-            font-size: 20px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .section-header a {
-            color: var(--primary);
-            text-decoration: none;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .section-header a:hover {
-            gap: 8px;
-        }
-
-        .leagues-grid,
-        .teams-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 20px;
-        }
-
-        /* ===================== LEAGUE CARD ===================== */
-        .league-card {
-            background: var(--bg-tertiary);
-            border-radius: 16px;
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .league-card:hover {
-            transform: translateY(-8px);
-            border-color: var(--primary);
-            box-shadow: 0 12px 24px rgba(16, 185, 129, 0.2);
-        }
-
-        .league-header {
-            background: linear-gradient(135deg, #1f2937, #111827);
-            padding: 20px;
-            position: relative;
-            min-height: 120px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .league-status {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .status-live {
-            background: #10b981;
-            color: white;
-        }
-
-        .status-registration {
-            background: #f59e0b;
-            color: white;
-        }
-
-        .status-completed {
-            background: #6b7280;
-            color: white;
-        }
-
-        .status-upcoming {
-            background: #3b82f6;
-            color: white;
-        }
-
-        .league-icon {
-            font-size: 32px;
-            margin-bottom: 10px;
-        }
-
-        .league-header h3 {
-            font-size: 18px;
-            margin-bottom: 4px;
-            font-weight: 700;
-        }
-
-        .league-game {
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-
-        .owner-badge,
-        .joined-badge {
-            font-size: 11px;
-            font-weight: 600;
-            padding: 4px 8px;
-            border-radius: 6px;
-            margin-top: 8px;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .owner-badge {
-            background: rgba(251, 191, 36, 0.2);
-            color: #fbbf24;
-        }
-
-        .joined-badge {
-            background: rgba(16, 185, 129, 0.2);
-            color: var(--primary);
-        }
-
-        .league-body {
-            padding: 15px;
-            flex: 1;
-        }
-
-        .league-stats {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 15px;
             padding-bottom: 15px;
             border-bottom: 1px solid var(--border-color);
         }
 
-        .stat {
-            text-align: center;
-            flex: 1;
-        }
-
-        .stat-value {
-            font-size: 18px;
-            font-weight: 700;
+        .modal-header h2 {
+            font-size: 20px;
             color: var(--primary);
         }
 
-        .stat-value.full {
-            color: #ef4444;
-        }
-
-        .stat-label {
-            font-size: 11px;
-            color: var(--text-secondary);
-            margin-top: 4px;
-        }
-
-        .league-owner {
-            font-size: 13px;
-            color: var(--text-secondary);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .league-footer {
-            padding: 15px;
-            border-top: 1px solid var(--border-color);
-            display: flex;
-            gap: 10px;
-        }
-
-        .join-btn,
-        .details-btn,
-        .joined-btn {
-            flex: 1;
-            padding: 10px;
-            border-radius: 30px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-        }
-
-        .join-btn {
-            background: var(--primary);
+        .modal-close {
+            background: none;
             border: none;
-            color: white;
-        }
-
-        .join-btn:hover:not(:disabled) {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
-        }
-
-        .join-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
-        .joined-btn {
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid var(--primary);
-            color: var(--primary);
-            cursor: default;
-        }
-
-        .details-btn {
-            background: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--text-primary);
-        }
-
-        .details-btn:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-            background: rgba(16, 185, 129, 0.05);
-        }
-
-        /* ===================== TEAM CARD ===================== */
-        .team-card {
-            background: var(--bg-tertiary);
-            border-radius: 16px;
-            padding: 16px;
-            display: flex;
-            align-items: center;
-            gap: 16px;
+            font-size: 24px;
+            color: var(--text-secondary);
             cursor: pointer;
-            border: 1px solid var(--border-color);
             transition: var(--transition);
         }
 
-        .team-card:hover {
-            transform: translateX(8px);
-            border-color: var(--primary);
-            background: rgba(16, 185, 129, 0.05);
+        .modal-close:hover {
+            color: #ff5555;
         }
 
-        .team-logo {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #1f2937, #111827);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            flex-shrink: 0;
-            overflow: hidden;
-        }
-
-        .team-logo img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .team-info {
-            flex: 1;
-        }
-
-        .team-name {
-            font-weight: 700;
-            font-size: 16px;
-            margin-bottom: 6px;
-        }
-
-        .team-stats {
+        /* ================== TABS ================== */
+        .tabs {
             display: flex;
             gap: 12px;
-            font-size: 12px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            background: transparent;
+            border: none;
             color: var(--text-secondary);
+            font-weight: 600;
+            cursor: pointer;
+            position: relative;
+            transition: var(--transition);
         }
 
-        .team-stats span {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .team-card i:last-child {
+        .tab-btn.active {
             color: var(--primary);
         }
 
-        /* ===================== EMPTY STATE ===================== */
-        .empty-state {
-            text-align: center;
-            padding: 60px 40px;
-            background: var(--bg-tertiary);
-            border-radius: 16px;
-            color: var(--text-secondary);
-            border: 1px dashed var(--border-color);
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--primary);
         }
 
-        .empty-state i {
-            font-size: 48px;
-            color: var(--primary);
-            margin-bottom: 16px;
-            opacity: 0.5;
+        .tab-content {
+            display: none;
         }
 
-        .empty-state p {
-            margin-bottom: 16px;
-            font-size: 15px;
+        .tab-content.active {
+            display: block;
         }
 
-        /* ===================== TOAST NOTIFICATION ===================== */
+        /* ================== NOTIFICATIONS & TOASTS ================== */
         .toast-container {
             position: fixed;
             bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 10000;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            align-items: center;
         }
 
         .toast {
             background: var(--primary);
-            color: white;
-            padding: 14px 24px;
+            color: var(--bg-primary);
+            padding: 12px 24px;
             border-radius: 50px;
             font-weight: 600;
+            margin-top: 10px;
             opacity: 0;
             transform: translateY(20px);
             transition: var(--transition);
-            min-width: 300px;
-            text-align: center;
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
             display: flex;
             align-items: center;
-            justify-content: center;
             gap: 8px;
         }
 
@@ -1119,1198 +510,929 @@
         }
 
         .toast.error {
-            background: #ef4444;
-            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+            background: var(--error);
         }
 
         .toast.warning {
-            background: #f59e0b;
-            color: white;
-            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+            background: var(--warning);
         }
 
-        /* ===================== FOOTER ===================== */
-        .footer {
-            margin-top: auto;
-            padding: 20px;
-            background: var(--bg-secondary);
-            border-top: 1px solid var(--border-color);
-            text-align: center;
-            color: var(--text-secondary);
-            font-size: 14px;
+        .toast.info {
+            background: var(--info);
         }
 
-        /* ===================== MODALS ===================== */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 10000;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(4px);
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background: var(--bg-secondary);
-            border-radius: 20px;
-            width: 90%;
-            max-width: 500px;
-            border: 1px solid var(--border-color);
-            max-height: 90vh;
-            overflow-y: auto;
-            animation: slideUp 0.3s ease;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 24px;
-            border-bottom: 1px solid var(--border-color);
-            position: sticky;
-            top: 0;
-            background: var(--bg-secondary);
-            z-index: 1;
-        }
-
-        .modal-header h2 {
-            font-size: 18px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .modal-close {
-            font-size: 28px;
-            cursor: pointer;
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            transition: var(--transition);
-        }
-
-        .modal-close:hover {
-            background: rgba(16, 185, 129, 0.1);
-            color: var(--primary);
-        }
-
-        .modal-body {
-            padding: 24px;
-        }
-
-        /* ===================== RESPONSIVE ===================== */
+        /* ================== RESPONSIVE ================== */
         @media (max-width: 768px) {
             .topbar {
                 padding: 0 16px;
-                height: 60px;
             }
 
             .brand h1 {
                 font-size: 18px;
             }
 
-            .veno-coins-display {
-                display: none;
+            .hero {
+                padding: 30px 20px;
             }
 
-            .claim-veno-btn {
-                display: none;
-            }
-
-            .tournaments-hero {
-                margin: 16px;
-                padding: 24px 16px;
-            }
-
-            .tournaments-hero h1 {
+            .hero h1 {
                 font-size: 24px;
             }
 
-            .quick-actions {
-                grid-template-columns: repeat(2, 1fr);
-                padding: 0 16px;
-            }
-
-            .featured-section,
-            .active-section,
-            .teams-section {
-                padding: 0 16px;
-            }
-
-            .leagues-grid,
-            .teams-grid {
+            .grid {
                 grid-template-columns: 1fr;
-            }
-
-            .section-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 12px;
-            }
-
-            .league-card {
-                margin: 0;
-            }
-
-            .hero-buttons {
-                flex-direction: column;
-            }
-
-            .btn-primary,
-            .btn-secondary {
-                width: 100%;
-                justify-content: center;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .quick-actions {
-                grid-template-columns: 1fr;
-            }
-
-            .tournaments-hero h1 {
-                font-size: 20px;
-            }
-
-            .tournaments-hero p {
-                font-size: 14px;
-            }
-
-            .btn-primary,
-            .btn-secondary {
-                padding: 10px 16px;
-                font-size: 14px;
             }
 
             .modal-content {
                 width: 95%;
-                border-radius: 16px;
             }
 
-            .toast {
-                min-width: 280px;
-                font-size: 14px;
-                padding: 12px 20px;
+            main {
+                padding: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .topbar {
+                height: 55px;
+                padding: 0 12px;
             }
 
-            .sidebar {
-                width: 250px;
+            .brand h1 {
+                font-size: 16px;
             }
 
             .icons {
-                gap: 12px;
+                gap: 10px;
+            }
+
+            .veno-coins-display {
+                padding: 6px 12px;
+                font-size: 14px;
+            }
+
+            .hero {
+                padding: 20px 15px;
+            }
+
+            .hero h1 {
+                font-size: 20px;
+            }
+
+            .btn {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+
+            .card {
+                padding: 15px;
             }
         }
 
-        /* ===================== SCROLLBAR ===================== */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
+        /* ================== ANIMATIONS ================== */
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        ::-webkit-scrollbar-track {
-            background: var(--bg-tertiary);
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        ::-webkit-scrollbar-thumb {
-            background: var(--border-color);
-            border-radius: 4px;
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
         }
 
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--primary);
-        }
-
-        /* ===================== UTILITY CLASSES ===================== */
-        .hidden {
-            display: none !important;
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         .loading {
-            opacity: 0.6;
-            pointer-events: none;
+            display: inline-block;
+            animation: spin 1s linear infinite;
         }
 
+        /* ================== UTILITY CLASSES ================== */
         .text-center {
             text-align: center;
         }
 
-        .mt {
+        .mt-20 {
             margin-top: 20px;
         }
 
-        .mb {
+        .mb-20 {
             margin-bottom: 20px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-secondary);
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        .loading-spinner {
+            border: 4px solid rgba(16, 185, 129, 0.1);
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        footer {
+            margin-top: auto;
+            padding: 20px;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 12px;
         }
     </style>
 </head>
 <body>
-
-<!-- LOGIN CONTAINER -->
-<div id="loginContainer" class="login-container">
-    <div class="login-card">
-        <div class="logo-icon">
-            <i class="fas fa-trophy"></i>
-        </div>
-        <h1>🏆 Veno-Arena</h1>
-        <p class="tagline">Play Tournaments • Win Coins • Compete</p>
-
-        <button class="google-btn" id="googleLoginBtn">
-            <i class="fab fa-google"></i> Continue with Google
-        </button>
-
-        <div class="divider"><span>OR</span></div>
-
-        <form id="loginForm">
-            <div class="login-form-group">
-                <input type="email" id="loginEmail" placeholder="Email address" required>
-            </div>
-            <div class="login-form-group">
-                <input type="password" id="loginPassword" placeholder="Password" required>
-            </div>
-            <button type="submit" class="login-btn">
-                <i class="fas fa-sign-in-alt"></i> Login / Sign Up
-            </button>
-        </form>
-    </div>
-</div>
-
-<!-- MAIN APP CONTAINER -->
-<div id="mainApp" class="main-app">
+    <!-- APP CONTAINER -->
     <div class="app">
         <!-- TOPBAR -->
         <header class="topbar">
-            <div class="menu" id="menuBtn" title="Open menu">
-                <i class="bx bx-menu"></i>
-            </div>
-            <div class="brand">
-                <h1>🏆 Veno-Arena</h1>
-            </div>
+            <button class="menu-btn" id="menuBtn"><i class="bx bx-menu"></i></button>
+            <div class="brand"><h1>🏆 Crunk Games</h1></div>
             <div class="icons">
-                <div class="veno-coins-container">
-                    <div class="veno-coins-display">
-                        <i class="fas fa-coins"></i>
-                        <span id="venoCoinsAmount">0</span>
-                        <span class="coin-label">Veno Coins</span>
-                    </div>
-                    <button id="claimVenoCoinsBtn" class="claim-veno-btn" title="Claim daily bonus">
-                        <i class="fas fa-gift"></i> Claim
-                    </button>
+                <div class="veno-coins-display">
+                    <i class="fas fa-coins"></i>
+                    <span id="venoCoinsAmount">0</span>
                 </div>
-                <div class="profile-dropdown" id="profileDropdown" title="Profile menu">
-                    <img id="profileAvatarImg" class="profile-pic" alt="Profile">
-                    <div class="profile-popup" id="profilePopup">
-                        <div class="account-info">
-                            <img id="popupProfileImg" alt="Profile">
-                            <div>
-                                <p id="profileNameDisplay" style="font-weight: 600; font-size: 14px;"></p>
-                                <p id="profileEmailDisplay" style="font-size: 12px; color: var(--text-secondary);"></p>
-                            </div>
-                        </div>
-                        <div class="profile-menu">
-                            <a href="#" id="profileSettingsBtn"><i class="bx bx-cog"></i> Settings</a>
-                            <a href="#" id="myLeaguesBtn"><i class="bx bx-calendar-event"></i> My Leagues</a>
-                            <a href="#" id="myTeamsBtn"><i class="bx bx-group"></i> My Teams</a>
-                        </div>
-                        <button id="logoutBtn"><i class="bx bx-log-out"></i> Logout</button>
-                    </div>
-                </div>
+                <img id="profilePic" class="profile-pic" src="https://ui-avatars.com/api/?name=User&background=10b981&color=fff&size=128" alt="Profile">
             </div>
         </header>
 
         <!-- SIDEBAR -->
-        <div class="sidebar" id="sidebar">
+        <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <h3>Menu</h3>
-                <span class="close-sidebar" id="closeSidebar"><i class="bx bx-x"></i></span>
-            </div>
-            <div class="venaura-section" id="venauraIcon">
-                <div class="venaura-icon"><i class="fas fa-star"></i></div>
-                <div class="venaura-info">
-                    <h3>Venaura App</h3>
-                    <p>Explore more</p>
-                </div>
+                <button class="close-sidebar" id="closeSidebar"><i class="bx bx-x"></i></button>
             </div>
             <ul class="sidebar-menu">
-                <li id="sidebarHome"><i class="bx bx-home"></i> Home</li>
-                <li id="sidebarCreateLeague"><i class="bx bx-plus-circle"></i> Create League</li>
-                <li id="sidebarCreateTeam"><i class="bx bx-plus-circle"></i> Create Team</li>
-                <li id="sidebarMyLeagues"><i class="bx bx-calendar-event"></i> My Leagues</li>
-                <li id="sidebarMyTeams"><i class="bx bx-group"></i> My Teams</li>
+                <li data-page="home"><i class="bx bx-home"></i> Home</li>
+                <li data-page="leagues"><i class="bx bx-trophy"></i> Leagues</li>
+                <li data-page="teams"><i class="bx bx-group"></i> Teams</li>
+                <li data-page="leaderboard"><i class="bx bx-bar-chart-alt-2"></i> Leaderboard</li>
+                <li data-page="profile"><i class="bx bx-user-circle"></i> Profile</li>
             </ul>
-            <div class="sidebar-footer">
-                <div class="sidebar-theme" id="menuTheme">
-                    <span><i class="bx bx-palette"></i> Theme: <span id="themeLabel">Dark</span></span>
-                </div>
-            </div>
-        </div>
+        </aside>
+
         <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
         <!-- MAIN CONTENT -->
-        <main class="tournaments-main">
-            <div class="tournaments-hero">
-                <div class="hero-content">
-                    <h1>⚽ Football Leagues & Tournaments</h1>
-                    <p>Create your own league, manage teams, and compete for Veno Coins!</p>
-                    <div class="hero-buttons">
-                        <button class="btn-primary" id="heroCreateLeagueBtn">
-                            <i class="fas fa-plus-circle"></i> Create League
-                        </button>
-                        <button class="btn-secondary" id="heroFindLeaguesBtn">
-                            <i class="fas fa-search"></i> Find Leagues
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="quick-actions">
-                <div class="action-card" id="quickCreateTeam">
-                    <i class="fas fa-users"></i>
-                    <h3>Create Team</h3>
-                    <p>Build your dream team</p>
-                </div>
-                <div class="action-card" id="quickJoinLeague">
-                    <i class="fas fa-door-open"></i>
-                    <h3>Join League</h3>
-                    <p>Browse and join leagues</p>
-                </div>
-                <div class="action-card" id="quickMyLeagues">
-                    <i class="fas fa-calendar-check"></i>
-                    <h3>My Leagues</h3>
-                    <p>View your active leagues</p>
-                </div>
-                <div class="action-card" id="quickLeaderboard">
-                    <i class="fas fa-chart-bar"></i>
-                    <h3>Leaderboard</h3>
-                    <p>Top players & teams</p>
-                </div>
-            </div>
-
-            <section class="featured-section">
-                <div class="section-header">
-                    <h2><i class="fas fa-star"></i> Featured Leagues</h2>
-                    <a id="viewAllLeagues">View All <i class="bx bx-chevron-right"></i></a>
-                </div>
-                <div class="leagues-grid" id="featuredLeagues">
-                    <div class="empty-state">
-                        <i class="fas fa-hourglass-half"></i>
-                        <p>Loading leagues...</p>
-                    </div>
-                </div>
-            </section>
-
-            <section class="active-section">
-                <div class="section-header">
-                    <h2><i class="fas fa-fire"></i> Active Leagues (Registration Open)</h2>
-                </div>
-                <div class="leagues-grid" id="activeLeagues">
-                    <div class="empty-state">
-                        <i class="fas fa-calendar"></i>
-                        <p>No active leagues at the moment</p>
-                    </div>
-                </div>
-            </section>
-
-            <section class="teams-section">
-                <div class="section-header">
-                    <h2><i class="fas fa-users"></i> My Teams</h2>
-                    <a id="viewAllTeams">View All <i class="bx bx-chevron-right"></i></a>
-                </div>
-                <div class="teams-grid" id="myTeams">
-                    <div class="empty-state">
-                        <i class="fas fa-shield-alt"></i>
-                        <p>You haven't created any teams yet</p>
-                    </div>
-                </div>
-            </section>
+        <main id="mainContent">
+            <!-- This will be dynamically populated -->
         </main>
 
-        <footer class="footer">
-            <p>🏆 Veno-Arena © 2026 | Play • Compete • Earn Veno Coins</p>
+        <!-- FOOTER -->
+        <footer>
+            <p>&copy; 2024 Crunk Games. All rights reserved. | Build your legacy, one match at a time</p>
         </footer>
     </div>
-</div>
 
-<!-- TOAST CONTAINER -->
-<div id="toastContainer" class="toast-container"></div>
+    <!-- MODALS -->
+    <div class="modal" id="leagueModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Create League</h2>
+                <button class="modal-close" onclick="app.closeModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <form id="leagueForm" onsubmit="app.createLeague(event)">
+                <div class="form-group">
+                    <label>League Name *</label>
+                    <input type="text" id="leagueName" required placeholder="e.g., Champions Cup 2024">
+                </div>
+                <div class="form-group">
+                    <label>Game Type *</label>
+                    <select id="gameType" required>
+                        <option value="">Select a game type</option>
+                        <option value="eFootball">eFootball</option>
+                        <option value="FC">EA Sports FC</option>
+                        <option value="DLS">Dream League Soccer</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Max Teams (4-32) *</label>
+                    <input type="number" id="maxTeams" min="4" max="32" value="16" required>
+                </div>
+                <div class="form-group">
+                    <label>Entry Fee (Veno Coins) *</label>
+                    <input type="number" id="entryFee" min="0" value="50" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    <i class="fas fa-plus"></i> Create League
+                </button>
+            </form>
+        </div>
+    </div>
 
-<!-- FIREBASE SDK -->
-<script type="module">
-    // ===================== FIREBASE IMPORTS =====================
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-    import { 
-        getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged 
-    } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
-    import { 
-        getFirestore, collection, doc, getDoc, getDocs, setDoc, updateDoc, 
-        deleteDoc, addDoc, query, where, orderBy, limit, Timestamp,
-        arrayUnion, arrayRemove
-    } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
-    import { 
-        getStorage, ref, uploadBytes, getDownloadURL, deleteObject 
-    } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-storage.js";
+    <!-- TOAST CONTAINER -->
+    <div class="toast-container" id="toastContainer"></div>
 
-    // ===================== FIREBASE CONFIG =====================
-    const firebaseConfig = {
-        apiKey: "AIzaSyBW0Sz7TODfa8tQJTfNUaLhfK9qJhdA1yE",
-        authDomain: "crunck-app.firebaseapp.com",
-        projectId: "crunck-app",
-        storageBucket: "crunck-app.firebasestorage.app",
-        messagingSenderId: "475953302982",
-        appId: "1:475953302982:web:607e08379adb12f985f6c7"
-    };
+    <!-- MAIN JAVASCRIPT -->
+    <script>
+        /***********************************
+         *       APPLICATION NAMESPACE
+         ***********************************/
+        const app = {
+            // ==================== CONFIGURATION ====================
+            API_BASE: "https://api.example.com", // Replace with your backend
+            STORAGE_KEYS: {
+                USER: "crunkUser",
+                LEAGUES: "leagues",
+                TEAMS: "userTeams",
+                COINS: "userCoins",
+                NOTIFICATIONS: "notifications"
+            },
 
-    // Initialize Firebase
-    const firebaseApp = initializeApp(firebaseConfig);
-    const auth = getAuth(firebaseApp);
-    const db = getFirestore(firebaseApp);
-    const storage = getStorage(firebaseApp);
-    const googleProvider = new GoogleAuthProvider();
+            // ==================== STATE ====================
+            state: {
+                currentUser: null,
+                currentPage: "home",
+                leagues: [],
+                teams: [],
+                users: [],
+                notifications: []
+            },
 
-    // ===================== BACKEND API CONFIG =====================
-    const API_URL = 'https://arena-backend-cv5d.onrender.com';
+            // ==================== INITIALIZATION ====================
+            init() {
+                console.log("🚀 Initializing Crunk Games App...");
+                this.setupEventListeners();
+                this.loadUserData();
+                this.renderPage("home");
+                this.updateCoinsDisplay();
+                console.log("✅ App initialized successfully");
+            },
 
-    // ===================== UTILITY FUNCTIONS =====================
-    function formatTime(date) {
-        if (!date) return '';
-        const d = new Date(date);
-        const now = new Date();
-        const diff = now - d;
-        if (diff < 60000) return 'Just now';
-        if (diff < 3600000) return `${Math.floor(diff / 60000)}m ago`;
-        if (diff < 86400000) return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        return d.toLocaleDateString();
-    }
+            // ==================== EVENT LISTENERS ====================
+            setupEventListeners() {
+                // Menu
+                document.getElementById("menuBtn").addEventListener("click", () => this.toggleSidebar());
+                document.getElementById("closeSidebar").addEventListener("click", () => this.toggleSidebar());
+                document.getElementById("sidebarOverlay").addEventListener("click", () => this.toggleSidebar());
 
-    function formatNumber(num) {
-        if (!num) return '0';
-        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    }
+                // Sidebar Navigation
+                document.querySelectorAll(".sidebar-menu li").forEach(li => {
+                    li.addEventListener("click", (e) => {
+                        const page = e.currentTarget.dataset.page;
+                        this.renderPage(page);
+                        this.toggleSidebar();
+                    });
+                });
 
-    function escapeHtml(text) {
-        if (!text) return '';
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
-    }
+                // Profile Picture
+                document.getElementById("profilePic").addEventListener("click", () => this.renderPage("profile"));
+            },
 
-    function getUrlParams() {
-        const params = {};
-        const queryString = window.location.search.substring(1);
-        const pairs = queryString.split('&');
-        for (let pair of pairs) {
-            const [key, value] = pair.split('=');
-            if (key) params[decodeURIComponent(key)] = decodeURIComponent(value || '');
-        }
-        return params;
-    }
+            // ==================== SIDEBAR ====================
+            toggleSidebar() {
+                const sidebar = document.getElementById("sidebar");
+                const overlay = document.getElementById("sidebarOverlay");
+                sidebar.classList.toggle("open");
+                overlay.classList.toggle("active");
+            },
 
-    function showToast(message, type = 'success', duration = 3000) {
-        let container = document.getElementById('toastContainer');
-        if (!container) {
-            container = document.createElement('div');
-            container.id = 'toastContainer';
-            container.className = 'toast-container';
-            document.body.appendChild(container);
-        }
-        const toast = document.createElement('div');
-        toast.className = `toast ${type}`;
-        const icons = {
-            success: 'fa-check-circle',
-            error: 'fa-exclamation-circle',
-            warning: 'fa-exclamation-triangle',
-            info: 'fa-info-circle'
-        };
-        toast.innerHTML = `<i class="fas ${icons[type] || icons.info}"></i> <span>${escapeHtml(message)}</span>`;
-        container.appendChild(toast);
-        setTimeout(() => toast.classList.add('show'), 10);
-        setTimeout(() => {
-            toast.classList.remove('show');
-            setTimeout(() => toast.remove(), 300);
-        }, duration);
-    }
+            // ==================== PAGE ROUTING ====================
+            renderPage(pageName) {
+                this.state.currentPage = pageName;
+                const mainContent = document.getElementById("mainContent");
 
-    // ===================== API REQUEST HELPER =====================
-    async function getAuthToken() {
-        const user = auth.currentUser;
-        if (!user) return null;
-        return await user.getIdToken();
-    }
-
-    async function apiRequest(endpoint, options = {}) {
-        try {
-            const token = await getAuthToken();
-            if (!token) throw new Error('Not authenticated');
-            
-            const response = await fetch(`${API_URL}${endpoint}`, {
-                ...options,
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                    ...options.headers
+                switch (pageName) {
+                    case "home":
+                        mainContent.innerHTML = this.renderHomePage();
+                        break;
+                    case "leagues":
+                        mainContent.innerHTML = this.renderLeaguesPage();
+                        break;
+                    case "teams":
+                        mainContent.innerHTML = this.renderTeamsPage();
+                        break;
+                    case "leaderboard":
+                        mainContent.innerHTML = this.renderLeaderboardPage();
+                        break;
+                    case "profile":
+                        mainContent.innerHTML = this.renderProfilePage();
+                        break;
+                    default:
+                        mainContent.innerHTML = this.renderHomePage();
                 }
-            });
-            
-            if (!response.ok) {
-                let errorMessage = `HTTP ${response.status}`;
+
+                // Re-attach any dynamic event listeners
+                this.attachDynamicListeners();
+            },
+
+            // ==================== HOME PAGE ====================
+            renderHomePage() {
+                const user = this.state.currentUser;
+                const recentLeagues = this.state.leagues.slice(0, 3);
+
+                return `
+                    <div class="hero">
+                        <h1>⚽ Welcome to Crunk Games</h1>
+                        <p>${user ? `Welcome back, ${user.displayName}!` : "Join the ultimate gaming platform"}</p>
+                        <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                            <button class="btn btn-primary" onclick="app.openLeagueModal()">
+                                <i class="fas fa-plus-circle"></i> Create League
+                            </button>
+                            <button class="btn btn-secondary" onclick="app.renderPage('leagues')">
+                                <i class="fas fa-search"></i> Browse Leagues
+                            </button>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 30px;">
+                        <h2 style="font-size: 20px; margin-bottom: 15px;"><i class="fas fa-fire"></i> Recent Leagues</h2>
+                        <div class="grid">
+                            ${recentLeagues.map(league => this.renderLeagueCard(league)).join('')}
+                        </div>
+                    </div>
+
+                    <div>
+                        <h2 style="font-size: 20px; margin-bottom: 15px;"><i class="fas fa-trophy"></i> Top Players</h2>
+                        <div class="grid">
+                            ${this.state.users.slice(0, 4).map(user => `
+                                <div class="card">
+                                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                                        <img src="${user.photoURL}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                                        <div>
+                                            <div class="card-header" style="margin: 0; font-size: 16px;">${user.displayName}</div>
+                                            <div style="font-size: 12px; color: var(--text-secondary);">Level ${Math.floor(Math.random() * 50) + 1}</div>
+                                        </div>
+                                    </div>
+                                    <div class="card-meta">
+                                        <span class="meta-item">⚽ ${Math.floor(Math.random() * 100)}</span>
+                                        <span class="meta-item">🏆 ${Math.floor(Math.random() * 20)}</span>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            },
+
+            // ==================== LEAGUES PAGE ====================
+            renderLeaguesPage() {
+                return `
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                        <h2 style="font-size: 24px;"><i class="fas fa-trophy"></i> All Leagues</h2>
+                        <button class="btn btn-primary" onclick="app.openLeagueModal()">
+                            <i class="fas fa-plus"></i> Create New
+                        </button>
+                    </div>
+
+                    <div class="tabs" id="leagueTabs">
+                        <button class="tab-btn active" data-tab="active">🔥 Active</button>
+                        <button class="tab-btn" data-tab="completed">✅ Completed</button>
+                        <button class="tab-btn" data-tab="myLeagues">👤 My Leagues</button>
+                    </div>
+
+                    <div id="active" class="tab-content active">
+                        <div class="grid">
+                            ${this.state.leagues
+                                .filter(l => l.status === "live")
+                                .map(league => this.renderLeagueCard(league))
+                                .join('')}
+                        </div>
+                    </div>
+
+                    <div id="completed" class="tab-content">
+                        <div class="grid">
+                            ${this.state.leagues
+                                .filter(l => l.status === "completed")
+                                .map(league => this.renderLeagueCard(league))
+                                .join('')}
+                        </div>
+                    </div>
+
+                    <div id="myLeagues" class="tab-content">
+                        <div class="grid">
+                            ${this.state.leagues
+                                .filter(l => l.ownerId === this.state.currentUser?.uid)
+                                .map(league => this.renderLeagueCard(league))
+                                .join('')}
+                        </div>
+                    </div>
+                `;
+            },
+
+            // ==================== TEAMS PAGE ====================
+            renderTeamsPage() {
+                return `
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                        <h2 style="font-size: 24px;"><i class="fas fa-users"></i> My Teams</h2>
+                        <button class="btn btn-primary" onclick="app.createTeam()">
+                            <i class="fas fa-plus"></i> Create Team
+                        </button>
+                    </div>
+
+                    <div class="grid">
+                        ${this.state.teams.map(team => `
+                            <div class="card">
+                                <div class="card-header">⚽ ${team.name}</div>
+                                <div class="card-meta">
+                                    <span class="meta-item">${team.gameType}</span>
+                                    <span class="meta-item">${team.formation}</span>
+                                </div>
+                                <div style="margin: 15px 0; padding: 15px; background: var(--bg-secondary); border-radius: 12px;">
+                                    <div style="display: flex; justify-content: space-around;">
+                                        <div style="text-align: center;">
+                                            <div style="font-size: 20px; font-weight: bold; color: var(--primary);">${team.wins || 0}</div>
+                                            <div style="font-size: 12px; color: var(--text-secondary);">Wins</div>
+                                        </div>
+                                        <div style="text-align: center;">
+                                            <div style="font-size: 20px; font-weight: bold; color: var(--primary);">${team.players?.length || 0}</div>
+                                            <div style="font-size: 12px; color: var(--text-secondary);">Players</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <button class="btn btn-primary" style="flex: 1; padding: 8px; border: none; border-radius: 20px;" onclick="app.editTeam('${team.id}')">
+                                        Edit
+                                    </button>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            },
+
+            // ==================== LEADERBOARD PAGE ====================
+            renderLeaderboardPage() {
+                const sortedUsers = [...this.state.users].sort((a, b) => (b.wins || 0) - (a.wins || 0));
+
+                return `
+                    <div style="margin-bottom: 30px;">
+                        <h2 style="font-size: 24px; margin-bottom: 20px;"><i class="fas fa-trophy"></i> Global Leaderboard</h2>
+                        
+                        <div style="background: var(--bg-tertiary); border-radius: 16px; overflow: hidden;">
+                            <div style="display: grid; grid-template-columns: 60px 1fr 100px 100px; gap: 10px; padding: 15px; background: var(--bg-secondary); border-bottom: 1px solid var(--border-color); font-weight: 600; color: var(--primary);">
+                                <div>Rank</div>
+                                <div>Player</div>
+                                <div style="text-align: center;">Wins</div>
+                                <div style="text-align: center;">Coins</div>
+                            </div>
+                            ${sortedUsers.map((user, index) => `
+                                <div style="display: grid; grid-template-columns: 60px 1fr 100px 100px; gap: 10px; padding: 15px; border-bottom: 1px solid var(--border-color); align-items: center;">
+                                    <div style="font-size: 18px; font-weight: bold; color: ${index === 0 ? '#fbbf24' : index === 1 ? '#94a3b8' : index === 2 ? '#cd7f32' : 'var(--text-secondary)'};">
+                                        #${index + 1}
+                                    </div>
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <img src="${user.photoURL}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                                        <div>
+                                            <div style="font-weight: 600;">${user.displayName}</div>
+                                            <div style="font-size: 12px; color: var(--text-secondary);">${user.email}</div>
+                                        </div>
+                                    </div>
+                                    <div style="text-align: center; font-weight: 600;">${user.wins || 0}</div>
+                                    <div style="text-align: center; color: #fbbf24; font-weight: 600;">💰 ${user.coins || 0}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            },
+
+            // ==================== PROFILE PAGE ====================
+            renderProfilePage() {
+                const user = this.state.currentUser;
+                if (!user) {
+                    return `<div class="empty-state"><i class="fas fa-user-circle"></i><p>Please login to view your profile</p></div>`;
+                }
+
+                return `
+                    <div style="max-width: 600px; margin: 0 auto;">
+                        <div class="card" style="text-align: center; margin-bottom: 30px;">
+                            <img src="${user.photoURL}" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 15px; border: 3px solid var(--primary);">
+                            <h2>${user.displayName}</h2>
+                            <p style="color: var(--text-secondary); margin-bottom: 15px;">${user.email}</p>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; padding: 20px 0; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);">
+                                <div>
+                                    <div style="font-size: 24px; font-weight: bold; color: var(--primary);">${this.state.teams.length}</div>
+                                    <div style="font-size: 12px; color: var(--text-secondary);">Teams Created</div>
+                                </div>
+                                <div>
+                                    <div style="font-size: 24px; font-weight: bold; color: #fbbf24;">💰 ${this.getCoins()}</div>
+                                    <div style="font-size: 12px; color: var(--text-secondary);">Veno Coins</div>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary" onclick="app.logoutUser()">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </button>
+                        </div>
+                    </div>
+                `;
+            },
+
+            // ==================== LEAGUE CARD ====================
+            renderLeagueCard(league) {
+                return `
+                    <div class="card">
+                        <div class="card-header">
+                            ${league.name}
+                            <span style="font-size: 12px; background: ${league.status === 'live' ? '#10b981' : '#6b7280'}; color: white; padding: 2px 6px; border-radius: 12px; margin-left: 10px;">
+                                ${league.status.toUpperCase()}
+                            </span>
+                        </div>
+                        <div class="card-meta">
+                            <span class="meta-item">🎮 ${league.gameType}</span>
+                            <span class="meta-item">👥 ${league.teams?.length || 0}/${league.maxTeams}</span>
+                            <span class="meta-item">💰 ${league.prizePool}</span>
+                        </div>
+                        <div style="margin: 15px 0; padding: 15px; background: var(--bg-secondary); border-radius: 12px; text-align: center;">
+                            <div style="font-size: 16px; font-weight: bold; color: var(--primary); margin-bottom: 5px;">Entry Fee</div>
+                            <div style="font-size: 14px; color: var(--text-secondary);">${league.entryFee} Veno Coins</div>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-primary" style="flex: 1; border: none; padding: 8px; border-radius: 20px;" onclick="app.joinLeague('${league.id}')">
+                                Join
+                            </button>
+                            <button class="btn btn-secondary" style="flex: 1; border: none; padding: 8px; border-radius: 20px;" onclick="app.viewLeague('${league.id}')">
+                                View
+                            </button>
+                        </div>
+                    </div>
+                `;
+            },
+
+            // ==================== MODALS ====================
+            openLeagueModal() {
+                if (!this.state.currentUser) {
+                    this.showToast("Please login first", "error");
+                    return;
+                }
+                document.getElementById("leagueModal").classList.add("active");
+            },
+
+            closeModal() {
+                document.querySelectorAll(".modal").forEach(m => m.classList.remove("active"));
+            },
+
+            // ==================== LEAGUE ACTIONS ====================
+            createLeague(event) {
+                event.preventDefault();
+
+                const leagueName = document.getElementById("leagueName").value.trim();
+                const gameType = document.getElementById("gameType").value;
+                const maxTeams = parseInt(document.getElementById("maxTeams").value);
+                const entryFee = parseInt(document.getElementById("entryFee").value);
+
+                if (!leagueName || !gameType) {
+                    this.showToast("Please fill all required fields", "error");
+                    return;
+                }
+
+                const league = {
+                    id: "league_" + Date.now(),
+                    name: leagueName,
+                    gameType: gameType,
+                    maxTeams: maxTeams,
+                    entryFee: entryFee,
+                    prizePool: maxTeams * entryFee * 0.8,
+                    status: "registration",
+                    ownerId: this.state.currentUser.uid,
+                    teams: [],
+                    matches: [],
+                    createdAt: new Date().toISOString()
+                };
+
+                this.state.leagues.push(league);
+                this.saveToLocalStorage("leagues", this.state.leagues);
+                this.showToast("League created successfully!", "success");
+                this.closeModal();
+                document.getElementById("leagueForm").reset();
+                this.renderPage("leagues");
+            },
+
+            joinLeague(leagueId) {
+                if (!this.state.currentUser) {
+                    this.showToast("Please login first", "error");
+                    return;
+                }
+
+                const league = this.state.leagues.find(l => l.id === leagueId);
+                if (!league) {
+                    this.showToast("League not found", "error");
+                    return;
+                }
+
+                const userCoins = this.getCoins();
+                if (userCoins < league.entryFee) {
+                    this.showToast(`You need ${league.entryFee} Veno Coins to join`, "error");
+                    return;
+                }
+
+                if (league.teams.some(t => t.ownerId === this.state.currentUser.uid)) {
+                    this.showToast("You already joined this league", "info");
+                    return;
+                }
+
+                this.deductCoins(league.entryFee);
+                league.teams.push({
+                    id: "team_" + Date.now(),
+                    name: `${this.state.currentUser.displayName}'s Team`,
+                    ownerId: this.state.currentUser.uid,
+                    joinedAt: new Date().toISOString()
+                });
+
+                this.saveToLocalStorage("leagues", this.state.leagues);
+                this.showToast("Successfully joined the league!", "success");
+                this.renderPage("leagues");
+            },
+
+            viewLeague(leagueId) {
+                const league = this.state.leagues.find(l => l.id === leagueId);
+                if (!league) return;
+
+                const mainContent = document.getElementById("mainContent");
+                mainContent.innerHTML = `
+                    <div style="max-width: 900px; margin: 0 auto;">
+                        <button class="btn btn-secondary" onclick="app.renderPage('leagues')" style="margin-bottom: 20px;">
+                            <i class="fas fa-arrow-left"></i> Back
+                        </button>
+                        <div class="card" style="margin-bottom: 30px;">
+                            <h2>${league.name}</h2>
+                            <div class="card-meta">
+                                <span class="meta-item">🎮 ${league.gameType}</span>
+                                <span class="meta-item">👥 ${league.teams?.length}/${league.maxTeams}</span>
+                                <span class="meta-item">💰 Entry: ${league.entryFee} VC</span>
+                                <span class="meta-item">🏆 Prize Pool: ${Math.round(league.prizePool)} VC</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 style="margin-bottom: 15px;">Teams in League</h3>
+                            <div class="grid">
+                                ${league.teams.map(team => `
+                                    <div class="card">
+                                        <div class="card-header">⚽ ${team.name}</div>
+                                        <div class="card-meta">
+                                            <span class="meta-item">Joined ${new Date(team.joinedAt).toLocaleDateString()}</span>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            },
+
+            // ==================== TEAM ACTIONS ====================
+            createTeam() {
+                if (!this.state.currentUser) {
+                    this.showToast("Please login first", "error");
+                    return;
+                }
+
+                const teamName = prompt("Enter team name:");
+                if (!teamName) return;
+
+                const team = {
+                    id: "team_" + Date.now(),
+                    name: teamName,
+                    gameType: "eFootball",
+                    formation: "4-4-2",
+                    players: [],
+                    wins: 0,
+                    draws: 0,
+                    losses: 0,
+                    createdAt: new Date().toISOString()
+                };
+
+                this.state.teams.push(team);
+                this.saveToLocalStorage("teams", this.state.teams);
+                this.showToast("Team created successfully!", "success");
+                this.renderPage("teams");
+            },
+
+            editTeam(teamId) {
+                this.showToast("Edit feature coming soon!", "info");
+            },
+
+            // ==================== USER MANAGEMENT ====================
+            loadUserData() {
                 try {
-                    const errorData = await response.json();
-                    errorMessage = errorData.error || errorMessage;
-                } catch (e) {}
-                throw new Error(errorMessage);
-            }
-            
-            return await response.json();
-        } catch (error) {
-            console.error(`API Error [${endpoint}]:`, error);
-            throw error;
-        }
-    }
+                    const user = localStorage.getItem(this.STORAGE_KEYS.USER);
+                    if (user) {
+                        this.state.currentUser = JSON.parse(user);
+                    }
 
-    // ===================== SERVICES =====================
-    const userService = {
-        async getUser(uid) {
-            try {
-                return await apiRequest(`/api/users/${uid}`);
-            } catch (error) {
-                console.error('Error getting user:', error);
-                return null;
-            }
-        },
-        
-        async saveUser(uid, userData) {
-            try {
-                return await apiRequest(`/api/users/${uid}`, {
-                    method: 'POST',
-                    body: JSON.stringify(userData)
-                });
-            } catch (error) {
-                return { success: false, error: error.message };
-            }
-        },
-        
-        async updateUser(uid, data) {
-            try {
-                return await apiRequest(`/api/users/${uid}`, {
-                    method: 'PUT',
-                    body: JSON.stringify(data)
-                });
-            } catch (error) {
-                return { success: false, error: error.message };
-            }
-        }
-    };
+                    this.state.leagues = JSON.parse(localStorage.getItem(this.STORAGE_KEYS.LEAGUES) || "[]");
+                    this.state.teams = JSON.parse(localStorage.getItem(this.STORAGE_KEYS.TEAMS) || "[]");
+                    this.state.users = JSON.parse(localStorage.getItem("users") || "[]");
 
-    const coinService = {
-        async getBalance(uid) {
-            try {
-                const data = await apiRequest(`/api/coins/${uid}`);
-                return data.balance || 0;
-            } catch (error) {
-                console.error('Error getting coins:', error);
-                return 100;
-            }
-        },
-        
-        async claimDaily(uid) {
-            try {
-                return await apiRequest(`/api/coins/${uid}/claim`, { method: 'POST' });
-            } catch (error) {
-                return { success: false, error: error.message };
-            }
-        }
-    };
-
-    const leagueService = {
-        async getAllLeagues(status = null) {
-            try {
-                const url = status ? `/api/leagues?status=${status}` : '/api/leagues';
-                return await apiRequest(url);
-            } catch (error) {
-                console.error('Error getting leagues:', error);
-                return [];
-            }
-        },
-        
-        async getLeague(leagueId) {
-            try {
-                return await apiRequest(`/api/leagues/${leagueId}`);
-            } catch (error) {
-                return null;
-            }
-        },
-        
-        async createLeague(leagueData) {
-            try {
-                return await apiRequest('/api/leagues', {
-                    method: 'POST',
-                    body: JSON.stringify(leagueData)
-                });
-            } catch (error) {
-                return { success: false, error: error.message };
-            }
-        },
-        
-        async joinLeague(leagueId, teamName) {
-            try {
-                return await apiRequest(`/api/leagues/${leagueId}/join`, {
-                    method: 'POST',
-                    body: JSON.stringify({ teamName })
-                });
-            } catch (error) {
-                return { success: false, error: error.message };
-            }
-        }
-    };
-
-    const teamService = {
-        async getUserTeams(userId) {
-            try {
-                return await apiRequest(`/api/teams/${userId}`);
-            } catch (error) {
-                console.error('Error getting teams:', error);
-                return [];
-            }
-        },
-        
-        async createTeam(teamData) {
-            try {
-                return await apiRequest('/api/teams', {
-                    method: 'POST',
-                    body: JSON.stringify(teamData)
-                });
-            } catch (error) {
-                return { success: false, error: error.message };
-            }
-        }
-    };
-
-    // ===================== AUTH SERVICE =====================
-    const authService = {
-        currentUser: null,
-        
-        async loginWithGoogle() {
-            try {
-                const result = await signInWithPopup(auth, googleProvider);
-                const firebaseUser = result.user;
-                
-                let userData = await userService.getUser(firebaseUser.uid);
-                if (!userData) {
-                    userData = {
-                        uid: firebaseUser.uid,
-                        email: firebaseUser.email,
-                        displayName: firebaseUser.displayName,
-                        photoURL: firebaseUser.photoURL,
-                        customDisplayName: null,
-                        customAvatar: null,
-                        hasSetProfile: false,
-                        createdAt: new Date().toISOString()
-                    };
-                    await userService.saveUser(firebaseUser.uid, userData);
+                    // Add mock users if not exists
+                    if (this.state.users.length === 0) {
+                        this.state.users = [
+                            {
+                                uid: "user_1",
+                                displayName: "Pro Player",
+                                email: "pro@example.com",
+                                photoURL: "https://ui-avatars.com/api/?name=Pro+Player&background=10b981&color=fff",
+                                wins: 45,
+                                coins: 5000
+                            },
+                            {
+                                uid: "user_2",
+                                displayName: "Gaming Master",
+                                email: "master@example.com",
+                                photoURL: "https://ui-avatars.com/api/?name=Gaming+Master&background=f59e0b&color=fff",
+                                wins: 38,
+                                coins: 4200
+                            },
+                            {
+                                uid: "user_3",
+                                displayName: "Champion",
+                                email: "champ@example.com",
+                                photoURL: "https://ui-avatars.com/api/?name=Champion&background=3b82f6&color=fff",
+                                wins: 52,
+                                coins: 6100
+                            },
+                            {
+                                uid: "user_4",
+                                displayName: "Rising Star",
+                                email: "star@example.com",
+                                photoURL: "https://ui-avatars.com/api/?name=Rising+Star&background=8b5cf6&color=fff",
+                                wins: 28,
+                                coins: 2800
+                            }
+                        ];
+                        this.saveToLocalStorage("users", this.state.users);
+                    }
+                } catch (error) {
+                    console.error("Error loading user data:", error);
                 }
-                
-                return { success: true, user: { ...firebaseUser, ...userData } };
-            } catch (error) {
-                return { success: false, error: error.message };
-            }
-        },
-        
-        async logout() {
-            try {
-                await signOut(auth);
-                this.currentUser = null;
-                return { success: true };
-            } catch (error) {
-                return { success: false, error: error.message };
-            }
-        },
-        
-        onAuthStateChanged(callback) {
-            return onAuthStateChanged(auth, async (firebaseUser) => {
-                if (firebaseUser) {
-                    const userData = await userService.getUser(firebaseUser.uid);
-                    this.currentUser = { ...firebaseUser, ...userData };
-                    callback(this.currentUser);
-                } else {
-                    this.currentUser = null;
-                    callback(null);
+            },
+
+            logoutUser() {
+                if (confirm("Are you sure you want to logout?")) {
+                    localStorage.removeItem(this.STORAGE_KEYS.USER);
+                    this.state.currentUser = null;
+                    this.renderPage("home");
+                    this.showToast("Logged out successfully", "success");
                 }
-            });
-        }
-    };
+            },
 
-    // ===================== MAIN APP CLASS =====================
-    class App {
-        constructor() {
-            this.currentUser = null;
-            this.userData = null;
-            this.userCoins = 0;
-        }
-        
-        async init() {
-            console.log('🚀 Veno-Arena initializing...');
-            
-            authService.onAuthStateChanged(async (user) => {
-                if (user) {
-                    this.currentUser = user;
-                    this.userData = await userService.getUser(user.uid);
-                    this.userCoins = await coinService.getBalance(user.uid);
-                    this.showMainApp();
-                    this.updateUI();
-                    this.setupEventListeners();
-                    console.log('✅ User logged in:', this.userData?.customDisplayName || user.displayName);
-                } else {
-                    this.showLoginPage();
+            // ==================== COINS SYSTEM ====================
+            getCoins() {
+                if (!this.state.currentUser) return 0;
+                const coinsStr = localStorage.getItem(this.STORAGE_KEYS.COINS);
+                const coins = coinsStr ? JSON.parse(coinsStr) : {};
+                return coins[this.state.currentUser.uid] || 100; // Default 100 coins
+            },
+
+            addCoins(amount) {
+                if (!this.state.currentUser) return;
+                const coins = JSON.parse(localStorage.getItem(this.STORAGE_KEYS.COINS) || "{}");
+                coins[this.state.currentUser.uid] = (coins[this.state.currentUser.uid] || 100) + amount;
+                localStorage.setItem(this.STORAGE_KEYS.COINS, JSON.stringify(coins));
+                this.updateCoinsDisplay();
+            },
+
+            deductCoins(amount) {
+                if (!this.state.currentUser) return false;
+                const coins = JSON.parse(localStorage.getItem(this.STORAGE_KEYS.COINS) || "{}");
+                const currentCoins = coins[this.state.currentUser.uid] || 100;
+                if (currentCoins >= amount) {
+                    coins[this.state.currentUser.uid] = currentCoins - amount;
+                    localStorage.setItem(this.STORAGE_KEYS.COINS, JSON.stringify(coins));
+                    this.updateCoinsDisplay();
+                    return true;
                 }
-            });
-        }
+                return false;
+            },
 
-        showMainApp() {
-            document.getElementById('loginContainer').style.display = 'none';
-            document.getElementById('mainApp').classList.add('active');
-        }
-
-        showLoginPage() {
-            document.getElementById('loginContainer').style.display = 'flex';
-            document.getElementById('mainApp').classList.remove('active');
-        }
-
-        updateUI() {
-            // Update coins display
-            document.getElementById('venoCoinsAmount').textContent = formatNumber(this.userCoins);
-            
-            const displayName = this.userData?.customDisplayName || this.currentUser?.displayName || 'Player';
-            const avatarUrl = this.userData?.customAvatar || this.currentUser?.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=10b981&color=fff&size=128`;
-            
-            // Update profile images
-            document.getElementById('profileAvatarImg').src = avatarUrl;
-            const popupImg = document.getElementById('popupProfileImg');
-            if (popupImg) popupImg.src = avatarUrl;
-            
-            // Update profile names
-            document.getElementById('profileNameDisplay').textContent = displayName;
-            if (this.currentUser?.email) {
-                document.getElementById('profileEmailDisplay').textContent = this.currentUser.email;
-            }
-
-            this.loadHomePageData();
-        }
-
-        async loadHomePageData() {
-            const leagues = await leagueService.getAllLeagues();
-            this.renderFeaturedLeagues(leagues.slice(0, 6));
-            
-            const activeLeagues = await leagueService.getAllLeagues('registration');
-            this.renderActiveLeagues(activeLeagues.slice(0, 3));
-            
-            const teams = await teamService.getUserTeams(this.currentUser.uid);
-            this.renderMyTeams(teams);
-        }
-
-        renderFeaturedLeagues(leagues) {
-            const container = document.getElementById('featuredLeagues');
-            if (!container) return;
-            
-            if (leagues.length === 0) {
-                container.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><p>No leagues available yet</p></div>';
-                return;
-            }
-            
-            container.innerHTML = '';
-            leagues.forEach(league => container.appendChild(this.createLeagueCard(league)));
-        }
-
-        renderActiveLeagues(leagues) {
-            const container = document.getElementById('activeLeagues');
-            if (!container) return;
-            
-            if (leagues.length === 0) {
-                container.innerHTML = '<div class="empty-state"><i class="fas fa-calendar-times"></i><p>No active registration leagues</p></div>';
-                return;
-            }
-            
-            container.innerHTML = '';
-            leagues.forEach(league => container.appendChild(this.createLeagueCard(league)));
-        }
-
-        renderMyTeams(teams) {
-            const container = document.getElementById('myTeams');
-            if (!container) return;
-            
-            if (teams.length === 0) {
-                container.innerHTML = `<div class="empty-state">
-                    <i class="fas fa-users"></i>
-                    <p>You haven't created any teams yet</p>
-                    <button class="btn-primary mt" onclick="window.location.href='team-create.html'" style="margin-top: 16px;">
-                        <i class="fas fa-plus-circle"></i> Create Your First Team
-                    </button>
-                </div>`;
-                return;
-            }
-            
-            container.innerHTML = '';
-            teams.forEach(team => container.appendChild(this.createTeamCard(team)));
-        }
-
-        createLeagueCard(league) {
-            const card = document.createElement('div');
-            card.className = 'league-card';
-            
-            const teamCount = league.teams?.length || 0;
-            const maxTeams = league.maxTeams || 16;
-            const isFull = teamCount >= maxTeams;
-            const isOwner = this.currentUser && league.ownerId === this.currentUser.uid;
-            const hasJoined = league.teams?.some(t => t.ownerId === this.currentUser?.uid);
-            
-            const statusText = league.status === 'live' ? 'LIVE' : 
-                             league.status === 'registration' ? 'REGISTRATION OPEN' : 
-                             league.status === 'upcoming' ? 'UPCOMING' : 'COMPLETED';
-            
-            card.innerHTML = `
-                <div class="league-header">
-                    <span class="league-status status-${league.status}">${statusText}</span>
-                    <div class="league-icon"><i class="fas fa-futbol"></i></div>
-                    <h3>${escapeHtml(league.name)}</h3>
-                    <div class="league-game">${league.gameType || 'eFootball'}</div>
-                    ${isOwner ? '<div class="owner-badge"><i class="fas fa-crown"></i> Your League</div>' : ''}
-                    ${hasJoined ? '<div class="joined-badge"><i class="fas fa-check-circle"></i> Joined</div>' : ''}
-                </div>
-                <div class="league-body">
-                    <div class="league-stats">
-                        <div class="stat">
-                            <div class="stat-value ${isFull ? 'full' : ''}">${teamCount}/${maxTeams}</div>
-                            <div class="stat-label">Teams</div>
-                        </div>
-                        <div class="stat">
-                            <div class="stat-value">${formatNumber(league.prizePool || 0)}</div>
-                            <div class="stat-label">Prize Pool</div>
-                        </div>
-                        <div class="stat">
-                            <div class="stat-value">${formatNumber(league.entryFee || 0)}</div>
-                            <div class="stat-label">Entry Fee</div>
-                        </div>
-                    </div>
-                    <div class="league-owner"><i class="fas fa-user"></i> Created by: <strong>${escapeHtml(league.ownerName || 'Unknown')}</strong></div>
-                </div>
-                <div class="league-footer">
-                    ${!isOwner && !hasJoined ? `<button class="join-btn" onclick="event.stopPropagation(); window.App.joinLeague('${league.id}')" ${isFull ? 'disabled' : ''}><i class="fas fa-sign-in-alt"></i> ${isFull ? 'League Full' : 'Join'}</button>` : hasJoined ? `<button class="joined-btn" disabled><i class="fas fa-check-circle"></i> Joined</button>` : ''}
-                    <button class="details-btn" onclick="event.stopPropagation(); window.location.href='league-view.html?id=${league.id}'"><i class="fas fa-info-circle"></i> Details</button>
-                </div>
-            `;
-            
-            card.onclick = () => window.location.href = `league-view.html?id=${league.id}`;
-            return card;
-        }
-
-        createTeamCard(team) {
-            const card = document.createElement('div');
-            card.className = 'team-card';
-            card.onclick = () => window.location.href = `team-view.html?id=${team.id}`;
-            
-            card.innerHTML = `
-                <div class="team-logo">
-                    ${team.logo ? `<img src="${team.logo}" alt="${team.name}">` : '<i class="fas fa-shield-alt"></i>'}
-                </div>
-                <div class="team-info">
-                    <div class="team-name">${escapeHtml(team.name)}</div>
-                    <div class="team-stats">
-                        <span><i class="fas fa-trophy"></i> ${team.stats?.wins || 0} Wins</span>
-                        <span><i class="fas fa-futbol"></i> ${team.stats?.matchesPlayed || 0} Matches</span>
-                    </div>
-                </div>
-                <i class="fas fa-chevron-right"></i>
-            `;
-            
-            return card;
-        }
-
-        async joinLeague(leagueId) {
-            if (!this.currentUser) {
-                showToast('Please login first', 'error');
-                return;
-            }
-            
-            const league = await leagueService.getLeague(leagueId);
-            if (!league) {
-                showToast('League not found', 'error');
-                return;
-            }
-            
-            if (league.entryFee > this.userCoins) {
-                showToast(`Need ${league.entryFee} Veno Coins! You have ${this.userCoins}`, 'error');
-                return;
-            }
-            
-            const displayName = this.userData?.customDisplayName || this.currentUser.displayName;
-            const result = await leagueService.joinLeague(leagueId, `${displayName}'s Team`);
-            
-            if (result.success) {
-                await this.refreshCoins();
-                showToast(`Successfully joined ${league.name}!`, 'success');
-                setTimeout(() => location.reload(), 1500);
-            } else {
-                showToast(result.error || 'Failed to join league', 'error');
-            }
-        }
-
-        async refreshCoins() {
-            this.userCoins = await coinService.getBalance(this.currentUser.uid);
-            this.updateUI();
-            return this.userCoins;
-        }
-
-        async claimDaily() {
-            const result = await coinService.claimDaily(this.currentUser.uid);
-            if (result.success) {
-                await this.refreshCoins();
-                showToast(`🎉 You claimed ${result.amount} Veno Coins!`, 'success');
-            } else {
-                showToast(result.error || 'Unable to claim', 'error');
-            }
-        }
-
-        setupEventListeners() {
-            // Hero buttons
-            document.getElementById('heroCreateLeagueBtn')?.addEventListener('click', () => {
-                window.location.href = 'league-create.html';
-            });
-
-            document.getElementById('heroFindLeaguesBtn')?.addEventListener('click', () => {
-                document.querySelector('.featured-section').scrollIntoView({ behavior: 'smooth' });
-            });
-
-            // Quick actions
-            document.getElementById('quickCreateTeam')?.addEventListener('click', () => {
-                window.location.href = 'team-create.html';
-            });
-
-            document.getElementById('quickJoinLeague')?.addEventListener('click', () => {
-                document.querySelector('.featured-section').scrollIntoView({ behavior: 'smooth' });
-            });
-
-            document.getElementById('quickMyLeagues')?.addEventListener('click', () => {
-                window.location.href = 'my-leagues.html';
-            });
-
-            document.getElementById('quickLeaderboard')?.addEventListener('click', () => {
-                window.location.href = 'leaderboard.html';
-            });
-
-            // View all links
-            document.getElementById('viewAllLeagues')?.addEventListener('click', () => {
-                window.location.href = 'all-leagues.html';
-            });
-
-            document.getElementById('viewAllTeams')?.addEventListener('click', () => {
-                window.location.href = 'my-teams.html';
-            });
-
-            // Profile menu
-            document.getElementById('profileSettingsBtn')?.addEventListener('click', (e) => {
-                e.preventDefault();
-                window.location.href = 'profile-settings.html';
-            });
-
-            document.getElementById('myLeaguesBtn')?.addEventListener('click', (e) => {
-                e.preventDefault();
-                window.location.href = 'my-leagues.html';
-            });
-
-            document.getElementById('myTeamsBtn')?.addEventListener('click', (e) => {
-                e.preventDefault();
-                window.location.href = 'my-teams.html';
-            });
-
-            // Sidebar
-            this.setupSidebar();
-        }
-
-        setupSidebar() {
-            const menuBtn = document.getElementById('menuBtn');
-            const sidebar = document.getElementById('sidebar');
-            const closeSidebar = document.getElementById('closeSidebar');
-            const overlay = document.getElementById('sidebarOverlay');
-            
-            const openSidebar = () => {
-                sidebar.classList.add('open');
-                overlay.classList.add('active');
-                document.body.style.overflow = 'hidden';
-            };
-            
-            const closeSidebarFunc = () => {
-                sidebar.classList.remove('open');
-                overlay.classList.remove('active');
-                document.body.style.overflow = '';
-            };
-            
-            menuBtn?.addEventListener('click', openSidebar);
-            closeSidebar?.addEventListener('click', closeSidebarFunc);
-            overlay?.addEventListener('click', closeSidebarFunc);
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && sidebar.classList.contains('open')) {
-                    closeSidebarFunc();
+            updateCoinsDisplay() {
+                const coinsSpan = document.getElementById("venoCoinsAmount");
+                if (coinsSpan) {
+                    coinsSpan.textContent = this.getCoins();
                 }
-            });
+            },
 
-            // Sidebar menu items
-            document.getElementById('sidebarHome')?.addEventListener('click', () => {
-                window.location.href = 'home.html';
-                closeSidebarFunc();
-            });
+            // ==================== STORAGE ====================
+            saveToLocalStorage(key, data) {
+                try {
+                    localStorage.setItem(this.STORAGE_KEYS[key.toUpperCase()] || key, JSON.stringify(data));
+                } catch (error) {
+                    console.error("Error saving to localStorage:", error);
+                }
+            },
 
-            document.getElementById('sidebarCreateLeague')?.addEventListener('click', () => {
-                window.location.href = 'league-create.html';
-                closeSidebarFunc();
-            });
+            // ==================== NOTIFICATIONS ====================
+            showToast(message, type = "success") {
+                const container = document.getElementById("toastContainer");
+                const toast = document.createElement("div");
+                toast.className = `toast ${type}`;
+                toast.innerHTML = `<i class="fas ${this.getToastIcon(type)}"></i> ${message}`;
+                container.appendChild(toast);
 
-            document.getElementById('sidebarCreateTeam')?.addEventListener('click', () => {
-                window.location.href = 'team-create.html';
-                closeSidebarFunc();
-            });
-
-            document.getElementById('sidebarMyLeagues')?.addEventListener('click', () => {
-                window.location.href = 'my-leagues.html';
-                closeSidebarFunc();
-            });
-
-            document.getElementById('sidebarMyTeams')?.addEventListener('click', () => {
-                window.location.href = 'my-teams.html';
-                closeSidebarFunc();
-            });
-
-            // Venaura
-            document.getElementById('venauraIcon')?.addEventListener('click', () => {
-                window.open('https://venauraai.netlify.app/', '_blank');
-            });
-
-            // Theme toggle
-            document.getElementById('menuTheme')?.addEventListener('click', () => {
-                document.body.classList.toggle('light-theme');
-                const isLight = document.body.classList.contains('light-theme');
-                document.getElementById('themeLabel').textContent = isLight ? 'Light' : 'Dark';
-                localStorage.setItem('theme', isLight ? 'light' : 'dark');
-            });
-
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme === 'light') {
-                document.body.classList.add('light-theme');
-                document.getElementById('themeLabel').textContent = 'Light';
-            }
-
-            // Logout
-            document.getElementById('logoutBtn')?.addEventListener('click', async () => {
-                await authService.logout();
-                localStorage.removeItem('crunkUser');
-                window.location.href = 'index.html';
-            });
-
-            // Profile dropdown
-            document.getElementById('profileDropdown')?.addEventListener('click', (e) => {
-                e.stopPropagation();
-                document.getElementById('profilePopup').classList.toggle('active');
-            });
-
-            document.addEventListener('click', () => {
-                document.getElementById('profilePopup').classList.remove('active');
-            });
-        }
-    }
-
-    // ===================== DAILY CLAIM BUTTON =====================
-    function initClaimButton() {
-        const claimBtn = document.getElementById('claimVenoCoinsBtn');
-        if (!claimBtn) return;
-        
-        const LAST_CLAIM_KEY = 'lastVenoClaim';
-        
-        function canClaim() {
-            const last = localStorage.getItem(LAST_CLAIM_KEY);
-            if (!last) return true;
-            return (Date.now() - parseInt(last)) >= 24 * 60 * 60 * 1000;
-        }
-        
-        function updateClaimButton() {
-            if (canClaim()) {
-                claimBtn.disabled = false;
-                claimBtn.innerHTML = '<i class="fas fa-gift"></i> Claim 10';
-                claimBtn.style.opacity = '1';
-            } else {
-                claimBtn.disabled = true;
-                const lastClaim = parseInt(localStorage.getItem(LAST_CLAIM_KEY));
-                const timeLeft = 24 * 60 * 60 * 1000 - (Date.now() - lastClaim);
-                const hoursLeft = Math.floor(timeLeft / (60 * 60 * 1000));
-                const minutesLeft = Math.floor((timeLeft % (60 * 60 * 1000)) / (60 * 1000));
-                claimBtn.innerHTML = `<i class="fas fa-clock"></i> ${hoursLeft}h ${minutesLeft}m`;
-                claimBtn.style.opacity = '0.6';
-            }
-        }
-        
-        claimBtn.addEventListener('click', async () => {
-            if (canClaim() && window.App) {
-                await window.App.claimDaily();
-                localStorage.setItem(LAST_CLAIM_KEY, Date.now().toString());
-                updateClaimButton();
-            }
-        });
-        
-        updateClaimButton();
-        setInterval(updateClaimButton, 60000);
-    }
-
-    // ===================== LOGIN HANDLER =====================
-    function setupLoginPage() {
-        const googleLoginBtn = document.getElementById('googleLoginBtn');
-        const loginForm = document.getElementById('loginForm');
-
-        googleLoginBtn?.addEventListener('click', async () => {
-            googleLoginBtn.disabled = true;
-            googleLoginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
-            
-            const result = await authService.loginWithGoogle();
-            if (result.success) {
-                showToast('✅ Login successful!', 'success');
+                setTimeout(() => toast.classList.add("show"), 10);
                 setTimeout(() => {
-                    window.location.href = 'home.html';
-                }, 1000);
-            } else {
-                showToast(result.error || 'Login failed', 'error');
-                googleLoginBtn.disabled = false;
-                googleLoginBtn.innerHTML = '<i class="fab fa-google"></i> Continue with Google';
+                    toast.classList.remove("show");
+                    setTimeout(() => toast.remove(), 300);
+                }, 3000);
+            },
+
+            getToastIcon(type) {
+                const icons = {
+                    success: "fa-check-circle",
+                    error: "fa-exclamation-circle",
+                    warning: "fa-exclamation-triangle",
+                    info: "fa-info-circle"
+                };
+                return icons[type] || icons.info;
+            },
+
+            // ==================== DYNAMIC LISTENERS ====================
+            attachDynamicListeners() {
+                // Tab switching
+                document.querySelectorAll(".tab-btn").forEach(btn => {
+                    btn.addEventListener("click", (e) => {
+                        const tabName = e.target.dataset.tab;
+                        document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+                        document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
+                        e.target.classList.add("active");
+                        document.getElementById(tabName).classList.add("active");
+                    });
+                });
+            },
+
+            // ==================== API INTEGRATION (BACKEND) ====================
+            async apiCall(endpoint, method = "GET", data = null) {
+                try {
+                    const options = {
+                        method: method,
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${this.state.currentUser?.uid || ""}`
+                        }
+                    };
+
+                    if (data) {
+                        options.body = JSON.stringify(data);
+                    }
+
+                    const response = await fetch(`${this.API_BASE}${endpoint}`, options);
+                    
+                    if (!response.ok) {
+                        throw new Error(`API Error: ${response.status}`);
+                    }
+
+                    return await response.json();
+                } catch (error) {
+                    console.error("API Call Error:", error);
+                    this.showToast("Server connection error", "error");
+                    return null;
+                }
             }
+        };
+
+        // ==================== INITIALIZE APP ====================
+        document.addEventListener("DOMContentLoaded", () => {
+            app.init();
         });
 
-        loginForm?.addEventListener('submit', (e) => {
-            e.preventDefault();
-            showToast('Email/Password login coming soon', 'warning');
+        // ==================== PREVENT AUTO-RELOAD ====================
+        window.addEventListener("beforeunload", (e) => {
+            // Don't prevent unload, just save data
+            app.state.currentUser && localStorage.setItem(app.STORAGE_KEYS.USER, JSON.stringify(app.state.currentUser));
         });
-    }
-
-    // ===================== INITIALIZE APP =====================
-    document.addEventListener('DOMContentLoaded', () => {
-        setupLoginPage();
-        initClaimButton();
-        window.App = new App();
-        window.App.init();
-        window.showToast = showToast;
-        console.log('✅ Veno-Arena v2 loaded successfully!');
-    });
-
-    // Make functions globally accessible
-    window.authService = authService;
-</script>
-
+    </script>
 </body>
 </html>
