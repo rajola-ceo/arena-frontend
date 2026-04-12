@@ -1,2016 +1,2179 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Crunk Games - Complete App</title>
-    
-    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <style>
-        /* ==================== GLOBAL VARIABLES & RESET ==================== */
-        :root {
-            --primary: #FFD700;
-            --primary-dark: #FFA500;
-            --primary-light: #FFED4E;
-            --bg-primary: #0a0e1a;
-            --bg-secondary: #0f1628;
-            --bg-tertiary: #1a2332;
-            --border-color: #2a3a4a;
-            --text-primary: #e6e6e6;
-            --text-secondary: #a0aec0;
-            --text-muted: #6b7280;
-            --success: #10b981;
-            --error: #ef4444;
-            --warning: #f59e0b;
-            --info: #3b82f6;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            --shadow-sm: 0 2px 4px rgba(255, 215, 0, 0.1);
-            --shadow-md: 0 4px 6px rgba(255, 215, 0, 0.15);
-            --shadow-lg: 0 10px 25px rgba(255, 215, 0, 0.2);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html, body {
-            width: 100%;
-            height: 100%;
-            overflow-x: hidden;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
-        }
-
-        a { color: inherit; text-decoration: none; }
-        button { font-family: inherit; }
-
-        /* ==================== LAYOUT ==================== */
-        .app {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-
-        /* ==================== TOPBAR ==================== */
-        .topbar {
-            height: 70px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 20px;
-            background: var(--bg-secondary);
-            border-bottom: 1px solid var(--border-color);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-        }
-
-        .topbar-left {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .menu-btn {
-            background: none;
-            border: none;
-            font-size: 24px;
-            color: var(--primary);
-            cursor: pointer;
-            padding: 8px;
-            border-radius: 50%;
-            transition: var(--transition);
-        }
-
-        .menu-btn:hover {
-            background: rgba(255, 215, 0, 0.1);
-            transform: scale(1.1);
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .brand h1 {
-            font-size: 24px;
-            color: var(--primary);
-            font-weight: 800;
-            letter-spacing: 2px;
-            text-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
-        }
-
-        .topbar-right {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .veno-coins {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(255, 215, 0, 0.1);
-            padding: 8px 16px;
-            border-radius: 40px;
-            border: 1px solid rgba(255, 215, 0, 0.3);
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .veno-coins:hover {
-            background: rgba(255, 215, 0, 0.2);
-            border-color: var(--primary);
-        }
-
-        .veno-coins i { color: var(--primary); font-size: 18px; }
-        .veno-coins span { font-weight: 700; color: var(--primary); font-size: 16px; }
-
-        .profile-pic {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--primary);
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .profile-pic:hover { transform: scale(1.05); }
-
-        /* ==================== SIDEBAR ==================== */
-        .sidebar {
-            position: fixed;
-            left: -300px;
-            top: 0;
-            width: 280px;
-            height: 100vh;
-            background: var(--bg-secondary);
-            border-right: 1px solid var(--border-color);
-            transition: var(--transition);
-            z-index: 2000;
-            overflow-y: auto;
-            padding-top: 70px;
-        }
-
-        .sidebar.open {
-            left: 0;
-        }
-
-        .sidebar-header {
-            padding: 20px;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .sidebar-header h3 { color: var(--primary); font-size: 18px; }
-
-        .close-sidebar {
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: var(--text-secondary);
-            transition: var(--transition);
-        }
-
-        .close-sidebar:hover { color: #ff5555; transform: rotate(90deg); }
-
-        .sidebar-menu {
-            list-style: none;
-            padding: 10px;
-        }
-
-        .sidebar-menu li {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 14px 16px;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: var(--transition);
-            margin-bottom: 5px;
-            color: var(--text-primary);
-        }
-
-        .sidebar-menu li:hover {
-            background: rgba(255, 215, 0, 0.15);
-            color: var(--primary);
-            transform: translateX(5px);
-        }
-
-        .sidebar-menu li.active {
-            background: rgba(255, 215, 0, 0.2);
-            color: var(--primary);
-        }
-
-        .sidebar-menu li i { width: 24px; color: inherit; }
-
-        .sidebar-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 1999;
-            display: none;
-            backdrop-filter: blur(4px);
-        }
-
-        .sidebar-overlay.active { display: block; }
-
-        /* ==================== MAIN CONTENT ==================== */
-        main {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-            animation: fadeIn 0.4s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        /* ==================== PAGES ==================== */
-        .page {
-            display: none;
-        }
-
-        .page.active {
-            display: block;
-        }
-
-        .page-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid var(--border-color);
-        }
-
-        .page-header h1 {
-            font-size: 28px;
-            color: var(--text-primary);
-        }
-
-        .page-header .btn { margin: 0; }
-
-        /* ==================== HERO SECTION ==================== */
-        .hero {
-            background: linear-gradient(135deg, #1a2a3a, #0f172a);
-            border-radius: 24px;
-            padding: 50px 40px;
-            margin-bottom: 40px;
-            text-align: center;
-            border: 1px solid var(--border-color);
-        }
-
-        .hero h1 {
-            font-size: 36px;
-            margin-bottom: 12px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
-        }
-
-        .hero p {
-            color: var(--text-secondary);
-            font-size: 16px;
-            margin-bottom: 30px;
-        }
-
-        .hero-buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        /* ==================== BUTTONS ==================== */
-        .btn {
-            padding: 12px 24px;
-            border-radius: 30px;
-            font-weight: 600;
-            cursor: pointer;
-            border: none;
-            transition: var(--transition);
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: #000;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: var(--primary);
-            border: 1px solid var(--primary);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255, 215, 0, 0.1);
-            border-color: var(--primary-light);
-        }
-
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        /* ==================== GRID & CARDS ==================== */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .card {
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 20px;
-            transition: var(--transition);
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(90deg, var(--primary), transparent);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-8px);
-            border-color: var(--primary);
-            box-shadow: 0 15px 30px rgba(255, 215, 0, 0.15);
-        }
-
-        .card:hover::before { opacity: 1; }
-
-        .card-header {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 12px;
-            color: var(--text-primary);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .card-status {
-            font-size: 11px;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-
-        .status-live {
-            background: rgba(16, 185, 129, 0.2);
-            color: #10b981;
-            animation: pulse 2s infinite;
-        }
-
-        .status-registration {
-            background: rgba(255, 215, 0, 0.2);
-            color: var(--primary);
-        }
-
-        .status-completed {
-            background: rgba(107, 114, 128, 0.2);
-            color: #a0aec0;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-
-        .card-meta {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            font-size: 12px;
-            color: var(--text-secondary);
-            margin-bottom: 15px;
-        }
-
-        .meta-item {
-            background: rgba(255, 215, 0, 0.05);
-            padding: 4px 10px;
-            border-radius: 20px;
-            border: 1px solid rgba(255, 215, 0, 0.1);
-        }
-
-        .card-content {
-            margin: 15px 0;
-            padding: 15px;
-            background: var(--bg-secondary);
-            border-radius: 12px;
-        }
-
-        .card-content-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-            font-size: 14px;
-        }
-
-        .card-content-item:last-child { margin-bottom: 0; }
-
-        .card-content-item span { color: var(--text-secondary); }
-
-        .card-content-item strong { color: var(--primary); }
-
-        .card-footer {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid var(--border-color);
-        }
-
-        .card-footer .btn {
-            flex: 1;
-            padding: 8px 12px;
-            font-size: 12px;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: var(--text-secondary);
-        }
-
-        .empty-state i {
-            font-size: 64px;
-            margin-bottom: 20px;
-            opacity: 0.3;
-        }
-
-        .empty-state p { font-size: 16px; margin-bottom: 20px; }
-
-        /* ==================== FORMS ==================== */
-        .form-container {
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 30px;
-            max-width: 600px;
-        }
-
-        .form-group {
-            margin-bottom: 24px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 12px 16px;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            color: var(--text-primary);
-            font-size: 14px;
-            transition: var(--transition);
-            font-family: inherit;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1);
-            background: var(--bg-primary);
-        }
-
-        .form-group textarea { resize: vertical; min-height: 120px; }
-
-        .form-error {
-            color: var(--error);
-            font-size: 12px;
-            margin-top: 6px;
-        }
-
-        /* ==================== MODAL ==================== */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            z-index: 10000;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(5px);
-            padding: 20px;
-        }
-
-        .modal.active {
-            display: flex;
-            animation: slideUp 0.3s ease;
-        }
-
-        @keyframes slideUp {
-            from { transform: translateY(50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        .modal-content {
-            background: var(--bg-primary);
-            border-radius: 24px;
-            width: 100%;
-            max-width: 500px;
-            max-height: 90vh;
-            overflow-y: auto;
-            border: 1px solid var(--border-color);
-            padding: 30px;
-            position: relative;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .modal-header h2 {
-            font-size: 22px;
-            color: var(--primary);
-        }
-
-        .modal-close {
-            background: none;
-            border: none;
-            font-size: 28px;
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: var(--transition);
-            padding: 0;
-        }
-
-        .modal-close:hover {
-            color: var(--primary);
-            transform: rotate(90deg);
-        }
-
-        /* ==================== TABS ==================== */
-        .tabs {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 30px;
-            border-bottom: 1px solid var(--border-color);
-            overflow-x: auto;
-        }
-
-        .tab-btn {
-            padding: 12px 24px;
-            background: transparent;
-            border: none;
-            color: var(--text-secondary);
-            font-weight: 600;
-            cursor: pointer;
-            position: relative;
-            transition: var(--transition);
-            white-space: nowrap;
-        }
-
-        .tab-btn:hover {
-            color: var(--text-primary);
-        }
-
-        .tab-btn.active {
-            color: var(--primary);
-        }
-
-        .tab-btn.active::after {
-            content: '';
-            position: absolute;
-            bottom: -1px;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: var(--primary);
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-            animation: fadeIn 0.3s ease;
-        }
-
-        /* ==================== NOTIFICATIONS & TOASTS ==================== */
-        .toast-container {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            z-index: 10001;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .toast {
-            background: var(--primary);
-            color: #000;
-            padding: 14px 20px;
-            border-radius: 12px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            animation: slideInRight 0.3s ease;
-            box-shadow: 0 10px 25px rgba(255, 215, 0, 0.2);
-        }
-
-        @keyframes slideInRight {
-            from {
-                transform: translateX(400px);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        .toast.error {
-            background: var(--error);
-            color: white;
-        }
-
-        .toast.success {
-            background: var(--success);
-            color: white;
-        }
-
-        .toast.warning {
-            background: var(--warning);
-            color: white;
-        }
-
-        .toast.info {
-            background: var(--info);
-            color: white;
-        }
-
-        /* ==================== TABLES ==================== */
-        .table-responsive {
-            overflow-x: auto;
-            background: var(--bg-tertiary);
-            border-radius: 16px;
-            border: 1px solid var(--border-color);
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th {
-            background: var(--bg-secondary);
-            padding: 16px;
-            text-align: left;
-            font-weight: 600;
-            color: var(--primary);
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        td {
-            padding: 16px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        tr:hover {
-            background: rgba(255, 215, 0, 0.05);
-        }
-
-        /* ==================== RESPONSIVE ==================== */
-        @media (max-width: 768px) {
-            .topbar {
-                padding: 0 15px;
-            }
-
-            .brand h1 {
-                font-size: 18px;
-            }
-
-            .topbar-right {
-                gap: 12px;
-            }
-
-            .veno-coins {
-                padding: 6px 12px;
-                font-size: 13px;
-            }
-
-            .hero {
-                padding: 30px 20px;
-            }
-
-            .hero h1 {
-                font-size: 24px;
-            }
-
-            .grid {
-                grid-template-columns: 1fr;
-            }
-
-            .page-header {
-                flex-direction: column;
-                gap: 15px;
-                text-align: center;
-            }
-
-            .page-header h1 {
-                font-size: 22px;
-            }
-
-            main {
-                padding: 15px;
-            }
-
-            .modal-content {
-                width: 100%;
-                padding: 20px;
-            }
-
-            .form-container {
-                max-width: 100%;
-            }
-
-            .tabs {
-                gap: 8px;
-            }
-
-            .tab-btn {
-                padding: 10px 16px;
-                font-size: 13px;
-            }
-
-            .toast-container {
-                left: 10px;
-                right: 10px;
-                bottom: 10px;
-            }
-
-            .toast {
-                padding: 12px 16px;
-                font-size: 13px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .topbar {
-                height: 55px;
-                padding: 0 10px;
-            }
-
-            .brand h1 {
-                font-size: 16px;
-                letter-spacing: 1px;
-            }
-
-            .sidebar {
-                width: 260px;
-                left: -260px;
-            }
-
-            .veno-coins {
-                padding: 6px 10px;
-                font-size: 12px;
-            }
-
-            .veno-coins i {
-                font-size: 16px;
-            }
-
-            .profile-pic {
-                width: 36px;
-                height: 36px;
-            }
-
-            .hero {
-                padding: 20px 15px;
-            }
-
-            .hero h1 {
-                font-size: 20px;
-            }
-
-            .hero p {
-                font-size: 14px;
-            }
-
-            .hero-buttons {
-                flex-direction: column;
-                gap: 10px;
-            }
-
-            .hero-buttons .btn {
-                width: 100%;
-                justify-content: center;
-            }
-
-            .btn {
-                padding: 10px 18px;
-                font-size: 13px;
-            }
-
-            .card {
-                padding: 15px;
-            }
-
-            .card-header {
-                font-size: 16px;
-            }
-
-            .card-meta {
-                font-size: 11px;
-            }
-
-            .meta-item {
-                padding: 3px 8px;
-            }
-
-            .page-header h1 {
-                font-size: 18px;
-            }
-
-            .form-container {
-                padding: 20px;
-            }
-
-            .modal-content {
-                padding: 15px;
-                border-radius: 16px;
-            }
-
-            .modal-header h2 {
-                font-size: 18px;
-            }
-
-            table {
-                font-size: 12px;
-            }
-
-            th, td {
-                padding: 12px 8px;
-            }
-        }
-
-        /* ==================== FOOTER ==================== */
-        footer {
-            margin-top: auto;
-            padding: 20px;
-            background: var(--bg-secondary);
-            border-top: 1px solid var(--border-color);
-            text-align: center;
-            color: var(--text-muted);
-            font-size: 12px;
-        }
-
-        /* ==================== UTILITY ==================== */
-        .text-center { text-align: center; }
-        .mt-20 { margin-top: 20px; }
-        .mb-20 { margin-bottom: 20px; }
-        .hidden { display: none !important; }
-        .loading { animation: spin 1s linear infinite; }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .loader {
-            border: 3px solid rgba(255, 215, 0, 0.1);
-            border-top: 3px solid var(--primary);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
-        }
-
-        .divider {
-            height: 1px;
-            background: var(--border-color);
-            margin: 20px 0;
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 600;
-        }
-
-        .badge-gold {
-            background: rgba(255, 215, 0, 0.2);
-            color: var(--primary);
-        }
-
-        .badge-green {
-            background: rgba(16, 185, 129, 0.2);
-            color: #10b981;
-        }
-
-        .badge-red {
-            background: rgba(239, 68, 68, 0.2);
-            color: var(--error);
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Crunk Games</title>
+<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Exo+2:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #FFD700;
+  --gold-dark: #FFA500;
+  --gold-light: #FFED4E;
+  --gold-dim: rgba(255,215,0,0.12);
+  --bg0: #070b14;
+  --bg1: #0c1221;
+  --bg2: #111827;
+  --bg3: #1a2433;
+  --border: rgba(255,215,0,0.15);
+  --border-strong: rgba(255,215,0,0.35);
+  --text1: #f0f0f0;
+  --text2: #94a3b8;
+  --text3: #546177;
+  --green: #10b981;
+  --red: #ef4444;
+  --blue: #3b82f6;
+  --orange: #f59e0b;
+  --r: all 0.25s ease;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;overflow-x:hidden}
+body{font-family:'Exo 2',sans-serif;background:var(--bg0);color:var(--text1);line-height:1.6}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer}
+input,select,textarea{font-family:inherit}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:var(--bg1)}
+::-webkit-scrollbar-thumb{background:rgba(255,215,0,0.3);border-radius:2px}
+
+/* APP LAYOUT */
+.app{display:flex;flex-direction:column;min-height:100vh}
+
+/* TOPBAR */
+.topbar{height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;background:var(--bg1);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:1000}
+.topbar-left{display:flex;align-items:center;gap:14px}
+.menu-btn{background:none;border:none;font-size:22px;color:var(--gold);padding:8px;border-radius:8px;transition:var(--r)}
+.menu-btn:hover{background:var(--gold-dim)}
+.brand{display:flex;align-items:center;gap:8px}
+.brand-icon{width:34px;height:34px;background:linear-gradient(135deg,#FFD700,#FF8C00);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.brand h1{font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;color:var(--gold);letter-spacing:3px}
+.topbar-right{display:flex;align-items:center;gap:12px}
+.notif-btn{background:none;border:none;font-size:18px;color:var(--text2);padding:8px;border-radius:8px;position:relative;transition:var(--r)}
+.notif-btn:hover{color:var(--gold);background:var(--gold-dim)}
+.notif-badge{position:absolute;top:4px;right:4px;width:8px;height:8px;background:var(--red);border-radius:50%;display:none}
+.notif-badge.show{display:block}
+.coins-pill{display:flex;align-items:center;gap:6px;background:var(--gold-dim);border:1px solid var(--border-strong);padding:6px 14px;border-radius:30px;cursor:pointer;transition:var(--r)}
+.coins-pill:hover{background:rgba(255,215,0,0.2)}
+.coins-pill i{color:var(--gold);font-size:16px}
+.coins-pill span{font-weight:700;color:var(--gold);font-size:15px;font-family:'Rajdhani',sans-serif;letter-spacing:1px}
+.avatar{width:38px;height:38px;border-radius:50%;object-fit:cover;border:2px solid var(--gold);cursor:pointer;transition:var(--r)}
+.avatar:hover{transform:scale(1.08);box-shadow:0 0 12px rgba(255,215,0,0.4)}
+
+/* SIDEBAR */
+.sidebar{position:fixed;left:-290px;top:0;width:270px;height:100vh;background:var(--bg1);border-right:1px solid var(--border);transition:var(--r);z-index:2000;overflow-y:auto;display:flex;flex-direction:column}
+.sidebar.open{left:0}
+.sidebar-head{display:flex;align-items:center;justify-content:space-between;padding:18px 16px;border-bottom:1px solid var(--border);min-height:64px}
+.sidebar-head .brand h1{font-size:18px}
+.close-btn{background:none;border:none;font-size:22px;color:var(--text2);border-radius:8px;padding:6px;transition:var(--r)}
+.close-btn:hover{color:var(--red);background:rgba(239,68,68,0.1)}
+.sidebar-user{padding:16px;display:flex;align-items:center;gap:12px;background:var(--gold-dim);margin:12px;border-radius:12px;border:1px solid var(--border)}
+.sidebar-user img{width:42px;height:42px;border-radius:50%;border:2px solid var(--gold)}
+.sidebar-user-name{font-weight:700;font-size:15px;color:var(--text1)}
+.sidebar-user-role{font-size:11px;color:var(--gold);text-transform:uppercase;letter-spacing:1px}
+.sidebar-nav{padding:8px;flex:1}
+.sidebar-nav h4{font-size:10px;text-transform:uppercase;letter-spacing:2px;color:var(--text3);padding:10px 10px 6px;font-weight:600}
+.nav-item{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:10px;cursor:pointer;transition:var(--r);margin-bottom:2px;color:var(--text2);font-size:15px;font-weight:500}
+.nav-item i{font-size:20px;width:24px;text-align:center}
+.nav-item:hover{background:var(--gold-dim);color:var(--text1)}
+.nav-item.active{background:var(--gold-dim);color:var(--gold);border-left:3px solid var(--gold)}
+.nav-item.active i{color:var(--gold)}
+.sidebar-footer{padding:12px;border-top:1px solid var(--border)}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:1999;display:none;backdrop-filter:blur(3px)}
+.overlay.show{display:block}
+
+/* MAIN */
+main{flex:1;padding:20px;overflow-y:auto;animation:fadeIn .35s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.page{display:none}
+.page.active{display:block}
+
+/* PAGE HEADER */
+.page-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;padding-bottom:18px;border-bottom:1px solid var(--border)}
+.page-hdr h1{font-family:'Rajdhani',sans-serif;font-size:28px;font-weight:700;display:flex;align-items:center;gap:10px;color:var(--text1)}
+.page-hdr h1 i{color:var(--gold)}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#0f1e35 0%,#0a0e1a 60%,#1a0f2e 100%);border:1px solid var(--border);border-radius:20px;padding:50px 40px;margin-bottom:32px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(ellipse at 60% 40%,rgba(255,215,0,0.05) 0%,transparent 60%);pointer-events:none}
+.hero h1{font-family:'Rajdhani',sans-serif;font-size:42px;font-weight:700;background:linear-gradient(135deg,var(--gold),var(--gold-light),#FF8C00);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:10px;letter-spacing:1px}
+.hero p{color:var(--text2);font-size:16px;margin-bottom:28px;max-width:500px;margin-left:auto;margin-right:auto}
+.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+/* STATS ROW */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px}
+.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:18px;text-align:center;transition:var(--r)}
+.stat-card:hover{border-color:var(--border-strong);transform:translateY(-3px)}
+.stat-num{font-family:'Rajdhani',sans-serif;font-size:30px;font-weight:700;color:var(--gold)}
+.stat-label{font-size:12px;color:var(--text2);text-transform:uppercase;letter-spacing:1px;margin-top:4px}
+
+/* BUTTONS */
+.btn{padding:10px 22px;border-radius:25px;font-weight:600;cursor:pointer;border:none;transition:var(--r);display:inline-flex;align-items:center;gap:7px;font-size:14px;font-family:'Exo 2',sans-serif}
+.btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:#000;font-weight:700}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(255,215,0,0.3)}
+.btn-outline{background:transparent;color:var(--gold);border:1px solid var(--border-strong)}
+.btn-outline:hover{background:var(--gold-dim);border-color:var(--gold)}
+.btn-ghost{background:transparent;color:var(--text2);border:1px solid var(--border)}
+.btn-ghost:hover{background:var(--bg3);color:var(--text1)}
+.btn-danger{background:rgba(239,68,68,0.15);color:var(--red);border:1px solid rgba(239,68,68,0.3)}
+.btn-danger:hover{background:rgba(239,68,68,0.25)}
+.btn-sm{padding:7px 14px;font-size:12px}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none!important}
+
+/* GRID & CARDS */
+.grid2{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:20px;transition:var(--r);position:relative;overflow:hidden}
+.card:hover{border-color:var(--border-strong);transform:translateY(-5px);box-shadow:0 12px 28px rgba(0,0,0,0.3)}
+.card-top-accent{position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),transparent);opacity:0;transition:opacity .3s}
+.card:hover .card-top-accent{opacity:1}
+.card-title{font-family:'Rajdhani',sans-serif;font-size:19px;font-weight:700;color:var(--text1);display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.card-meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.pill{background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.15);padding:3px 10px;border-radius:20px;font-size:11px;color:var(--text2);display:inline-flex;align-items:center;gap:4px}
+.pill i{font-size:10px}
+.card-body{background:var(--bg3);border-radius:10px;padding:12px;margin:10px 0}
+.card-row{display:flex;justify-content:space-between;align-items:center;font-size:13px;padding:4px 0}
+.card-row:not(:last-child){border-bottom:1px solid rgba(255,255,255,0.04)}
+.card-row span{color:var(--text2)}
+.card-row strong{color:var(--gold);font-family:'Rajdhani',sans-serif;font-size:15px}
+.card-footer{display:flex;gap:8px;margin-top:14px;padding-top:14px;border-top:1px solid var(--border)}
+.card-footer .btn{flex:1;justify-content:center}
+
+/* STATUS BADGES */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.badge-live{background:rgba(16,185,129,0.15);color:var(--green);border:1px solid rgba(16,185,129,0.3)}
+.badge-live::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 1.5s infinite}
+.badge-reg{background:var(--gold-dim);color:var(--gold);border:1px solid var(--border)}
+.badge-done{background:rgba(100,116,139,0.15);color:var(--text2);border:1px solid rgba(100,116,139,0.2)}
+.badge-admin{background:rgba(239,68,68,0.15);color:var(--red);border:1px solid rgba(239,68,68,0.3)}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* TABS */
+.tabs{display:flex;gap:4px;margin-bottom:24px;border-bottom:1px solid var(--border);overflow-x:auto;padding-bottom:1px}
+.tab-btn{background:none;border:none;color:var(--text2);font-weight:600;font-size:14px;padding:10px 18px;cursor:pointer;position:relative;transition:var(--r);white-space:nowrap;font-family:'Exo 2',sans-serif;border-radius:8px 8px 0 0}
+.tab-btn:hover{color:var(--text1);background:var(--gold-dim)}
+.tab-btn.active{color:var(--gold)}
+.tab-btn.active::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:2px;background:var(--gold)}
+.tab-pane{display:none}
+.tab-pane.active{display:block;animation:fadeIn .25s ease}
+
+/* FORMS */
+.form-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:28px;max-width:560px}
+.fgroup{margin-bottom:20px}
+.fgroup label{display:block;font-size:13px;font-weight:600;color:var(--text2);margin-bottom:7px;text-transform:uppercase;letter-spacing:.5px}
+.fgroup input,.fgroup select,.fgroup textarea{width:100%;padding:11px 14px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;color:var(--text1);font-size:14px;transition:var(--r);outline:none}
+.fgroup input:focus,.fgroup select:focus,.fgroup textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(255,215,0,0.08);background:var(--bg1)}
+.fgroup select option{background:var(--bg2)}
+.fgroup textarea{resize:vertical;min-height:100px}
+.fgroup .hint{font-size:11px;color:var(--text3);margin-top:5px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.ferr{color:var(--red);font-size:11px;margin-top:4px}
+
+/* MODAL */
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:10000;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(6px)}
+.modal.show{display:flex;animation:modalIn .25s ease}
+@keyframes modalIn{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+.modal-box{background:var(--bg1);border:1px solid var(--border);border-radius:20px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;position:relative}
+.modal-hdr{display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--bg1);z-index:1}
+.modal-hdr h2{font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;color:var(--gold);display:flex;align-items:center;gap:8px}
+.modal-hdr h2 i{font-size:20px}
+.modal-close{background:none;border:none;font-size:24px;color:var(--text2);border-radius:8px;padding:4px 8px;transition:var(--r)}
+.modal-close:hover{color:var(--red);background:rgba(239,68,68,0.1)}
+.modal-body{padding:24px}
+.modal-footer{padding:16px 24px;border-top:1px solid var(--border);display:flex;gap:10px;justify-content:flex-end}
+
+/* AUTH MODAL */
+.auth-modal .modal-box{max-width:400px}
+.auth-logo{text-align:center;margin-bottom:24px}
+.auth-logo .brand-icon{width:56px;height:56px;margin:0 auto 12px;font-size:26px;border-radius:14px}
+.auth-logo h2{font-family:'Rajdhani',sans-serif;font-size:28px;font-weight:700;color:var(--gold);letter-spacing:2px}
+.auth-logo p{color:var(--text2);font-size:14px}
+.auth-switch{text-align:center;margin-top:16px;font-size:13px;color:var(--text2)}
+.auth-switch a{color:var(--gold);cursor:pointer;font-weight:600}
+.divider{display:flex;align-items:center;gap:12px;margin:16px 0}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.divider span{color:var(--text3);font-size:12px}
+.google-btn{width:100%;padding:11px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;color:var(--text1);font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:var(--r);font-family:'Exo 2',sans-serif}
+.google-btn:hover{background:var(--bg2);border-color:var(--border-strong)}
+.google-icon{width:18px;height:18px}
+
+/* NOTIFICATIONS PANEL */
+.notif-panel{position:fixed;right:0;top:64px;width:340px;height:calc(100vh - 64px);background:var(--bg1);border-left:1px solid var(--border);z-index:900;transform:translateX(100%);transition:var(--r);overflow-y:auto}
+.notif-panel.open{transform:translateX(0)}
+.notif-panel-hdr{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.notif-panel-hdr h3{font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:var(--gold)}
+.notif-item{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;gap:12px;align-items:flex-start;transition:var(--r)}
+.notif-item:hover{background:var(--gold-dim)}
+.notif-item.unread{background:rgba(255,215,0,0.04)}
+.notif-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.notif-text{flex:1}
+.notif-text p{font-size:13px;color:var(--text1);margin-bottom:3px}
+.notif-text span{font-size:11px;color:var(--text3)}
+
+/* TABLES */
+.tbl-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:400px}
+thead th{background:var(--bg3);padding:13px 16px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gold);border-bottom:1px solid var(--border)}
+tbody td{padding:13px 16px;border-bottom:1px solid rgba(255,255,255,0.04);font-size:14px}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover{background:var(--gold-dim)}
+.rank-gold{color:var(--gold);font-family:'Rajdhani',sans-serif;font-size:17px;font-weight:700}
+.rank-silver{color:#94a3b8;font-family:'Rajdhani',sans-serif;font-size:17px;font-weight:700}
+.rank-bronze{color:#cd7f32;font-family:'Rajdhani',sans-serif;font-size:17px;font-weight:700}
+
+/* ACTIVITY FEED */
+.activity-item{display:flex;align-items:flex-start;gap:14px;padding:14px 0;border-bottom:1px solid var(--border)}
+.activity-item:last-child{border-bottom:none}
+.activity-dot{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.act-league{background:var(--gold-dim);color:var(--gold)}
+.act-team{background:rgba(16,185,129,0.12);color:var(--green)}
+.act-match{background:rgba(59,130,246,0.12);color:var(--blue)}
+.act-coin{background:rgba(245,158,11,0.12);color:var(--orange)}
+.activity-info h4{font-size:14px;font-weight:600;color:var(--text1);margin-bottom:3px}
+.activity-info p{font-size:12px;color:var(--text2)}
+
+/* MATCH CARD */
+.match-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:10px}
+.match-teams{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.match-team{flex:1;text-align:center}
+.match-team-name{font-size:14px;font-weight:600;color:var(--text1)}
+.match-score{font-family:'Rajdhani',sans-serif;font-size:28px;font-weight:700;color:var(--gold);min-width:70px;text-align:center}
+.match-vs{font-size:12px;color:var(--text3)}
+.match-meta{display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);font-size:11px;color:var(--text3)}
+
+/* COIN HISTORY */
+.coin-hist-item{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border)}
+.coin-hist-item:last-child{border-bottom:none}
+.coin-hist-label{font-size:13px;color:var(--text1)}
+.coin-hist-sub{font-size:11px;color:var(--text3)}
+.coin-amount{font-family:'Rajdhani',sans-serif;font-size:17px;font-weight:700}
+.coin-in{color:var(--green)}
+.coin-out{color:var(--red)}
+
+/* PROGRESS BAR */
+.progress{background:var(--bg3);border-radius:6px;height:6px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-dark));border-radius:6px;transition:width .5s ease}
+
+/* SEARCH */
+.search-wrap{position:relative;margin-bottom:18px}
+.search-wrap input{width:100%;padding:10px 14px 10px 40px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;color:var(--text1);font-size:14px;outline:none;transition:var(--r)}
+.search-wrap input:focus{border-color:var(--gold)}
+.search-wrap i{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:16px}
+
+/* TOAST */
+.toasts{position:fixed;bottom:24px;right:24px;z-index:20000;display:flex;flex-direction:column;gap:8px;pointer-events:none}
+.toast{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:12px 18px;display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600;animation:toastIn .3s ease;pointer-events:all;max-width:320px;box-shadow:0 8px 24px rgba(0,0,0,0.4)}
+@keyframes toastIn{from{transform:translateX(120px);opacity:0}to{transform:translateX(0);opacity:1}}
+.toast-success{border-color:rgba(16,185,129,0.4);background:rgba(16,185,129,0.12)}
+.toast-success i{color:var(--green)}
+.toast-error{border-color:rgba(239,68,68,0.4);background:rgba(239,68,68,0.12)}
+.toast-error i{color:var(--red)}
+.toast-info{border-color:rgba(59,130,246,0.4);background:rgba(59,130,246,0.12)}
+.toast-info i{color:var(--blue)}
+.toast-warning{border-color:rgba(245,158,11,0.4);background:rgba(245,158,11,0.12)}
+.toast-warning i{color:var(--orange)}
+
+/* PROFILE PAGE */
+.profile-hero{background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:32px;text-align:center;margin-bottom:24px;position:relative;overflow:hidden}
+.profile-hero::before{content:'';position:absolute;top:0;left:0;right:0;height:80px;background:linear-gradient(135deg,rgba(255,215,0,0.1),rgba(255,140,0,0.05))}
+.profile-avatar{width:90px;height:90px;border-radius:50%;border:3px solid var(--gold);object-fit:cover;margin:0 auto 12px}
+.profile-name{font-family:'Rajdhani',sans-serif;font-size:26px;font-weight:700;color:var(--text1)}
+.profile-email{color:var(--text2);font-size:14px;margin-bottom:8px}
+.profile-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:20px}
+.pstat{text-align:center}
+.pstat-num{font-family:'Rajdhani',sans-serif;font-size:24px;font-weight:700;color:var(--gold)}
+.pstat-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px}
+
+/* ADMIN PANEL */
+.admin-wrap{max-width:900px}
+.admin-section{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:18px}
+.admin-section h3{font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:var(--gold);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+
+/* EMPTY STATE */
+.empty{text-align:center;padding:60px 20px}
+.empty i{font-size:52px;color:var(--text3);display:block;margin-bottom:16px}
+.empty p{color:var(--text2);font-size:15px;margin-bottom:20px}
+
+/* FOOTER */
+footer{padding:16px 20px;background:var(--bg1);border-top:1px solid var(--border);text-align:center;font-size:12px;color:var(--text3)}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .stats-row{grid-template-columns:repeat(2,1fr)}
+  .form-row{grid-template-columns:1fr}
+  .hero{padding:30px 20px}
+  .hero h1{font-size:28px}
+  main{padding:14px}
+  .page-hdr{flex-direction:column;align-items:flex-start;gap:12px}
+  .notif-panel{width:100%;top:64px}
+  .toasts{left:12px;right:12px;bottom:12px}
+}
+@media(max-width:480px){
+  .topbar{height:56px;padding:0 12px}
+  .brand h1{font-size:18px}
+  .sidebar{width:250px;left:-250px}
+  .stats-row{grid-template-columns:1fr 1fr}
+  .hero h1{font-size:22px}
+  .grid2{grid-template-columns:1fr}
+  .coins-pill span{display:none}
+  .profile-stats{grid-template-columns:repeat(3,1fr)}
+}
+
+/* LOADING SPINNER */
+.spinner{width:36px;height:36px;border:3px solid rgba(255,215,0,0.15);border-top-color:var(--gold);border-radius:50%;animation:spin 1s linear infinite;margin:20px auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* BRACKET */
+.bracket{overflow-x:auto}
+.round{display:flex;flex-direction:column;gap:40px;min-width:200px}
+.bracket-wrap{display:flex;gap:48px;padding:20px 0}
+.match-slot{background:var(--bg3);border:1px solid var(--border);border-radius:10px;overflow:hidden;width:190px}
+.match-slot-team{padding:9px 13px;font-size:13px;font-weight:600;display:flex;justify-content:space-between;align-items:center;transition:var(--r)}
+.match-slot-team:first-child{border-bottom:1px solid var(--border)}
+.match-slot-team.winner{background:var(--gold-dim);color:var(--gold)}
+.match-slot-score{font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:var(--gold)}
+
+/* STANDINGS TABLE */
+.standings-wrap{overflow-x:auto}
+.standings-wrap table{min-width:600px}
+.st-pos{font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;width:40px;text-align:center}
+
+/* PLAYER CARD */
+.player-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
+.player-item:last-child{border-bottom:none}
+.player-num{width:28px;height:28px;background:var(--gold-dim);border:1px solid var(--border);border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:13px;color:var(--gold);flex-shrink:0}
+.player-name{flex:1;font-size:14px;font-weight:500}
+.player-pos{font-size:11px;color:var(--text3);background:var(--bg3);padding:2px 7px;border-radius:6px}
+.player-remove{background:none;border:none;color:var(--text3);font-size:16px;cursor:pointer;padding:4px;border-radius:6px;transition:var(--r)}
+.player-remove:hover{color:var(--red);background:rgba(239,68,68,0.1)}
+
+/* DAILY BONUS */
+.bonus-btn{background:linear-gradient(135deg,rgba(255,215,0,0.15),rgba(255,140,0,0.1));border:1px solid var(--gold);border-radius:14px;padding:18px 24px;width:100%;text-align:center;cursor:pointer;transition:var(--r);margin-bottom:20px}
+.bonus-btn:hover{background:rgba(255,215,0,0.2);transform:scale(1.01)}
+.bonus-btn h3{font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:var(--gold)}
+.bonus-btn p{font-size:12px;color:var(--text2);margin-top:4px}
+
+/* ANNOUNCEMENT */
+.announcement{background:linear-gradient(135deg,rgba(59,130,246,0.12),rgba(139,92,246,0.08));border:1px solid rgba(59,130,246,0.3);border-radius:12px;padding:14px 18px;margin-bottom:18px;display:flex;align-items:flex-start;gap:12px}
+.announcement i{color:var(--blue);font-size:20px;flex-shrink:0;margin-top:2px}
+.announcement-text h4{font-size:14px;font-weight:700;color:var(--text1);margin-bottom:3px}
+.announcement-text p{font-size:13px;color:var(--text2)}
+</style>
 </head>
 <body>
-    <div class="app">
-        <!-- TOPBAR -->
-        <header class="topbar">
-            <div class="topbar-left">
-                <button class="menu-btn" id="menuBtn"><i class="bx bx-menu"></i></button>
-                <div class="brand">
-                    <i class="fas fa-trophy" style="font-size: 28px;"></i>
-                    <h1>CRUNK</h1>
-                </div>
-            </div>
-            <div class="topbar-right">
-                <div class="veno-coins" id="venoCoinsBtn">
-                    <i class="fas fa-coins"></i>
-                    <span id="venoCoinsAmount">0</span>
-                </div>
-                <img id="profilePic" class="profile-pic" src="https://ui-avatars.com/api/?name=User&background=FFD700&color=000&size=128" alt="Profile">
-            </div>
-        </header>
+<div class="app">
 
-        <!-- SIDEBAR -->
-        <aside class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <h3>MENU</h3>
-                <button class="close-sidebar" id="closeSidebar"><i class="bx bx-x"></i></button>
-            </div>
-            <ul class="sidebar-menu" id="sidebarMenu">
-                <li data-page="dashboard"><i class="bx bx-home"></i> Dashboard</li>
-                <li data-page="leagues"><i class="bx bx-trophy"></i> Leagues</li>
-                <li data-page="teams"><i class="bx bx-group"></i> Teams</li>
-                <li data-page="leaderboard"><i class="bx bx-bar-chart-alt-2"></i> Leaderboard</li>
-                <li data-page="profile"><i class="bx bx-user-circle"></i> Profile</li>
-            </ul>
-        </aside>
-
-        <div class="sidebar-overlay" id="sidebarOverlay"></div>
-
-        <!-- MAIN CONTENT -->
-        <main id="mainContent">
-            <!-- Dashboard Page -->
-            <div class="page active" id="dashboard-page">
-                <div class="hero">
-                    <h1>🏆 Welcome to Crunk Games</h1>
-                    <p>Create leagues, manage teams, and climb the rankings</p>
-                    <div class="hero-buttons">
-                        <button class="btn btn-primary" id="createLeagueBtnHero"><i class="fas fa-plus-circle"></i> Create League</button>
-                        <button class="btn btn-secondary" id="browseLeaguesBtnHero"><i class="fas fa-search"></i> Browse Leagues</button>
-                    </div>
-                </div>
-
-                <div>
-                    <div class="page-header">
-                        <h1 style="margin: 0;"><i class="fas fa-fire"></i> Your Recent Activity</h1>
-                    </div>
-                    <div id="recentActivity">
-                        <div class="empty-state">
-                            <i class="fas fa-inbox"></i>
-                            <p>No activity yet. Create a league or team to get started!</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Leagues Page -->
-            <div class="page" id="leagues-page">
-                <div class="page-header">
-                    <h1><i class="fas fa-trophy"></i> Leagues</h1>
-                    <button class="btn btn-primary" id="createLeagueBtn"><i class="fas fa-plus"></i> Create League</button>
-                </div>
-
-                <div class="tabs" id="leagueTabs">
-                    <button class="tab-btn active" data-tab="all-leagues"><i class="fas fa-list"></i> All Leagues</button>
-                    <button class="tab-btn" data-tab="my-leagues"><i class="fas fa-star"></i> My Leagues</button>
-                    <button class="tab-btn" data-tab="joined-leagues"><i class="fas fa-check"></i> Joined</button>
-                </div>
-
-                <div id="all-leagues" class="tab-content active">
-                    <div class="grid" id="allLeaguesGrid">
-                        <div class="empty-state">
-                            <i class="fas fa-inbox"></i>
-                            <p>No leagues yet. Be the first to create one!</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="my-leagues" class="tab-content">
-                    <div class="grid" id="myLeaguesGrid">
-                        <div class="empty-state">
-                            <i class="fas fa-inbox"></i>
-                            <p>You haven't created any leagues yet.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="joined-leagues" class="tab-content">
-                    <div class="grid" id="joinedLeaguesGrid">
-                        <div class="empty-state">
-                            <i class="fas fa-inbox"></i>
-                            <p>You haven't joined any leagues yet.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Teams Page -->
-            <div class="page" id="teams-page">
-                <div class="page-header">
-                    <h1><i class="fas fa-users"></i> Teams</h1>
-                    <button class="btn btn-primary" id="createTeamBtn"><i class="fas fa-plus"></i> Create Team</button>
-                </div>
-
-                <div class="grid" id="teamsGrid">
-                    <div class="empty-state">
-                        <i class="fas fa-inbox"></i>
-                        <p>No teams yet. Create your first team!</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Leaderboard Page -->
-            <div class="page" id="leaderboard-page">
-                <div class="page-header">
-                    <h1><i class="fas fa-chart-line"></i> Global Leaderboard</h1>
-                </div>
-
-                <div class="tabs" id="leaderboardTabs">
-                    <button class="tab-btn active" data-tab="players-ranking"><i class="fas fa-user"></i> Players</button>
-                    <button class="tab-btn" data-tab="teams-ranking"><i class="fas fa-users"></i> Teams</button>
-                </div>
-
-                <div id="players-ranking" class="tab-content active">
-                    <div class="table-responsive">
-                        <table id="playersTable">
-                            <thead>
-                                <tr>
-                                    <th>Rank</th>
-                                    <th>Player</th>
-                                    <th>Wins</th>
-                                    <th>Coins</th>
-                                </tr>
-                            </thead>
-                            <tbody id="playersTableBody">
-                                <tr>
-                                    <td colspan="4" style="text-align: center; padding: 40px;">
-                                        <i class="fas fa-inbox"></i> No players data available
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <div id="teams-ranking" class="tab-content">
-                    <div class="table-responsive">
-                        <table id="teamsTable">
-                            <thead>
-                                <tr>
-                                    <th>Rank</th>
-                                    <th>Team</th>
-                                    <th>Leagues</th>
-                                    <th>Wins</th>
-                                </tr>
-                            </thead>
-                            <tbody id="teamsTableBody">
-                                <tr>
-                                    <td colspan="4" style="text-align: center; padding: 40px;">
-                                        <i class="fas fa-inbox"></i> No teams data available
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Profile Page -->
-            <div class="page" id="profile-page">
-                <div class="page-header">
-                    <h1><i class="fas fa-user-circle"></i> Profile</h1>
-                </div>
-
-                <div style="max-width: 600px;">
-                    <div class="card">
-                        <div style="text-align: center; margin-bottom: 20px;">
-                            <img id="profileImage" src="https://ui-avatars.com/api/?name=User&background=FFD700&color=000&size=128" style="width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--primary); margin-bottom: 15px;">
-                            <h2 id="profileName">Loading...</h2>
-                            <p id="profileEmail" style="color: var(--text-secondary);">Loading...</p>
-                        </div>
-
-                        <div class="divider"></div>
-
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0;">
-                            <div style="text-align: center;">
-                                <div style="font-size: 24px; font-weight: bold; color: var(--primary);" id="profileTeamsCount">0</div>
-                                <div style="font-size: 12px; color: var(--text-secondary);">Teams Created</div>
-                            </div>
-                            <div style="text-align: center;">
-                                <div style="font-size: 24px; font-weight: bold; color: var(--primary);" id="profileLeaguesCount">0</div>
-                                <div style="font-size: 12px; color: var(--text-secondary);">Leagues Created</div>
-                            </div>
-                        </div>
-
-                        <button class="btn btn-primary" onclick="app.logoutUser()" style="width: 100%; justify-content: center; margin-top: 20px;">
-                            <i class="fas fa-sign-out-alt"></i> Logout
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </main>
-
-        <!-- FOOTER -->
-        <footer>
-            <p>&copy; 2024 Crunk Games. All rights reserved. | Build your legacy, one match at a time.</p>
-        </footer>
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="topbar-left">
+    <button class="menu-btn" id="menuBtn"><i class="bx bx-menu"></i></button>
+    <div class="brand">
+      <div class="brand-icon">🏆</div>
+      <h1>CRUNK</h1>
     </div>
+  </div>
+  <div class="topbar-right">
+    <button class="notif-btn" id="notifBtn"><i class="bx bx-bell"></i><span class="notif-badge" id="notifBadge"></span></button>
+    <div class="coins-pill" id="coinsPill">
+      <i class="fas fa-coins"></i>
+      <span id="coinsAmt">0</span>
+    </div>
+    <img class="avatar" id="topAvatar" src="https://ui-avatars.com/api/?name=U&background=FFD700&color=000&size=80" alt="Profile">
+  </div>
+</header>
 
-    <!-- CREATE LEAGUE MODAL -->
-    <div class="modal" id="createLeagueModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2><i class="fas fa-trophy"></i> Create New League</h2>
-                <button class="modal-close" onclick="app.closeModal()"><i class="fas fa-times"></i></button>
-            </div>
-            <form id="createLeagueForm" onsubmit="app.createLeague(event)">
-                <div class="form-group">
-                    <label>League Name *</label>
-                    <input type="text" id="leagueName" required placeholder="e.g., Champions Cup 2024">
-                    <div class="form-error" id="leagueNameError"></div>
-                </div>
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-head">
+    <div class="brand"><div class="brand-icon" style="width:28px;height:28px;font-size:15px">🏆</div><h1>CRUNK</h1></div>
+    <button class="close-btn" id="sidebarClose"><i class="bx bx-x"></i></button>
+  </div>
+  <div class="sidebar-user" id="sidebarUser">
+    <img id="sidebarAvatar" src="https://ui-avatars.com/api/?name=U&background=FFD700&color=000&size=80" alt="">
+    <div>
+      <div class="sidebar-user-name" id="sidebarName">Loading...</div>
+      <div class="sidebar-user-role" id="sidebarRole">Player</div>
+    </div>
+  </div>
+  <nav class="sidebar-nav">
+    <h4>Main</h4>
+    <div class="nav-item active" data-page="dashboard"><i class="bx bx-home-alt"></i> Dashboard</div>
+    <div class="nav-item" data-page="leagues"><i class="bx bx-trophy"></i> Leagues</div>
+    <div class="nav-item" data-page="teams"><i class="bx bx-group"></i> Teams</div>
+    <div class="nav-item" data-page="matches"><i class="bx bx-football"></i> Matches</div>
+    <h4>Account</h4>
+    <div class="nav-item" data-page="leaderboard"><i class="bx bx-bar-chart-alt-2"></i> Leaderboard</div>
+    <div class="nav-item" data-page="profile"><i class="bx bx-user-circle"></i> Profile</div>
+    <div class="nav-item" data-page="coins"><i class="bx bx-coin-stack"></i> Coins & History</div>
+    <div class="nav-item hidden" data-page="admin" id="adminNavItem"><i class="bx bx-shield"></i> Admin Panel</div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="nav-item" id="logoutBtn" style="color:var(--red)"><i class="bx bx-log-out"></i> Logout</div>
+  </div>
+</aside>
+<div class="overlay" id="overlay"></div>
 
-                <div class="form-group">
-                    <label>Game Type *</label>
-                    <select id="gameType" required>
-                        <option value="">Select a game</option>
-                        <option value="eFootball">eFootball</option>
-                        <option value="EA Sports FC">EA Sports FC</option>
-                        <option value="Dream League Soccer">Dream League Soccer</option>
-                    </select>
-                </div>
+<!-- NOTIFICATIONS PANEL -->
+<div class="notif-panel" id="notifPanel">
+  <div class="notif-panel-hdr">
+    <h3>Notifications</h3>
+    <button class="btn btn-ghost btn-sm" id="markAllReadBtn">Mark all read</button>
+  </div>
+  <div id="notifList"></div>
+</div>
 
-                <div class="form-group">
-                    <label>Max Teams *</label>
-                    <input type="number" id="maxTeams" min="2" max="32" value="16" required>
-                </div>
+<!-- MAIN -->
+<main id="main">
 
-                <div class="form-group">
-                    <label>Entry Fee (Veno Coins) *</label>
-                    <input type="number" id="entryFee" min="0" value="50" required>
-                </div>
+  <!-- DASHBOARD -->
+  <div class="page active" id="page-dashboard">
+    <div class="hero">
+      <h1>⚡ Welcome to Crunk Games</h1>
+      <p>Create leagues, manage teams, and battle your way to the top of the leaderboard</p>
+      <div class="hero-btns">
+        <button class="btn btn-gold" id="heroCreateLeague"><i class="fas fa-plus-circle"></i> Create League</button>
+        <button class="btn btn-outline" id="heroCreateTeam"><i class="fas fa-users"></i> Create Team</button>
+        <button class="btn btn-ghost" id="heroBrowse"><i class="fas fa-search"></i> Browse Leagues</button>
+      </div>
+    </div>
+    <div id="dailyBonusWrap"></div>
+    <div id="announcementsWrap"></div>
+    <div class="stats-row" id="dashStats">
+      <div class="stat-card"><div class="stat-num" id="ds-coins">0</div><div class="stat-label">💰 Coins</div></div>
+      <div class="stat-card"><div class="stat-num" id="ds-teams">0</div><div class="stat-label">Teams</div></div>
+      <div class="stat-card"><div class="stat-num" id="ds-leagues">0</div><div class="stat-label">Leagues</div></div>
+      <div class="stat-card"><div class="stat-num" id="ds-wins">0</div><div class="stat-label">Wins</div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px" id="dashGrid">
+      <div>
+        <h3 style="font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:var(--text1);margin-bottom:14px">📋 Recent Activity</h3>
+        <div id="recentActivity" style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:16px"></div>
+      </div>
+      <div>
+        <h3 style="font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:var(--text1);margin-bottom:14px">⚽ Upcoming Matches</h3>
+        <div id="upcomingMatches" style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:16px"></div>
+      </div>
+    </div>
+  </div>
 
-                <div class="form-group">
-                    <label>Description (Optional)</label>
-                    <textarea id="leagueDescription" placeholder="Describe your league..."></textarea>
-                </div>
+  <!-- LEAGUES -->
+  <div class="page" id="page-leagues">
+    <div class="page-hdr">
+      <h1><i class="fas fa-trophy"></i> Leagues</h1>
+      <button class="btn btn-gold" id="createLeagueBtn"><i class="fas fa-plus"></i> Create League</button>
+    </div>
+    <div class="search-wrap"><i class="fas fa-search"></i><input type="text" placeholder="Search leagues..." id="leagueSearch"></div>
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="t-all-leagues">All Leagues</button>
+      <button class="tab-btn" data-tab="t-my-leagues">My Leagues</button>
+      <button class="tab-btn" data-tab="t-joined-leagues">Joined</button>
+    </div>
+    <div class="tab-pane active" id="t-all-leagues"><div class="grid2" id="allLeaguesGrid"></div></div>
+    <div class="tab-pane" id="t-my-leagues"><div class="grid2" id="myLeaguesGrid"></div></div>
+    <div class="tab-pane" id="t-joined-leagues"><div class="grid2" id="joinedLeaguesGrid"></div></div>
+  </div>
 
-                <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">
-                    <i class="fas fa-plus"></i> Create League
-                </button>
-            </form>
+  <!-- TEAMS -->
+  <div class="page" id="page-teams">
+    <div class="page-hdr">
+      <h1><i class="fas fa-users"></i> Teams</h1>
+      <button class="btn btn-gold" id="createTeamBtn"><i class="fas fa-plus"></i> Create Team</button>
+    </div>
+    <div class="search-wrap"><i class="fas fa-search"></i><input type="text" placeholder="Search teams..." id="teamSearch"></div>
+    <div class="grid2" id="teamsGrid"></div>
+  </div>
+
+  <!-- MATCHES -->
+  <div class="page" id="page-matches">
+    <div class="page-hdr"><h1><i class="fas fa-futbol"></i> Matches</h1></div>
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="t-my-matches">My Matches</button>
+      <button class="tab-btn" data-tab="t-all-matches">All Matches</button>
+      <button class="tab-btn" data-tab="t-results">Results</button>
+    </div>
+    <div class="tab-pane active" id="t-my-matches"><div id="myMatchesList"></div></div>
+    <div class="tab-pane" id="t-all-matches"><div id="allMatchesList"></div></div>
+    <div class="tab-pane" id="t-results"><div id="resultsList"></div></div>
+  </div>
+
+  <!-- LEADERBOARD -->
+  <div class="page" id="page-leaderboard">
+    <div class="page-hdr"><h1><i class="fas fa-chart-line"></i> Leaderboard</h1></div>
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="t-players-lb">Players</button>
+      <button class="tab-btn" data-tab="t-teams-lb">Teams</button>
+    </div>
+    <div class="tab-pane active" id="t-players-lb">
+      <div class="tbl-wrap">
+        <table><thead><tr><th>Rank</th><th>Player</th><th>Wins</th><th>Matches</th><th>Coins</th></tr></thead>
+        <tbody id="playersLbBody"></tbody></table>
+      </div>
+    </div>
+    <div class="tab-pane" id="t-teams-lb">
+      <div class="tbl-wrap">
+        <table><thead><tr><th>Rank</th><th>Team</th><th>W</th><th>D</th><th>L</th><th>GF</th><th>GA</th><th>GD</th></tr></thead>
+        <tbody id="teamsLbBody"></tbody></table>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROFILE -->
+  <div class="page" id="page-profile">
+    <div class="page-hdr"><h1><i class="fas fa-user-circle"></i> Profile</h1></div>
+    <div style="max-width:620px">
+      <div class="profile-hero">
+        <img class="profile-avatar" id="profAvatar" src="" alt="">
+        <div class="profile-name" id="profName">Loading...</div>
+        <div class="profile-email" id="profEmail">Loading...</div>
+        <div id="profBadges" style="margin-top:8px;display:flex;justify-content:center;gap:6px;flex-wrap:wrap"></div>
+        <div class="profile-stats">
+          <div class="pstat"><div class="pstat-num" id="prof-wins">0</div><div class="pstat-label">Wins</div></div>
+          <div class="pstat"><div class="pstat-num" id="prof-leagues">0</div><div class="pstat-label">Leagues</div></div>
+          <div class="pstat"><div class="pstat-num" id="prof-teams">0</div><div class="pstat-label">Teams</div></div>
         </div>
+      </div>
+      <div class="form-wrap" style="max-width:100%;margin-bottom:18px">
+        <h3 style="font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:var(--gold);margin-bottom:18px">Edit Profile</h3>
+        <div class="fgroup"><label>Display Name</label><input type="text" id="editName" placeholder="Your name"></div>
+        <div class="fgroup"><label>Avatar URL</label><input type="text" id="editAvatar" placeholder="https://..."></div>
+        <div class="fgroup"><label>New Password (leave blank to keep)</label><input type="password" id="editPass" placeholder="New password"></div>
+        <button class="btn btn-gold" onclick="app.saveProfile()"><i class="fas fa-save"></i> Save Changes</button>
+      </div>
+      <button class="btn btn-danger" style="width:100%;justify-content:center" onclick="app.logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
     </div>
+  </div>
 
-    <!-- CREATE TEAM MODAL -->
-    <div class="modal" id="createTeamModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2><i class="fas fa-users"></i> Create New Team</h2>
-                <button class="modal-close" onclick="app.closeModal()"><i class="fas fa-times"></i></button>
-            </div>
-            <form id="createTeamForm" onsubmit="app.createTeam(event)">
-                <div class="form-group">
-                    <label>Team Name *</label>
-                    <input type="text" id="teamName" required placeholder="e.g., Manchester United">
-                </div>
+  <!-- COINS -->
+  <div class="page" id="page-coins">
+    <div class="page-hdr"><h1><i class="fas fa-coins"></i> Coins & History</h1></div>
+    <div style="max-width:600px">
+      <div class="card" style="margin-bottom:20px;text-align:center">
+        <div style="font-size:13px;color:var(--text2);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Your Balance</div>
+        <div style="font-family:'Rajdhani',sans-serif;font-size:52px;font-weight:700;color:var(--gold)" id="coinsBigNum">0</div>
+        <div style="font-size:13px;color:var(--text3)">Veno Coins</div>
+      </div>
+      <div id="coinsDailyBonus"></div>
+      <div class="form-wrap" style="max-width:100%;margin-bottom:18px">
+        <h3 style="font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:var(--gold);margin-bottom:14px">Transaction History</h3>
+        <div id="coinHistoryList"></div>
+      </div>
+    </div>
+  </div>
 
-                <div class="form-group">
-                    <label>Formation *</label>
-                    <select id="teamFormation" required>
-                        <option value="4-4-2">4-4-2</option>
-                        <option value="4-3-3">4-3-3</option>
-                        <option value="5-3-2">5-3-2</option>
-                        <option value="3-5-2">3-5-2</option>
-                        <option value="4-1-4-1">4-1-4-1</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>Game Type *</label>
-                    <select id="teamGameType" required>
-                        <option value="eFootball">eFootball</option>
-                        <option value="EA Sports FC">EA Sports FC</option>
-                        <option value="Dream League Soccer">Dream League Soccer</option>
-                    </select>
-                </div>
-
-                <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">
-                    <i class="fas fa-plus"></i> Create Team
-                </button>
-            </form>
+  <!-- ADMIN -->
+  <div class="page" id="page-admin">
+    <div class="page-hdr"><h1><i class="fas fa-shield-alt"></i> Admin Panel <span class="badge badge-admin" style="margin-left:8px">ADMIN</span></h1></div>
+    <div class="admin-wrap">
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="t-admin-users">Users</button>
+        <button class="tab-btn" data-tab="t-admin-leagues">Leagues</button>
+        <button class="tab-btn" data-tab="t-admin-coins">Coins</button>
+        <button class="tab-btn" data-tab="t-admin-announce">Announcements</button>
+      </div>
+      <div class="tab-pane active" id="t-admin-users">
+        <div class="search-wrap"><i class="fas fa-search"></i><input type="text" placeholder="Search users..." id="adminUserSearch"></div>
+        <div id="adminUsersTable"></div>
+      </div>
+      <div class="tab-pane" id="t-admin-leagues">
+        <div id="adminLeaguesTable"></div>
+      </div>
+      <div class="tab-pane" id="t-admin-coins">
+        <div class="admin-section">
+          <h3><i class="fas fa-coins"></i> Adjust User Coins</h3>
+          <div class="form-row">
+            <div class="fgroup"><label>User ID or Name</label><input type="text" id="adminCoinUser" placeholder="User name or ID"></div>
+            <div class="fgroup"><label>Amount (+/-)</label><input type="number" id="adminCoinAmt" placeholder="e.g. 500 or -100"></div>
+          </div>
+          <div class="fgroup"><label>Reason</label><input type="text" id="adminCoinReason" placeholder="e.g. Tournament reward"></div>
+          <button class="btn btn-gold" onclick="app.adminAdjustCoins()"><i class="fas fa-coins"></i> Apply Coins</button>
         </div>
-    </div>
-
-    <!-- LEAGUE DETAILS MODAL -->
-    <div class="modal" id="leagueDetailsModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="leagueDetailsTitle"></h2>
-                <button class="modal-close" onclick="app.closeModal()"><i class="fas fa-times"></i></button>
-            </div>
-            <div id="leagueDetailsContent"></div>
+        <div class="admin-section">
+          <h3><i class="fas fa-history"></i> All Transactions</h3>
+          <div id="adminAllTxns"></div>
         </div>
+      </div>
+      <div class="tab-pane" id="t-admin-announce">
+        <div class="admin-section">
+          <h3><i class="fas fa-bullhorn"></i> Post Announcement</h3>
+          <div class="fgroup"><label>Title</label><input type="text" id="aTitle" placeholder="Announcement title"></div>
+          <div class="fgroup"><label>Message</label><textarea id="aMsg" placeholder="Your announcement..."></textarea></div>
+          <button class="btn btn-gold" onclick="app.postAnnouncement()"><i class="fas fa-paper-plane"></i> Post</button>
+        </div>
+        <div id="adminAnnounceList"></div>
+      </div>
     </div>
-
-    <!-- TOAST CONTAINER -->
-    <div class="toast-container" id="toastContainer"></div>
-
-    <!-- MAIN APPLICATION SCRIPT -->
-    <script>
-        /***********************************
-         *   CRUNK GAMES APPLICATION
-         ***********************************/
-
-        const app = {
-            // ==================== CONFIGURATION ====================
-            API_BASE: "https://api.example.com/v1", // Replace with your backend
-            STORAGE_KEYS: {
-                USER: "crunkUser",
-                LEAGUES: "leagues",
-                TEAMS: "teams",
-                COINS: "userCoins",
-                JOINED_LEAGUES: "joinedLeagues"
-            },
-
-            // ==================== STATE ====================
-            state: {
-                currentUser: null,
-                currentPage: "dashboard",
-                leagues: [],
-                teams: [],
-                joinedLeagues: [],
-                allUsers: []
-            },
-
-            // ==================== INITIALIZATION ====================
-            init() {
-                console.log("🚀 Initializing Crunk Games...");
-                this.loadUserData();
-                this.setupEventListeners();
-                this.renderPage("dashboard");
-                this.updateCoinsDisplay();
-                console.log("✅ App initialized");
-            },
-
-            // ==================== EVENT LISTENERS ====================
-            setupEventListeners() {
-                // Menu
-                document.getElementById("menuBtn").addEventListener("click", () => this.toggleSidebar());
-                document.getElementById("closeSidebar").addEventListener("click", () => this.toggleSidebar());
-                document.getElementById("sidebarOverlay").addEventListener("click", () => this.toggleSidebar());
-
-                // Sidebar Navigation
-                document.querySelectorAll(".sidebar-menu li").forEach(li => {
-                    li.addEventListener("click", (e) => {
-                        const page = e.currentTarget.dataset.page;
-                        this.renderPage(page);
-                        this.toggleSidebar();
-                        this.updateActiveMenu(page);
-                    });
-                });
-
-                // Profile Picture
-                document.getElementById("profilePic").addEventListener("click", () => {
-                    this.renderPage("profile");
-                    this.toggleSidebar();
-                });
-
-                // Create League Buttons
-                document.getElementById("createLeagueBtn")?.addEventListener("click", () => this.openModal("createLeagueModal"));
-                document.getElementById("createLeagueBtnHero")?.addEventListener("click", () => this.openModal("createLeagueModal"));
-
-                // Browse Leagues Button
-                document.getElementById("browseLeaguesBtnHero")?.addEventListener("click", () => {
-                    this.renderPage("leagues");
-                    this.toggleSidebar();
-                });
-
-                // Create Team Button
-                document.getElementById("createTeamBtn")?.addEventListener("click", () => this.openModal("createTeamModal"));
-
-                // Tabs
-                document.querySelectorAll(".tab-btn").forEach(btn => {
-                    btn.addEventListener("click", (e) => {
-                        const tabId = e.target.dataset.tab;
-                        if (!tabId) return;
-
-                        e.target.parentElement.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-                        e.target.classList.add("active");
-
-                        e.target.parentElement.parentElement.querySelectorAll(".tab-content").forEach(t => t.classList.remove("active"));
-                        document.getElementById(tabId).classList.add("active");
-                    });
-                });
-
-                // Coins Button
-                document.getElementById("venoCoinsBtn")?.addEventListener("click", () => {
-                    this.showToast(`You have ${this.getCoins()} Veno Coins!`, "info");
-                });
-            },
-
-            // ==================== MODAL ====================
-            openModal(modalId) {
-                if (!this.state.currentUser) {
-                    this.showToast("Please login first", "error");
-                    return;
-                }
-                document.getElementById(modalId).classList.add("active");
-            },
-
-            closeModal() {
-                document.querySelectorAll(".modal").forEach(m => m.classList.remove("active"));
-            },
-
-            // ==================== SIDEBAR ====================
-            toggleSidebar() {
-                const sidebar = document.getElementById("sidebar");
-                const overlay = document.getElementById("sidebarOverlay");
-                sidebar.classList.toggle("open");
-                overlay.classList.toggle("active");
-            },
-
-            updateActiveMenu(page) {
-                document.querySelectorAll(".sidebar-menu li").forEach(li => li.classList.remove("active"));
-                document.querySelector(`[data-page="${page}"]`)?.classList.add("active");
-            },
-
-            // ==================== PAGE ROUTING ====================
-            renderPage(pageName) {
-                // Hide all pages
-                document.querySelectorAll(".page").forEach(page => page.classList.remove("active"));
-
-                // Show selected page
-                const page = document.getElementById(`${pageName}-page`);
-                if (page) {
-                    page.classList.add("active");
-                    this.state.currentPage = pageName;
-                    this.updateActiveMenu(pageName);
-
-                    // Load page-specific content
-                    if (pageName === "dashboard") this.loadDashboard();
-                    if (pageName === "leagues") this.loadLeaguesPage();
-                    if (pageName === "teams") this.loadTeamsPage();
-                    if (pageName === "leaderboard") this.loadLeaderboard();
-                    if (pageName === "profile") this.loadProfile();
-                }
-            },
-
-            // ==================== DASHBOARD ==================== 
-            loadDashboard() {
-                const recentActivityDiv = document.getElementById("recentActivity");
-                const allActivity = [
-                    ...this.state.leagues.map(l => ({
-                        type: "League Created",
-                        title: l.name,
-                        date: new Date(l.createdAt),
-                        icon: "fa-trophy",
-                        color: "var(--primary)"
-                    })),
-                    ...this.state.teams.map(t => ({
-                        type: "Team Created",
-                        title: t.name,
-                        date: new Date(t.createdAt),
-                        icon: "fa-users",
-                        color: "#10b981"
-                    }))
-                ];
-
-                if (allActivity.length === 0) {
-                    recentActivityDiv.innerHTML = `
-                        <div class="empty-state">
-                            <i class="fas fa-inbox"></i>
-                            <p>No activity yet. Create a league or team to get started!</p>
-                        </div>
-                    `;
-                    return;
-                }
-
-                allActivity.sort((a, b) => b.date - a.date);
-                recentActivityDiv.innerHTML = `
-                    <div class="grid">
-                        ${allActivity.slice(0, 6).map(activity => `
-                            <div class="card">
-                                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
-                                    <i class="fas ${activity.icon}" style="font-size: 24px; color: ${activity.color};"></i>
-                                    <div>
-                                        <div style="font-weight: 600; color: var(--primary);">${activity.type}</div>
-                                        <div style="font-size: 12px; color: var(--text-secondary);">${activity.date.toLocaleDateString()}</div>
-                                    </div>
-                                </div>
-                                <div style="padding: 12px; background: var(--bg-secondary); border-radius: 12px; word-break: break-word;">
-                                    ${activity.title}
-                                </div>
-                            </div>
-                        `).join('')}
-                    </div>
-                `;
-            },
-
-            // ==================== LEAGUES PAGE ====================
-            loadLeaguesPage() {
-                // All Leagues
-                const allLeaguesGrid = document.getElementById("allLeaguesGrid");
-                if (this.state.leagues.length === 0) {
-                    allLeaguesGrid.innerHTML = `
-                        <div class="empty-state">
-                            <i class="fas fa-inbox"></i>
-                            <p>No leagues yet. Be the first to create one!</p>
-                        </div>
-                    `;
-                } else {
-                    allLeaguesGrid.innerHTML = this.state.leagues.map(league => this.renderLeagueCard(league)).join("");
-                }
-
-                // My Leagues
-                const myLeaguesGrid = document.getElementById("myLeaguesGrid");
-                const myLeagues = this.state.leagues.filter(l => l.ownerId === this.state.currentUser?.uid);
-                if (myLeagues.length === 0) {
-                    myLeaguesGrid.innerHTML = `
-                        <div class="empty-state">
-                            <i class="fas fa-inbox"></i>
-                            <p>You haven't created any leagues yet.</p>
-                        </div>
-                    `;
-                } else {
-                    myLeaguesGrid.innerHTML = myLeagues.map(league => this.renderLeagueCard(league)).join("");
-                }
-
-                // Joined Leagues
-                const joinedLeaguesGrid = document.getElementById("joinedLeaguesGrid");
-                const joinedLeagues = this.state.joinedLeagues.map(id => this.state.leagues.find(l => l.id === id)).filter(l => l);
-                if (joinedLeagues.length === 0) {
-                    joinedLeaguesGrid.innerHTML = `
-                        <div class="empty-state">
-                            <i class="fas fa-inbox"></i>
-                            <p>You haven't joined any leagues yet.</p>
-                        </div>
-                    `;
-                } else {
-                    joinedLeaguesGrid.innerHTML = joinedLeagues.map(league => this.renderLeagueCard(league)).join("");
-                }
-
-                this.attachCardListeners();
-            },
-
-            renderLeagueCard(league) {
-                const isOwner = league.ownerId === this.state.currentUser?.uid;
-                const isJoined = this.state.joinedLeagues.includes(league.id);
-
-                return `
-                    <div class="card">
-                        <div class="card-header">
-                            <span>${league.name}</span>
-                            <span class="card-status status-${league.status}">${league.status}</span>
-                        </div>
-                        <div class="card-meta">
-                            <span class="meta-item"><i class="fas fa-gamepad"></i> ${league.gameType}</span>
-                            <span class="meta-item"><i class="fas fa-users"></i> ${league.teams?.length || 0}/${league.maxTeams}</span>
-                            <span class="meta-item"><i class="fas fa-coins"></i> Entry: ${league.entryFee}</span>
-                        </div>
-                        <div class="card-content">
-                            <div class="card-content-item">
-                                <span>Prize Pool:</span>
-                                <strong>💰 ${Math.round(league.prizePool)}</strong>
-                            </div>
-                            <div class="card-content-item">
-                                <span>Slots Available:</span>
-                                <strong>${league.maxTeams - (league.teams?.length || 0)}</strong>
-                            </div>
-                        </div>
-                        <div class="card-footer">
-                            <button class="btn btn-secondary" onclick="app.viewLeague('${league.id}')">
-                                <i class="fas fa-eye"></i> View
-                            </button>
-                            ${isOwner ? `
-                                <button class="btn btn-primary" onclick="app.manageLea gue('${league.id}')">
-                                    <i class="fas fa-cog"></i> Manage
-                                </button>
-                            ` : !isJoined ? `
-                                <button class="btn btn-primary" onclick="app.joinLeague('${league.id}')">
-                                    <i class="fas fa-sign-in-alt"></i> Join
-                                </button>
-                            ` : `
-                                <button class="btn btn-primary" disabled>
-                                    <i class="fas fa-check"></i> Joined
-                                </button>
-                            `}
-                        </div>
-                    </div>
-                `;
-            },
-
-            // ==================== TEAMS PAGE ====================
-            loadTeamsPage() {
-                const teamsGrid = document.getElementById("teamsGrid");
-                if (this.state.teams.length === 0) {
-                    teamsGrid.innerHTML = `
-                        <div class="empty-state">
-                            <i class="fas fa-inbox"></i>
-                            <p>No teams yet. Create your first team!</p>
-                        </div>
-                    `;
-                } else {
-                    teamsGrid.innerHTML = this.state.teams.map(team => this.renderTeamCard(team)).join("");
-                    this.attachCardListeners();
-                }
-            },
-
-            renderTeamCard(team) {
-                return `
-                    <div class="card">
-                        <div class="card-header">
-                            <span>⚽ ${team.name}</span>
-                        </div>
-                        <div class="card-meta">
-                            <span class="meta-item"><i class="fas fa-gamepad"></i> ${team.gameType}</span>
-                            <span class="meta-item"><i class="fas fa-chess"></i> ${team.formation}</span>
-                        </div>
-                        <div class="card-content">
-                            <div class="card-content-item">
-                                <span>Players:</span>
-                                <strong>${team.players?.length || 0}</strong>
-                            </div>
-                            <div class="card-content-item">
-                                <span>Record:</span>
-                                <strong>${team.wins || 0}W - ${team.draws || 0}D - ${team.losses || 0}L</strong>
-                            </div>
-                        </div>
-                        <div class="card-footer">
-                            <button class="btn btn-secondary" onclick="app.editTeam('${team.id}')">
-                                <i class="fas fa-edit"></i> Edit
-                            </button>
-                            <button class="btn btn-primary" onclick="app.viewTeam('${team.id}')">
-                                <i class="fas fa-eye"></i> View
-                            </button>
-                        </div>
-                    </div>
-                `;
-            },
-
-            // ==================== LEADERBOARD ====================
-            loadLeaderboard() {
-                // Players Rankings
-                const playersTableBody = document.getElementById("playersTableBody");
-                const sortedPlayers = [...this.state.allUsers].sort((a, b) => (b.wins || 0) - (a.wins || 0));
-
-                if (sortedPlayers.length === 0) {
-                    playersTableBody.innerHTML = `
-                        <tr>
-                            <td colspan="4" style="text-align: center; padding: 40px;">
-                                <i class="fas fa-inbox"></i> No data yet
-                            </td>
-                        </tr>
-                    `;
-                } else {
-                    playersTableBody.innerHTML = sortedPlayers.slice(0, 100).map((player, idx) => `
-                        <tr>
-                            <td><strong style="color: ${idx === 0 ? 'var(--primary)' : idx === 1 ? '#94a3b8' : idx === 2 ? '#cd7f32' : 'inherit'};">#${idx + 1}</strong></td>
-                            <td>
-                                <div style="display: flex; align-items: center; gap: 10px;">
-                                    <img src="${player.photoURL || 'https://ui-avatars.com/api/?name=User&background=FFD700&color=000&size=32'}" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">
-                                    <div>
-                                        <div style="font-weight: 600;">${player.displayName || 'Unknown'}</div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td><strong>${player.wins || 0}</strong></td>
-                            <td><strong style="color: var(--primary);">💰 ${player.coins || 0}</strong></td>
-                        </tr>
-                    `).join("");
-                }
-
-                // Teams Rankings
-                const teamsTableBody = document.getElementById("teamsTableBody");
-                const sortedTeams = [...this.state.teams].sort((a, b) => (b.wins || 0) - (a.wins || 0));
-
-                if (sortedTeams.length === 0) {
-                    teamsTableBody.innerHTML = `
-                        <tr>
-                            <td colspan="4" style="text-align: center; padding: 40px;">
-                                <i class="fas fa-inbox"></i> No data yet
-                            </td>
-                        </tr>
-                    `;
-                } else {
-                    teamsTableBody.innerHTML = sortedTeams.slice(0, 100).map((team, idx) => `
-                        <tr>
-                            <td><strong style="color: ${idx === 0 ? 'var(--primary)' : idx === 1 ? '#94a3b8' : idx === 2 ? '#cd7f32' : 'inherit'};">#${idx + 1}</strong></td>
-                            <td><strong>⚽ ${team.name}</strong></td>
-                            <td>${team.leagues?.length || 0}</td>
-                            <td><strong>${team.wins || 0}</strong></td>
-                        </tr>
-                    `).join("");
-                }
-            },
-
-            // ==================== PROFILE ====================
-            loadProfile() {
-                const user = this.state.currentUser;
-                if (!user) return;
-
-                document.getElementById("profileName").textContent = user.displayName || "Unknown";
-                document.getElementById("profileEmail").textContent = user.email || "No email";
-                document.getElementById("profileImage").src = user.photoURL || `https://ui-avatars.com/api/?name=${user.displayName}&background=FFD700&color=000&size=128`;
-                document.getElementById("profileTeamsCount").textContent = this.state.teams.length;
-                document.getElementById("profileLeaguesCount").textContent = this.state.leagues.length;
-            },
-
-            // ==================== LEAGUE ACTIONS ====================
-            createLeague(event) {
-                event.preventDefault();
-
-                const name = document.getElementById("leagueName").value.trim();
-                const gameType = document.getElementById("gameType").value;
-                const maxTeams = parseInt(document.getElementById("maxTeams").value);
-                const entryFee = parseInt(document.getElementById("entryFee").value);
-                const description = document.getElementById("leagueDescription").value.trim();
-
-                if (!name || !gameType) {
-                    this.showToast("Please fill all required fields", "error");
-                    return;
-                }
-
-                const league = {
-                    id: "league_" + Date.now() + "_" + Math.random().toString(36).substr(2, 9),
-                    name: name,
-                    gameType: gameType,
-                    maxTeams: maxTeams,
-                    entryFee: entryFee,
-                    prizePool: maxTeams * entryFee * 0.8,
-                    description: description,
-                    status: "registration",
-                    ownerId: this.state.currentUser.uid,
-                    teams: [],
-                    matches: [],
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString()
-                };
-
-                this.state.leagues.push(league);
-                this.saveLeagues();
-                
-                this.showToast("League created successfully!", "success");
-                this.closeModal();
-                document.getElementById("createLeagueForm").reset();
-                this.loadLeaguesPage();
-                this.loadDashboard();
-            },
-
-            joinLeague(leagueId) {
-                const league = this.state.leagues.find(l => l.id === leagueId);
-                if (!league) return;
-
-                if (this.state.joinedLeagues.includes(leagueId)) {
-                    this.showToast("You already joined this league", "warning");
-                    return;
-                }
-
-                const userCoins = this.getCoins();
-                if (userCoins < league.entryFee) {
-                    this.showToast(`You need ${league.entryFee} Veno Coins. You have ${userCoins}`, "error");
-                    return;
-                }
-
-                this.deductCoins(league.entryFee);
-                this.state.joinedLeagues.push(leagueId);
-                this.saveJoinedLeagues();
-
-                this.showToast(`Joined ${league.name}!`, "success");
-                this.loadLeaguesPage();
-            },
-
-            viewLeague(leagueId) {
-                const league = this.state.leagues.find(l => l.id === leagueId);
-                if (!league) return;
-
-                const modal = document.getElementById("leagueDetailsModal");
-                document.getElementById("leagueDetailsTitle").textContent = league.name;
-                document.getElementById("leagueDetailsContent").innerHTML = `
-                    <div class="card" style="border: none; background: transparent;">
-                        <div class="card-meta">
-                            <span class="meta-item"><i class="fas fa-gamepad"></i> ${league.gameType}</span>
-                            <span class="meta-item"><i class="fas fa-users"></i> ${league.teams?.length || 0}/${league.maxTeams}</span>
-                            <span class="meta-item"><i class="fas fa-coins"></i> Entry: ${league.entryFee}</span>
-                        </div>
-
-                        <div class="divider"></div>
-
-                        <div style="margin-bottom: 20px;">
-                            <h3 style="color: var(--primary); margin-bottom: 10px;">Details</h3>
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                                <div>
-                                    <div style="font-size: 12px; color: var(--text-secondary);">Prize Pool</div>
-                                    <div style="font-size: 18px; font-weight: bold; color: var(--primary);">💰 ${Math.round(league.prizePool)}</div>
-                                </div>
-                                <div>
-                                    <div style="font-size: 12px; color: var(--text-secondary);">Status</div>
-                                    <div style="font-size: 18px; font-weight: bold; color: #10b981;">${league.status.toUpperCase()}</div>
-                                </div>
-                                <div>
-                                    <div style="font-size: 12px; color: var(--text-secondary);">Created</div>
-                                    <div style="font-size: 14px; font-weight: 600;">${new Date(league.createdAt).toLocaleDateString()}</div>
-                                </div>
-                                <div>
-                                    <div style="font-size: 12px; color: var(--text-secondary);">Teams</div>
-                                    <div style="font-size: 18px; font-weight: bold;">${league.teams?.length || 0}</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        ${league.description ? `
-                            <div style="margin-bottom: 20px;">
-                                <h3 style="color: var(--primary); margin-bottom: 10px;">Description</h3>
-                                <p style="color: var(--text-secondary);">${league.description}</p>
-                            </div>
-                        ` : ''}
-
-                        ${league.teams && league.teams.length > 0 ? `
-                            <div>
-                                <h3 style="color: var(--primary); margin-bottom: 10px;">Teams</h3>
-                                <div style="display: grid; grid-template-columns: 1fr; gap: 10px;">
-                                    ${league.teams.map((team, idx) => `
-                                        <div style="padding: 10px; background: var(--bg-secondary); border-radius: 12px;">
-                                            <div style="font-weight: 600;">${idx + 1}. ${team.name}</div>
-                                            <div style="font-size: 12px; color: var(--text-secondary);">Owner: ${team.ownerName}</div>
-                                        </div>
-                                    `).join('')}
-                                </div>
-                            </div>
-                        ` : ''}
-
-                        <button class="btn btn-primary" onclick="app.closeModal()" style="width: 100%; justify-content: center; margin-top: 20px;">
-                            Close
-                        </button>
-                    </div>
-                `;
-                modal.classList.add("active");
-            },
-
-            manageLeague(leagueId) {
-                this.showToast("League management coming soon", "info");
-            },
-
-            // ==================== TEAM ACTIONS ====================
-            createTeam(event) {
-                event.preventDefault();
-
-                const name = document.getElementById("teamName").value.trim();
-                const formation = document.getElementById("teamFormation").value;
-                const gameType = document.getElementById("teamGameType").value;
-
-                if (!name) {
-                    this.showToast("Please enter team name", "error");
-                    return;
-                }
-
-                const team = {
-                    id: "team_" + Date.now() + "_" + Math.random().toString(36).substr(2, 9),
-                    name: name,
-                    formation: formation,
-                    gameType: gameType,
-                    ownerId: this.state.currentUser.uid,
-                    players: [],
-                    wins: 0,
-                    draws: 0,
-                    losses: 0,
-                    leagues: [],
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString()
-                };
-
-                this.state.teams.push(team);
-                this.saveTeams();
-
-                this.showToast("Team created successfully!", "success");
-                this.closeModal();
-                document.getElementById("createTeamForm").reset();
-                this.loadTeamsPage();
-                this.loadDashboard();
-            },
-
-            editTeam(teamId) {
-                this.showToast("Team editing coming soon", "info");
-            },
-
-            viewTeam(teamId) {
-                this.showToast("Team details coming soon", "info");
-            },
-
-            // ==================== USER MANAGEMENT ====================
-            loadUserData() {
-                try {
-                    const user = localStorage.getItem(this.STORAGE_KEYS.USER);
-                    if (user) {
-                        this.state.currentUser = JSON.parse(user);
-                    } else {
-                        // Demo user for development
-                        this.state.currentUser = {
-                            uid: "user_demo_" + Math.random().toString(36).substr(2, 9),
-                            displayName: "Demo Player",
-                            email: "demo@crunkgames.com",
-                            photoURL: "https://ui-avatars.com/api/?name=Demo+Player&background=FFD700&color=000&size=128"
-                        };
-                        localStorage.setItem(this.STORAGE_KEYS.USER, JSON.stringify(this.state.currentUser));
-                    }
-
-                    this.state.leagues = JSON.parse(localStorage.getItem(this.STORAGE_KEYS.LEAGUES) || "[]");
-                    this.state.teams = JSON.parse(localStorage.getItem(this.STORAGE_KEYS.TEAMS) || "[]");
-                    this.state.joinedLeagues = JSON.parse(localStorage.getItem(this.STORAGE_KEYS.JOINED_LEAGUES) || "[]");
-                    this.state.allUsers = JSON.parse(localStorage.getItem("allUsers") || "[]");
-
-                    // Add current user to all users list
-                    if (!this.state.allUsers.find(u => u.uid === this.state.currentUser.uid)) {
-                        this.state.allUsers.push({
-                            ...this.state.currentUser,
-                            wins: 0,
-                            coins: this.getCoins()
-                        });
-                        localStorage.setItem("allUsers", JSON.stringify(this.state.allUsers));
-                    }
-                } catch (error) {
-                    console.error("Error loading user data:", error);
-                }
-            },
-
-            logoutUser() {
-                if (confirm("Are you sure you want to logout?")) {
-                    localStorage.removeItem(this.STORAGE_KEYS.USER);
-                    this.state.currentUser = null;
-                    window.location.href = "index.html"; // Redirect to login page
-                }
-            },
-
-            // ==================== COINS SYSTEM ====================
-            getCoins() {
-                if (!this.state.currentUser) return 0;
-                const coinsData = JSON.parse(localStorage.getItem(this.STORAGE_KEYS.COINS) || "{}");
-                return coinsData[this.state.currentUser.uid] || 100;
-            },
-
-            addCoins(amount) {
-                if (!this.state.currentUser) return;
-                const coinsData = JSON.parse(localStorage.getItem(this.STORAGE_KEYS.COINS) || "{}");
-                coinsData[this.state.currentUser.uid] = (coinsData[this.state.currentUser.uid] || 100) + amount;
-                localStorage.setItem(this.STORAGE_KEYS.COINS, JSON.stringify(coinsData));
-                this.updateCoinsDisplay();
-                this.updateAllUsersCoins();
-            },
-
-            deductCoins(amount) {
-                if (!this.state.currentUser) return false;
-                const coinsData = JSON.parse(localStorage.getItem(this.STORAGE_KEYS.COINS) || "{}");
-                const currentCoins = coinsData[this.state.currentUser.uid] || 100;
-
-                if (currentCoins >= amount) {
-                    coinsData[this.state.currentUser.uid] = currentCoins - amount;
-                    localStorage.setItem(this.STORAGE_KEYS.COINS, JSON.stringify(coinsData));
-                    this.updateCoinsDisplay();
-                    this.updateAllUsersCoins();
-                    return true;
-                }
-                return false;
-            },
-
-            updateCoinsDisplay() {
-                const span = document.getElementById("venoCoinsAmount");
-                if (span) span.textContent = this.getCoins();
-            },
-
-            updateAllUsersCoins() {
-                const userIdx = this.state.allUsers.findIndex(u => u.uid === this.state.currentUser.uid);
-                if (userIdx !== -1) {
-                    this.state.allUsers[userIdx].coins = this.getCoins();
-                    localStorage.setItem("allUsers", JSON.stringify(this.state.allUsers));
-                }
-            },
-
-            // ==================== STORAGE ====================
-            saveLeagues() {
-                localStorage.setItem(this.STORAGE_KEYS.LEAGUES, JSON.stringify(this.state.leagues));
-            },
-
-            saveTeams() {
-                localStorage.setItem(this.STORAGE_KEYS.TEAMS, JSON.stringify(this.state.teams));
-            },
-
-            saveJoinedLeagues() {
-                localStorage.setItem(this.STORAGE_KEYS.JOINED_LEAGUES, JSON.stringify(this.state.joinedLeagues));
-            },
-
-            // ==================== NOTIFICATIONS ====================
-            showToast(message, type = "success") {
-                const container = document.getElementById("toastContainer");
-                const toast = document.createElement("div");
-                toast.className = `toast ${type}`;
-
-                const icons = {
-                    success: "fa-check-circle",
-                    error: "fa-exclamation-circle",
-                    warning: "fa-exclamation-triangle",
-                    info: "fa-info-circle"
-                };
-
-                toast.innerHTML = `<i class="fas ${icons[type]}"></i> ${message}`;
-                container.appendChild(toast);
-
-                setTimeout(() => {
-                    toast.remove();
-                }, 4000);
-            },
-
-            // ==================== HELPERS ====================
-            attachCardListeners() {
-                // Any dynamic card listeners can be added here
-            }
+  </div>
+
+</main>
+
+<footer><p>© 2026 Auraen · venoarena . com  · <span id="footerUser"></span></p></footer>
+</div>
+
+<!-- TOASTS -->
+<div class="toasts" id="toastContainer"></div>
+
+<!-- AUTH MODAL -->
+<div class="modal" id="authModal">
+  <div class="modal-box" style="max-width:400px">
+    <div class="modal-body">
+      <div class="auth-logo">
+        <div class="brand-icon" style="width:56px;height:56px;font-size:26px;border-radius:14px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#FFD700,#FF8C00)">🏆</div>
+        <h2 style="font-family:'Rajdhani',sans-serif;font-size:28px;font-weight:700;color:var(--gold);letter-spacing:2px" id="authTitle">LOGIN</h2>
+        <p style="color:var(--text2);font-size:14px" id="authSubtitle">Welcome back to Crunk Games</p>
+      </div>
+      <div id="loginForm">
+        <div class="fgroup"><label>Email</label><input type="email" id="loginEmail" placeholder="you@email.com"></div>
+        <div class="fgroup"><label>Password</label><input type="password" id="loginPass" placeholder="Password"><div class="ferr" id="loginErr"></div></div>
+        <button class="btn btn-gold" style="width:100%;justify-content:center" onclick="app.login()"><i class="fas fa-sign-in-alt"></i> Login</button>
+        <div style="margin-top:12px;text-align:right"><a style="color:var(--gold);cursor:pointer;font-size:13px" onclick="app.showForgot()">Forgot password?</a></div>
+        <div class="divider"><span>OR</span></div>
+        <button class="google-btn" onclick="app.googleLogin()">
+          <svg class="google-icon" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+          Continue with Google
+        </button>
+        <div class="auth-switch">Don't have an account? <a onclick="app.showRegister()">Register</a></div>
+      </div>
+      <div id="registerForm" style="display:none">
+        <div class="fgroup"><label>Display Name</label><input type="text" id="regName" placeholder="Your gaming name"></div>
+        <div class="fgroup"><label>Email</label><input type="email" id="regEmail" placeholder="you@email.com"></div>
+        <div class="fgroup"><label>Password</label><input type="password" id="regPass" placeholder="Min 6 characters"><div class="ferr" id="regErr"></div></div>
+        <button class="btn btn-gold" style="width:100%;justify-content:center" onclick="app.register()"><i class="fas fa-user-plus"></i> Create Account</button>
+        <div class="auth-switch">Already have an account? <a onclick="app.showLogin()">Login</a></div>
+      </div>
+      <div id="forgotForm" style="display:none">
+        <p style="color:var(--text2);font-size:14px;margin-bottom:16px">Enter your email to receive a reset link (simulated).</p>
+        <div class="fgroup"><label>Email</label><input type="email" id="forgotEmail" placeholder="you@email.com"></div>
+        <button class="btn btn-gold" style="width:100%;justify-content:center" onclick="app.forgotPass()"><i class="fas fa-envelope"></i> Send Reset Link</button>
+        <div class="auth-switch"><a onclick="app.showLogin()">Back to login</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CREATE LEAGUE MODAL -->
+<div class="modal" id="leagueModal">
+  <div class="modal-box">
+    <div class="modal-hdr">
+      <h2><i class="fas fa-trophy"></i> <span id="leagueModalTitle">Create League</span></h2>
+      <button class="modal-close" onclick="app.closeModal('leagueModal')"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="editLeagueId">
+      <div class="fgroup"><label>League Name *</label><input type="text" id="lName" placeholder="e.g. Champions Cup 2024"><div class="ferr" id="lNameErr"></div></div>
+      <div class="form-row">
+        <div class="fgroup"><label>Game Type *</label><select id="lGame"><option value="">Select game</option><option value="eFootball">eFootball</option><option value="EA Sports FC">EA Sports FC</option><option value="Dream League Soccer">Dream League Soccer</option></select></div>
+        <div class="fgroup"><label>Format *</label><select id="lFormat"><option value="round-robin">Round Robin</option><option value="knockout">Knockout</option></select></div>
+      </div>
+      <div class="form-row">
+        <div class="fgroup"><label>Max Teams (2–32) *</label><input type="number" id="lMax" min="2" max="32" value="8"></div>
+        <div class="fgroup"><label>Entry Fee (Coins) *</label><input type="number" id="lFee" min="0" value="50"></div>
+      </div>
+      <div class="fgroup"><label>Description</label><textarea id="lDesc" placeholder="Describe your league, rules, schedule..."></textarea></div>
+      <div class="hint" style="font-size:12px;color:var(--text3);margin-bottom:16px">💡 Prize pool = 80% of (entry fee × max teams)</div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="app.closeModal('leagueModal')">Cancel</button>
+      <button class="btn btn-gold" onclick="app.saveLeague()"><i class="fas fa-save"></i> <span id="leagueSaveTxt">Create League</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- CREATE TEAM MODAL -->
+<div class="modal" id="teamModal">
+  <div class="modal-box">
+    <div class="modal-hdr">
+      <h2><i class="fas fa-users"></i> <span id="teamModalTitle">Create Team</span></h2>
+      <button class="modal-close" onclick="app.closeModal('teamModal')"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="editTeamId">
+      <div class="fgroup"><label>Team Name *</label><input type="text" id="tName" placeholder="e.g. Manchester United FC"></div>
+      <div class="form-row">
+        <div class="fgroup"><label>Game Type *</label><select id="tGame"><option value="eFootball">eFootball</option><option value="EA Sports FC">EA Sports FC</option><option value="Dream League Soccer">Dream League Soccer</option></select></div>
+        <div class="fgroup"><label>Formation *</label><select id="tFormation"><option value="4-4-2">4-4-2</option><option value="4-3-3">4-3-3</option><option value="5-3-2">5-3-2</option><option value="3-5-2">3-5-2</option><option value="4-1-4-1">4-1-4-1</option><option value="4-2-3-1">4-2-3-1</option></select></div>
+      </div>
+      <div class="fgroup"><label>Players (optional, max 25)</label>
+        <div style="display:flex;gap:8px;margin-bottom:8px">
+          <input type="text" id="newPlayerName" placeholder="Player name" style="flex:1">
+          <select id="newPlayerPos" style="width:110px"><option value="GK">GK</option><option value="CB">CB</option><option value="LB">LB</option><option value="RB">RB</option><option value="CM">CM</option><option value="CAM">CAM</option><option value="CDM">CDM</option><option value="LW">LW</option><option value="RW">RW</option><option value="ST">ST</option><option value="CF">CF</option></select>
+          <button class="btn btn-outline btn-sm" onclick="app.addPlayerToForm()"><i class="fas fa-plus"></i></button>
+        </div>
+        <div id="playerListForm"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="app.closeModal('teamModal')">Cancel</button>
+      <button class="btn btn-gold" onclick="app.saveTeam()"><i class="fas fa-save"></i> <span id="teamSaveTxt">Create Team</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- LEAGUE DETAILS MODAL -->
+<div class="modal" id="leagueDetailsModal">
+  <div class="modal-box" style="max-width:640px">
+    <div class="modal-hdr">
+      <h2><i class="fas fa-trophy"></i> <span id="ldTitle">League</span></h2>
+      <button class="modal-close" onclick="app.closeModal('leagueDetailsModal')"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body" id="ldBody"></div>
+  </div>
+</div>
+
+<!-- SUBMIT RESULT MODAL -->
+<div class="modal" id="resultModal">
+  <div class="modal-box" style="max-width:420px">
+    <div class="modal-hdr">
+      <h2><i class="fas fa-futbol"></i> Submit Result</h2>
+      <button class="modal-close" onclick="app.closeModal('resultModal')"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="resultMatchId">
+      <div id="resultMatchPreview" style="margin-bottom:18px"></div>
+      <div class="form-row">
+        <div class="fgroup"><label id="result-t1-label">Team 1 Score</label><input type="number" id="score1" min="0" value="0"></div>
+        <div class="fgroup"><label id="result-t2-label">Team 2 Score</label><input type="number" id="score2" min="0" value="0"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="app.closeModal('resultModal')">Cancel</button>
+      <button class="btn btn-gold" onclick="app.submitResult()"><i class="fas fa-check"></i> Submit Result</button>
+    </div>
+  </div>
+</div>
+
+<!-- MANAGE LEAGUE MODAL -->
+<div class="modal" id="manageModal">
+  <div class="modal-box" style="max-width:640px">
+    <div class="modal-hdr">
+      <h2><i class="fas fa-cog"></i> Manage League</h2>
+      <button class="modal-close" onclick="app.closeModal('manageModal')"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body" id="manageBody"></div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// CRUNK GAMES - COMPLETE APPLICATION
+// ============================================================
+
+const DB = {
+  get(k,d=null){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch{return d}},
+  set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){console.error(e)}},
+  del(k){localStorage.removeItem(k)}
+};
+
+const app = {
+  // STATE
+  state:{
+    user:null,
+    leagues:[],
+    teams:[],
+    matches:[],
+    allUsers:[],
+    notifications:[],
+    coinHistory:[],
+    announcements:[],
+    tempPlayers:[]
+  },
+
+  // INIT
+  init(){
+    this.loadAll();
+    this.bindEvents();
+    const u = DB.get('cg_user');
+    if(u){
+      this.state.user = u;
+      this.postLogin();
+    } else {
+      this.openModal('authModal');
+    }
+  },
+
+  loadAll(){
+    this.state.leagues = DB.get('cg_leagues',[]);
+    this.state.teams = DB.get('cg_teams',[]);
+    this.state.matches = DB.get('cg_matches',[]);
+    this.state.allUsers = DB.get('cg_users',[]);
+    this.state.announcements = DB.get('cg_announces',[]);
+  },
+
+  saveAll(){
+    DB.set('cg_leagues',this.state.leagues);
+    DB.set('cg_teams',this.state.teams);
+    DB.set('cg_matches',this.state.matches);
+    DB.set('cg_users',this.state.allUsers);
+    DB.set('cg_announces',this.state.announcements);
+  },
+
+  postLogin(){
+    const u = this.state.user;
+    DB.set('cg_user',u);
+    // update user in allUsers
+    const idx = this.state.allUsers.findIndex(x=>x.uid===u.uid);
+    if(idx>=0) this.state.allUsers[idx]={...this.state.allUsers[idx],...u};
+    else this.state.allUsers.push(u);
+    this.saveAll();
+    this.updateTopbar();
+    this.renderSidebar();
+    this.checkDailyBonus();
+    this.loadNotifications();
+    this.renderPage('dashboard');
+    // admin nav
+    if(u.isAdmin) document.getElementById('adminNavItem').classList.remove('hidden');
+    else document.getElementById('adminNavItem').classList.add('hidden');
+  },
+
+  // EVENTS
+  bindEvents(){
+    document.getElementById('menuBtn').onclick=()=>this.toggleSidebar();
+    document.getElementById('sidebarClose').onclick=()=>this.toggleSidebar();
+    document.getElementById('overlay').onclick=()=>{this.toggleSidebar();this.closeNotifPanel()};
+    document.getElementById('notifBtn').onclick=()=>this.toggleNotifPanel();
+    document.getElementById('markAllReadBtn').onclick=()=>this.markAllRead();
+    document.getElementById('coinsPill').onclick=()=>this.renderPage('coins');
+    document.getElementById('topAvatar').onclick=()=>this.renderPage('profile');
+    document.getElementById('logoutBtn').onclick=()=>this.logout();
+    // nav
+    document.querySelectorAll('.nav-item[data-page]').forEach(el=>{
+      el.onclick=()=>{this.renderPage(el.dataset.page);this.toggleSidebar()};
+    });
+    // hero buttons
+    document.getElementById('heroCreateLeague').onclick=()=>this.openCreateLeague();
+    document.getElementById('heroCreateTeam').onclick=()=>this.openCreateTeam();
+    document.getElementById('heroBrowse').onclick=()=>this.renderPage('leagues');
+    document.getElementById('createLeagueBtn').onclick=()=>this.openCreateLeague();
+    document.getElementById('createTeamBtn').onclick=()=>this.openCreateTeam();
+    // search
+    document.getElementById('leagueSearch').oninput=e=>this.filterLeagues(e.target.value);
+    document.getElementById('teamSearch').oninput=e=>this.filterTeams(e.target.value);
+    document.getElementById('adminUserSearch').oninput=e=>this.renderAdminUsers(e.target.value);
+    // tabs (delegated)
+    document.querySelectorAll('.tabs').forEach(tabs=>{
+      tabs.querySelectorAll('.tab-btn').forEach(btn=>{
+        btn.onclick=e=>{
+          const id=btn.dataset.tab; if(!id) return;
+          tabs.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+          btn.classList.add('active');
+          const parent = tabs.closest('.page')||document.querySelector('main');
+          parent.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+          document.getElementById(id)?.classList.add('active');
         };
+      });
+    });
+    // close modals on backdrop
+    document.querySelectorAll('.modal').forEach(m=>{
+      m.onclick=e=>{if(e.target===m && m.id!=='authModal') this.closeModal(m.id)};
+    });
+  },
 
-        // ==================== INITIALIZE ====================
-        document.addEventListener("DOMContentLoaded", () => {
-            app.init();
-        });
+  // SIDEBAR
+  toggleSidebar(){
+    document.getElementById('sidebar').classList.toggle('open');
+    document.getElementById('overlay').classList.toggle('show');
+  },
 
-        // Prevent accidental navigation
-        window.addEventListener("beforeunload", (e) => {
-            if (app.state.currentUser) {
-                localStorage.setItem(app.STORAGE_KEYS.USER, JSON.stringify(app.state.currentUser));
-            }
-        });
-    </script>
+  // NOTIF PANEL
+  toggleNotifPanel(){
+    const p=document.getElementById('notifPanel');
+    p.classList.toggle('open');
+    this.renderNotifPanel();
+  },
+  closeNotifPanel(){
+    document.getElementById('notifPanel').classList.remove('open');
+  },
+
+  // MODAL
+  openModal(id){document.getElementById(id).classList.add('show')},
+  closeModal(id){document.getElementById(id)?.classList.remove('show')},
+
+  // TOPBAR
+  updateTopbar(){
+    const u=this.state.user; if(!u) return;
+    const coins=this.getCoins();
+    document.getElementById('coinsAmt').textContent=coins.toLocaleString();
+    const av=u.photoURL||`https://ui-avatars.com/api/?name=${encodeURIComponent(u.displayName||'U')}&background=FFD700&color=000&size=80`;
+    document.getElementById('topAvatar').src=av;
+  },
+
+  renderSidebar(){
+    const u=this.state.user; if(!u) return;
+    document.getElementById('sidebarName').textContent=u.displayName||'Player';
+    document.getElementById('sidebarRole').textContent=u.isAdmin?'Admin':'Player';
+    const av=u.photoURL||`https://ui-avatars.com/api/?name=${encodeURIComponent(u.displayName||'U')}&background=FFD700&color=000&size=80`;
+    document.getElementById('sidebarAvatar').src=av;
+    document.getElementById('footerUser').textContent=`Logged in as ${u.displayName||u.email}`;
+  },
+
+  updateActiveNav(page){
+    document.querySelectorAll('.nav-item[data-page]').forEach(el=>{
+      el.classList.toggle('active',el.dataset.page===page);
+    });
+  },
+
+  // =================== AUTH ===================
+  showLogin(){
+    document.getElementById('loginForm').style.display='';
+    document.getElementById('registerForm').style.display='none';
+    document.getElementById('forgotForm').style.display='none';
+    document.getElementById('authTitle').textContent='LOGIN';
+    document.getElementById('authSubtitle').textContent='Welcome back to Crunk Games';
+  },
+  showRegister(){
+    document.getElementById('loginForm').style.display='none';
+    document.getElementById('registerForm').style.display='';
+    document.getElementById('forgotForm').style.display='none';
+    document.getElementById('authTitle').textContent='REGISTER';
+    document.getElementById('authSubtitle').textContent='Join the competition today';
+  },
+  showForgot(){
+    document.getElementById('loginForm').style.display='none';
+    document.getElementById('forgotForm').style.display='';
+    document.getElementById('authTitle').textContent='RESET';
+    document.getElementById('authSubtitle').textContent='Password recovery';
+  },
+
+  login(){
+    const email=document.getElementById('loginEmail').value.trim();
+    const pass=document.getElementById('loginPass').value;
+    const err=document.getElementById('loginErr');
+    if(!email||!pass){err.textContent='Please fill all fields';return}
+    // find user
+    const u=this.state.allUsers.find(x=>x.email===email&&x.password===this.hashPass(pass));
+    if(!u){err.textContent='Invalid email or password';return}
+    if(u.isBanned){err.textContent='Your account has been banned';return}
+    err.textContent='';
+    u.lastLogin=new Date().toISOString();
+    this.state.user=u;
+    this.addNotification('Welcome back, '+u.displayName+'!','info');
+    this.closeModal('authModal');
+    this.postLogin();
+    this.toast('Welcome back, '+u.displayName+'!','success');
+  },
+
+  register(){
+    const name=document.getElementById('regName').value.trim();
+    const email=document.getElementById('regEmail').value.trim();
+    const pass=document.getElementById('regPass').value;
+    const err=document.getElementById('regErr');
+    if(!name||!email||!pass){err.textContent='Please fill all fields';return}
+    if(pass.length<6){err.textContent='Password must be at least 6 characters';return}
+    if(this.state.allUsers.find(x=>x.email===email)){err.textContent='Email already registered';return}
+    const u={
+      uid:'u_'+Date.now()+'_'+Math.random().toString(36).substr(2,6),
+      displayName:name,
+      email,
+      password:this.hashPass(pass),
+      photoURL:'',
+      isAdmin:false,
+      isBanned:false,
+      createdAt:new Date().toISOString(),
+      lastLogin:new Date().toISOString(),
+      totalWins:0,totalLosses:0,totalDraws:0,
+      coins:500,
+      teams:[],joinedLeagues:[],
+      lastDailyBonus:null
+    };
+    // first user is admin
+    if(this.state.allUsers.length===0) u.isAdmin=true;
+    this.state.allUsers.push(u);
+    this.state.user=u;
+    this.saveAll();
+    this.addCoinTx(500,'Welcome bonus - new account','in',u.uid);
+    this.closeModal('authModal');
+    this.postLogin();
+    this.toast('Account created! You received 500 coins!','success');
+  },
+
+  googleLogin(){
+    // Simulate Google OAuth - in production replace with Firebase Auth
+    const names=['Alex Chen','Jordan Smith','Maya Patel','Sam Rivera','Chris O\'Brien'];
+    const name=names[Math.floor(Math.random()*names.length)];
+    const email=name.toLowerCase().replace(/[' ]/g,'.').replace(/\./g,'_')+'@gmail.com';
+    let u=this.state.allUsers.find(x=>x.email===email);
+    if(!u){
+      u={
+        uid:'u_g_'+Date.now()+'_'+Math.random().toString(36).substr(2,6),
+        displayName:name,email,password:'',
+        photoURL:`https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random&size=80`,
+        isAdmin:this.state.allUsers.length===0,
+        isBanned:false,createdAt:new Date().toISOString(),lastLogin:new Date().toISOString(),
+        totalWins:0,totalLosses:0,totalDraws:0,coins:500,
+        teams:[],joinedLeagues:[],lastDailyBonus:null
+      };
+      this.state.allUsers.push(u);
+      this.addCoinTx(500,'Welcome bonus - Google signup','in',u.uid);
+    }
+    u.lastLogin=new Date().toISOString();
+    this.state.user=u;
+    this.saveAll();
+    this.closeModal('authModal');
+    this.postLogin();
+    this.toast('Signed in with Google!','success');
+  },
+
+  forgotPass(){
+    const email=document.getElementById('forgotEmail').value.trim();
+    if(!email){this.toast('Enter your email','error');return}
+    this.toast('Password reset link sent to '+email+' (simulated)','info');
+    this.showLogin();
+  },
+
+  logout(){
+    if(!confirm('Are you sure you want to logout?')) return;
+    DB.del('cg_user');
+    this.state.user=null;
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    document.getElementById('page-dashboard').classList.add('active');
+    this.openModal('authModal');
+    this.showLogin();
+    this.toast('Logged out successfully','info');
+  },
+
+  hashPass(p){
+    // Simple hash for demo - use bcrypt in production
+    let h=0;
+    for(let i=0;i<p.length;i++){h=((h<<5)-h)+p.charCodeAt(i);h|=0}
+    return 'h_'+Math.abs(h).toString(36)+'_'+p.length;
+  },
+
+  // =================== COINS ===================
+  getCoins(uid=null){
+    const id=uid||(this.state.user?.uid);
+    if(!id) return 0;
+    const u=this.state.allUsers.find(x=>x.uid===id);
+    return u?.coins||0;
+  },
+
+  addCoins(amount,reason='Reward',uid=null){
+    const id=uid||(this.state.user?.uid); if(!id) return;
+    const u=this.state.allUsers.find(x=>x.uid===id); if(!u) return;
+    u.coins=(u.coins||0)+amount;
+    if(this.state.user?.uid===id) this.state.user.coins=u.coins;
+    this.addCoinTx(amount,reason,'in',id);
+    this.saveAll();
+    this.updateTopbar();
+  },
+
+  spendCoins(amount,reason='Purchase',uid=null){
+    const id=uid||(this.state.user?.uid); if(!id) return false;
+    const u=this.state.allUsers.find(x=>x.uid===id); if(!u) return false;
+    if((u.coins||0)<amount) return false;
+    u.coins-=amount;
+    if(this.state.user?.uid===id) this.state.user.coins=u.coins;
+    this.addCoinTx(amount,reason,'out',id);
+    this.saveAll();
+    this.updateTopbar();
+    return true;
+  },
+
+  addCoinTx(amount,reason,dir,uid=null){
+    const id=uid||(this.state.user?.uid); if(!id) return;
+    const hist=DB.get('cg_coins_'+id,[]);
+    hist.unshift({amount,reason,dir,date:new Date().toISOString()});
+    if(hist.length>200) hist.splice(200);
+    DB.set('cg_coins_'+id,hist);
+  },
+
+  getCoinHistory(uid=null){
+    const id=uid||(this.state.user?.uid); if(!id) return [];
+    return DB.get('cg_coins_'+id,[]);
+  },
+
+  checkDailyBonus(){
+    const u=this.state.user; if(!u) return;
+    const now=new Date(); const today=now.toDateString();
+    const uu=this.state.allUsers.find(x=>x.uid===u.uid);
+    if(uu?.lastDailyBonus===today) return;
+    if(uu) uu.lastDailyBonus=today;
+    u.lastDailyBonus=today;
+    const bonus=50;
+    this.addCoins(bonus,'Daily login bonus');
+    this.addNotification('Daily bonus: +50 coins!','success');
+    this.saveAll();
+  },
+
+  // =================== NOTIFICATIONS ===================
+  loadNotifications(){
+    const id=this.state.user?.uid; if(!id) return;
+    this.state.notifications=DB.get('cg_notifs_'+id,[]);
+    this.updateNotifBadge();
+  },
+
+  addNotification(msg,type='info',uid=null){
+    const id=uid||(this.state.user?.uid); if(!id) return;
+    const notifs=DB.get('cg_notifs_'+id,[]);
+    notifs.unshift({id:'n_'+Date.now(),msg,type,read:false,date:new Date().toISOString()});
+    if(notifs.length>50) notifs.splice(50);
+    DB.set('cg_notifs_'+id,notifs);
+    if(id===this.state.user?.uid){
+      this.state.notifications=notifs;
+      this.updateNotifBadge();
+    }
+  },
+
+  updateNotifBadge(){
+    const unread=this.state.notifications.filter(n=>!n.read).length;
+    document.getElementById('notifBadge').classList.toggle('show',unread>0);
+  },
+
+  markAllRead(){
+    const id=this.state.user?.uid; if(!id) return;
+    this.state.notifications.forEach(n=>n.read=true);
+    DB.set('cg_notifs_'+id,this.state.notifications);
+    this.updateNotifBadge();
+    this.renderNotifPanel();
+  },
+
+  renderNotifPanel(){
+    const list=document.getElementById('notifList');
+    if(!this.state.notifications.length){
+      list.innerHTML='<div class="empty" style="padding:40px 20px"><i class="bx bx-bell-off"></i><p>No notifications</p></div>';
+      return;
+    }
+    const icons={info:'bx-info-circle',success:'bx-check-circle',warning:'bx-error',error:'bx-x-circle'};
+    const colors={info:'rgba(59,130,246,0.15)',success:'rgba(16,185,129,0.15)',warning:'rgba(245,158,11,0.15)',error:'rgba(239,68,68,0.15)'};
+    const tc={info:'var(--blue)',success:'var(--green)',warning:'var(--orange)',error:'var(--red)'};
+    list.innerHTML=this.state.notifications.slice(0,30).map(n=>`
+      <div class="notif-item ${n.read?'':'unread'}">
+        <div class="notif-icon" style="background:${colors[n.type]||colors.info};color:${tc[n.type]||tc.info}"><i class="bx ${icons[n.type]||icons.info}"></i></div>
+        <div class="notif-text"><p>${n.msg}</p><span>${this.timeAgo(n.date)}</span></div>
+      </div>
+    `).join('');
+  },
+
+  // =================== PAGE ROUTING ===================
+  renderPage(name){
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    const pg=document.getElementById('page-'+name);
+    if(pg){
+      pg.classList.add('active');
+      this.updateActiveNav(name);
+    }
+    const map={
+      dashboard:()=>this.renderDashboard(),
+      leagues:()=>this.renderLeagues(),
+      teams:()=>this.renderTeams(),
+      matches:()=>this.renderMatches(),
+      leaderboard:()=>this.renderLeaderboard(),
+      profile:()=>this.renderProfile(),
+      coins:()=>this.renderCoins(),
+      admin:()=>this.renderAdmin()
+    };
+    map[name]?.();
+  },
+
+  // =================== DASHBOARD ===================
+  renderDashboard(){
+    const u=this.state.user; if(!u) return;
+    const uu=this.state.allUsers.find(x=>x.uid===u.uid)||u;
+    const myLeagues=this.state.leagues.filter(l=>l.ownerId===u.uid||(u.joinedLeagues||[]).includes(l.id)).length;
+    const myTeams=this.state.teams.filter(t=>t.ownerId===u.uid).length;
+    document.getElementById('ds-coins').textContent=this.getCoins().toLocaleString();
+    document.getElementById('ds-teams').textContent=myTeams;
+    document.getElementById('ds-leagues').textContent=myLeagues;
+    document.getElementById('ds-wins').textContent=uu.totalWins||0;
+    // daily bonus button
+    const today=new Date().toDateString();
+    const claimedToday=uu.lastDailyBonus===today;
+    document.getElementById('dailyBonusWrap').innerHTML=claimedToday?'':`
+      <div class="bonus-btn" onclick="app.claimDailyBonus()">
+        <h3>🎁 Claim Daily Bonus</h3>
+        <p>Claim your 50 coins daily login reward</p>
+      </div>
+    `;
+    // announcements
+    const anns=this.state.announcements.slice(0,3);
+    document.getElementById('announcementsWrap').innerHTML=anns.map(a=>`
+      <div class="announcement"><i class="bx bx-broadcast"></i>
+        <div class="announcement-text"><h4>${a.title}</h4><p>${a.msg}</p></div>
+      </div>
+    `).join('');
+    // recent activity
+    const hist=this.getCoinHistory().slice(0,6);
+    const myMatches=this.state.matches.filter(m=>{
+      const t1=this.state.teams.find(t=>t.id===m.team1Id);
+      const t2=this.state.teams.find(t=>t.id===m.team2Id);
+      return t1?.ownerId===u.uid||t2?.ownerId===u.uid;
+    }).slice(0,5);
+    const ra=document.getElementById('recentActivity');
+    if(!hist.length&&!myMatches.length){
+      ra.innerHTML='<div class="empty" style="padding:30px 0"><i class="bx bx-inbox"></i><p>No activity yet</p></div>';
+    } else {
+      ra.innerHTML=[
+        ...hist.slice(0,4).map(h=>`
+          <div class="activity-item">
+            <div class="activity-dot ${h.dir==='in'?'act-coin':'act-match'}"><i class="fas fa-coins"></i></div>
+            <div class="activity-info"><h4>${h.dir==='in'?'+':'-'}${h.amount} coins</h4><p>${h.reason} · ${this.timeAgo(h.date)}</p></div>
+          </div>
+        `),
+        ...this.state.leagues.filter(l=>l.ownerId===u.uid).slice(0,2).map(l=>`
+          <div class="activity-item">
+            <div class="activity-dot act-league"><i class="fas fa-trophy"></i></div>
+            <div class="activity-info"><h4>League created</h4><p>${l.name} · ${this.timeAgo(l.createdAt)}</p></div>
+          </div>
+        `)
+      ].join('');
+    }
+    // upcoming matches
+    const um=document.getElementById('upcomingMatches');
+    const upcoming=this.state.matches.filter(m=>m.status==='scheduled').slice(0,4);
+    if(!upcoming.length){
+      um.innerHTML='<div class="empty" style="padding:30px 0"><i class="bx bx-calendar-x"></i><p>No upcoming matches</p></div>';
+    } else {
+      um.innerHTML=upcoming.map(m=>this.renderMatchCard(m)).join('');
+    }
+    // responsive dash grid
+    if(window.innerWidth<640){
+      document.getElementById('dashGrid').style.gridTemplateColumns='1fr';
+    }
+  },
+
+  claimDailyBonus(){
+    const u=this.state.user; if(!u) return;
+    const today=new Date().toDateString();
+    const uu=this.state.allUsers.find(x=>x.uid===u.uid);
+    if(uu?.lastDailyBonus===today){this.toast('Already claimed today!','warning');return}
+    if(uu) uu.lastDailyBonus=today;
+    u.lastDailyBonus=today;
+    this.addCoins(50,'Daily login bonus');
+    this.addNotification('Daily bonus claimed: +50 coins!','success');
+    this.saveAll();
+    this.toast('+50 coins! Daily bonus claimed!','success');
+    this.renderDashboard();
+  },
+
+  // =================== LEAGUES ===================
+  renderLeagues(){
+    this.renderLeaguesGrid('allLeaguesGrid',this.state.leagues);
+    const u=this.state.user;
+    const mine=this.state.leagues.filter(l=>l.ownerId===u?.uid);
+    const joined=this.state.leagues.filter(l=>(u?.joinedLeagues||[]).includes(l.id)&&l.ownerId!==u?.uid);
+    this.renderLeaguesGrid('myLeaguesGrid',mine,'No leagues created yet');
+    this.renderLeaguesGrid('joinedLeaguesGrid',joined,'No leagues joined yet');
+  },
+
+  renderLeaguesGrid(id,leagues,emptyMsg='No leagues found'){
+    const el=document.getElementById(id); if(!el) return;
+    if(!leagues.length){
+      el.innerHTML=`<div class="empty"><i class="bx bx-inbox"></i><p>${emptyMsg}</p></div>`;
+      return;
+    }
+    el.innerHTML=leagues.map(l=>this.leagueCardHtml(l)).join('');
+  },
+
+  filterLeagues(q){
+    const f=this.state.leagues.filter(l=>
+      l.name.toLowerCase().includes(q.toLowerCase())||
+      l.gameType.toLowerCase().includes(q.toLowerCase())
+    );
+    this.renderLeaguesGrid('allLeaguesGrid',f,'No leagues match your search');
+  },
+
+  leagueCardHtml(l){
+    const u=this.state.user;
+    const isOwner=l.ownerId===u?.uid;
+    const isJoined=(u?.joinedLeagues||[]).includes(l.id);
+    const slots=l.maxTeams-(l.teams?.length||0);
+    const pct=Math.round(((l.teams?.length||0)/l.maxTeams)*100);
+    const statBadge={
+      'registration':`<span class="badge badge-reg">Registration</span>`,
+      'in-progress':`<span class="badge badge-live">Live</span>`,
+      'completed':`<span class="badge badge-done">Completed</span>`
+    }[l.status]||'';
+    return `
+      <div class="card">
+        <div class="card-top-accent"></div>
+        <div class="card-title">${l.name}${statBadge}</div>
+        <div class="card-meta">
+          <span class="pill"><i class="fas fa-gamepad"></i> ${l.gameType}</span>
+          <span class="pill"><i class="fas fa-users"></i> ${l.teams?.length||0}/${l.maxTeams}</span>
+          <span class="pill"><i class="fas fa-coins"></i> ${l.entryFee}</span>
+          <span class="pill"><i class="fas fa-random"></i> ${l.format||'round-robin'}</span>
+        </div>
+        <div class="card-body">
+          <div class="card-row"><span>Prize Pool</span><strong>💰 ${Math.round(l.prizePool).toLocaleString()}</strong></div>
+          <div class="card-row"><span>Slots</span><strong>${slots} available</strong></div>
+          ${l.description?`<div class="card-row"><span style="font-size:12px;color:var(--text3)">${l.description.substring(0,60)}${l.description.length>60?'...':''}</span></div>`:''}
+        </div>
+        <div class="progress"><div class="progress-fill" style="width:${pct}%"></div></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;margin-bottom:10px">${pct}% filled</div>
+        <div class="card-footer">
+          <button class="btn btn-ghost btn-sm" onclick="app.viewLeague('${l.id}')"><i class="fas fa-eye"></i> View</button>
+          ${isOwner?`<button class="btn btn-outline btn-sm" onclick="app.openManageLeague('${l.id}')"><i class="fas fa-cog"></i> Manage</button>
+          <button class="btn btn-danger btn-sm" onclick="app.deleteLeague('${l.id}')"><i class="fas fa-trash"></i></button>`
+          :isJoined?`<button class="btn btn-ghost btn-sm" disabled><i class="fas fa-check"></i> Joined</button>
+          <button class="btn btn-danger btn-sm" onclick="app.leaveLeague('${l.id}')"><i class="fas fa-sign-out-alt"></i> Leave</button>`
+          :l.status==='registration'&&slots>0?`<button class="btn btn-gold btn-sm" onclick="app.joinLeague('${l.id}')"><i class="fas fa-sign-in-alt"></i> Join (${l.entryFee})</button>`
+          :`<button class="btn btn-ghost btn-sm" disabled>${l.status==='registration'?'Full':'Closed'}</button>`}
+        </div>
+      </div>
+    `;
+  },
+
+  openCreateLeague(){
+    if(!this.state.user){this.toast('Please login first','error');return}
+    document.getElementById('leagueModalTitle').textContent='Create League';
+    document.getElementById('leagueSaveTxt').textContent='Create League';
+    document.getElementById('editLeagueId').value='';
+    document.getElementById('lName').value='';
+    document.getElementById('lGame').value='';
+    document.getElementById('lFormat').value='round-robin';
+    document.getElementById('lMax').value='8';
+    document.getElementById('lFee').value='50';
+    document.getElementById('lDesc').value='';
+    this.openModal('leagueModal');
+  },
+
+  saveLeague(){
+    const id=document.getElementById('editLeagueId').value;
+    const name=document.getElementById('lName').value.trim();
+    const game=document.getElementById('lGame').value;
+    const format=document.getElementById('lFormat').value;
+    const max=parseInt(document.getElementById('lMax').value);
+    const fee=parseInt(document.getElementById('lFee').value)||0;
+    const desc=document.getElementById('lDesc').value.trim();
+    if(!name){document.getElementById('lNameErr').textContent='Name is required';return}
+    if(!game){this.toast('Select a game type','error');return}
+    document.getElementById('lNameErr').textContent='';
+    if(id){
+      // edit
+      const l=this.state.leagues.find(x=>x.id===id);
+      if(l){Object.assign(l,{name,gameType:game,format,maxTeams:max,entryFee:fee,prizePool:max*fee*0.8,description:desc,updatedAt:new Date().toISOString()})}
+      this.toast('League updated!','success');
+    } else {
+      const l={
+        id:'l_'+Date.now()+'_'+Math.random().toString(36).substr(2,6),
+        name,gameType:game,format,maxTeams:max,entryFee:fee,
+        prizePool:max*fee*0.8,description:desc,
+        status:'registration',ownerId:this.state.user.uid,
+        teams:[],matches:[],standings:[],
+        createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()
+      };
+      this.state.leagues.push(l);
+      this.addNotification(`League "${name}" created!`,'success');
+      this.toast('League created!','success');
+    }
+    this.saveAll();
+    this.closeModal('leagueModal');
+    this.renderLeagues();
+    this.renderDashboard();
+  },
+
+  viewLeague(id){
+    const l=this.state.leagues.find(x=>x.id===id); if(!l) return;
+    document.getElementById('ldTitle').textContent=l.name;
+    const standings=this.calcStandings(l);
+    const u=this.state.user;
+    const isOwner=l.ownerId===u?.uid;
+    const isJoined=(u?.joinedLeagues||[]).includes(l.id);
+    const slots=l.maxTeams-(l.teams?.length||0);
+    document.getElementById('ldBody').innerHTML=`
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px">
+        <span class="pill"><i class="fas fa-gamepad"></i> ${l.gameType}</span>
+        <span class="pill"><i class="fas fa-random"></i> ${l.format||'round-robin'}</span>
+        <span class="pill"><i class="fas fa-users"></i> ${l.teams?.length||0}/${l.maxTeams} teams</span>
+        <span class="pill"><i class="fas fa-coins"></i> Entry: ${l.entryFee}</span>
+        ${{registration:'<span class="badge badge-reg">Registration</span>','in-progress':'<span class="badge badge-live">Live</span>',completed:'<span class="badge badge-done">Completed</span>'}[l.status]||''}
+      </div>
+      <div class="card-body" style="margin-bottom:16px">
+        <div class="card-row"><span>Prize Pool</span><strong>💰 ${Math.round(l.prizePool).toLocaleString()}</strong></div>
+        <div class="card-row"><span>Slots Available</span><strong>${slots}</strong></div>
+        <div class="card-row"><span>Created</span><strong>${new Date(l.createdAt).toLocaleDateString()}</strong></div>
+        ${l.description?`<div class="card-row"><span>Description</span></div><p style="font-size:13px;color:var(--text2);margin-top:6px">${l.description}</p>`:''}
+      </div>
+      ${standings.length?`
+        <h4 style="font-family:'Rajdhani',sans-serif;font-size:16px;color:var(--gold);margin-bottom:10px">Standings</h4>
+        <div class="tbl-wrap" style="margin-bottom:16px">
+          <table><thead><tr><th>#</th><th>Team</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GD</th><th>Pts</th></tr></thead>
+          <tbody>${standings.map((s,i)=>`<tr>
+            <td class="${i===0?'rank-gold':i===1?'rank-silver':i===2?'rank-bronze':''}">${i+1}</td>
+            <td><strong>${s.name}</strong></td>
+            <td>${s.played}</td><td>${s.wins}</td><td>${s.draws}</td><td>${s.losses}</td>
+            <td style="color:${s.gd>=0?'var(--green)':'var(--red)'}">${s.gd>0?'+':''}${s.gd}</td>
+            <td><strong style="color:var(--gold)">${s.points}</strong></td>
+          </tr>`).join('')}</tbody></table>
+        </div>
+      `:''}
+      ${l.teams?.length?`
+        <h4 style="font-family:'Rajdhani',sans-serif;font-size:16px;color:var(--gold);margin-bottom:10px">Teams</h4>
+        <div style="display:grid;gap:8px;margin-bottom:16px">
+          ${l.teams.map((t,i)=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--bg3);border-radius:10px">
+            <span style="font-weight:600">${i+1}. ${t.name}</span>
+            <span style="font-size:12px;color:var(--text3)">${t.ownerName}</span>
+          </div>`).join('')}
+        </div>
+      `:''}
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        ${isOwner&&l.status==='registration'&&(l.teams?.length||0)>=2?`<button class="btn btn-gold btn-sm" onclick="app.startLeague('${l.id}');app.closeModal('leagueDetailsModal')"><i class="fas fa-play"></i> Start League</button>`:''}
+        ${!isOwner&&!isJoined&&l.status==='registration'&&slots>0?`<button class="btn btn-gold btn-sm" onclick="app.joinLeague('${l.id}');app.closeModal('leagueDetailsModal')"><i class="fas fa-sign-in-alt"></i> Join (${l.entryFee} coins)</button>`:''}
+        ${isOwner?`<button class="btn btn-outline btn-sm" onclick="app.closeModal('leagueDetailsModal');app.openManageLeague('${l.id}')"><i class="fas fa-cog"></i> Manage</button>`:''}
+        <button class="btn btn-ghost btn-sm" onclick="app.closeModal('leagueDetailsModal')">Close</button>
+      </div>
+    `;
+    this.openModal('leagueDetailsModal');
+  },
+
+  joinLeague(id){
+    const l=this.state.leagues.find(x=>x.id===id); if(!l) return;
+    const u=this.state.user; if(!u){this.toast('Please login','error');return}
+    if(l.ownerId===u.uid){this.toast('You own this league','warning');return}
+    if((u.joinedLeagues||[]).includes(id)){this.toast('Already joined','warning');return}
+    if((l.teams?.length||0)>=l.maxTeams){this.toast('League is full','error');return}
+    if(l.status!=='registration'){this.toast('Registration is closed','error');return}
+    if(!this.spendCoins(l.entryFee,`Joined league: ${l.name}`)){
+      this.toast(`Not enough coins. Need ${l.entryFee}, have ${this.getCoins()}`,'error');return;
+    }
+    // pick a team
+    const myTeam=this.state.teams.filter(t=>t.ownerId===u.uid&&t.gameType===l.gameType)[0];
+    const teamEntry={
+      id:myTeam?.id||('t_'+u.uid),
+      name:myTeam?.name||(u.displayName+"'s Team"),
+      ownerId:u.uid,
+      ownerName:u.displayName
+    };
+    if(!l.teams) l.teams=[];
+    l.teams.push(teamEntry);
+    if(!u.joinedLeagues) u.joinedLeagues=[];
+    u.joinedLeagues.push(id);
+    const uu=this.state.allUsers.find(x=>x.uid===u.uid);
+    if(uu){if(!uu.joinedLeagues)uu.joinedLeagues=[];uu.joinedLeagues.push(id)}
+    this.saveAll();
+    this.addNotification(`Joined league: ${l.name}`,'success');
+    this.toast(`Joined ${l.name}!`,'success');
+    this.renderLeagues();
+    this.renderDashboard();
+  },
+
+  leaveLeague(id){
+    if(!confirm('Leave this league? Entry fee will NOT be refunded.')) return;
+    const l=this.state.leagues.find(x=>x.id===id); if(!l) return;
+    const u=this.state.user; if(!u) return;
+    l.teams=(l.teams||[]).filter(t=>t.ownerId!==u.uid);
+    u.joinedLeagues=(u.joinedLeagues||[]).filter(x=>x!==id);
+    const uu=this.state.allUsers.find(x=>x.uid===u.uid);
+    if(uu) uu.joinedLeagues=(uu.joinedLeagues||[]).filter(x=>x!==id);
+    this.saveAll();
+    this.toast('Left league','info');
+    this.renderLeagues();
+  },
+
+  deleteLeague(id){
+    if(!confirm('Delete this league? This cannot be undone.')) return;
+    const l=this.state.leagues.find(x=>x.id===id);
+    if(!l||l.ownerId!==this.state.user?.uid){this.toast('Unauthorized','error');return}
+    // refund joined users
+    (l.teams||[]).forEach(t=>{
+      if(t.ownerId!==l.ownerId && l.entryFee>0){
+        this.addCoins(l.entryFee,`Refund: league "${l.name}" deleted`,t.ownerId);
+      }
+    });
+    this.state.leagues=this.state.leagues.filter(x=>x.id!==id);
+    this.state.matches=this.state.matches.filter(x=>x.leagueId!==id);
+    this.saveAll();
+    this.toast('League deleted and refunds issued','info');
+    this.renderLeagues();
+  },
+
+  editLeague(id){
+    const l=this.state.leagues.find(x=>x.id===id); if(!l) return;
+    document.getElementById('leagueModalTitle').textContent='Edit League';
+    document.getElementById('leagueSaveTxt').textContent='Save Changes';
+    document.getElementById('editLeagueId').value=id;
+    document.getElementById('lName').value=l.name;
+    document.getElementById('lGame').value=l.gameType;
+    document.getElementById('lFormat').value=l.format||'round-robin';
+    document.getElementById('lMax').value=l.maxTeams;
+    document.getElementById('lFee').value=l.entryFee;
+    document.getElementById('lDesc').value=l.description||'';
+    this.closeModal('manageModal');
+    this.openModal('leagueModal');
+  },
+
+  startLeague(id){
+    const l=this.state.leagues.find(x=>x.id===id); if(!l) return;
+    if(l.ownerId!==this.state.user?.uid){this.toast('Unauthorized','error');return}
+    if((l.teams?.length||0)<2){this.toast('Need at least 2 teams','error');return}
+    l.status='in-progress';
+    l.startDate=new Date().toISOString();
+    this.generateMatches(l);
+    this.saveAll();
+    this.addNotification(`League "${l.name}" has started!`,'info');
+    this.toast(`League "${l.name}" started! Matches generated.`,'success');
+    this.renderLeagues();
+    this.renderMatches();
+  },
+
+  generateMatches(league){
+    const teams=league.teams||[];
+    if(league.format==='knockout'){
+      this.generateKnockout(league,teams);
+    } else {
+      this.generateRoundRobin(league,teams);
+    }
+  },
+
+  generateRoundRobin(league,teams){
+    for(let i=0;i<teams.length;i++){
+      for(let j=i+1;j<teams.length;j++){
+        const m={
+          id:'m_'+Date.now()+'_'+Math.random().toString(36).substr(2,5),
+          leagueId:league.id,leagueName:league.name,
+          team1Id:teams[i].id,team1Name:teams[i].name,team1OwnerId:teams[i].ownerId,
+          team2Id:teams[j].id,team2Name:teams[j].name,team2OwnerId:teams[j].ownerId,
+          team1Score:null,team2Score:null,
+          status:'scheduled',winnerId:null,
+          round:1,matchDate:new Date().toISOString(),
+          submittedBy:null,approvedBy:null
+        };
+        this.state.matches.push(m);
+        if(!league.matches) league.matches=[];
+        league.matches.push(m.id);
+      }
+    }
+  },
+
+  generateKnockout(league,teams){
+    // pair up teams for round 1
+    const pairs=[];
+    for(let i=0;i<teams.length;i+=2){
+      if(i+1<teams.length) pairs.push([teams[i],teams[i+1]]);
+    }
+    pairs.forEach((pair,idx)=>{
+      const m={
+        id:'m_'+Date.now()+'_'+idx+'_'+Math.random().toString(36).substr(2,4),
+        leagueId:league.id,leagueName:league.name,
+        team1Id:pair[0].id,team1Name:pair[0].name,team1OwnerId:pair[0].ownerId,
+        team2Id:pair[1].id,team2Name:pair[1].name,team2OwnerId:pair[1].ownerId,
+        team1Score:null,team2Score:null,
+        status:'scheduled',winnerId:null,round:1,
+        matchDate:new Date().toISOString(),submittedBy:null,approvedBy:null
+      };
+      this.state.matches.push(m);
+      if(!league.matches) league.matches=[];
+      league.matches.push(m.id);
+    });
+  },
+
+  openManageLeague(id){
+    const l=this.state.leagues.find(x=>x.id===id); if(!l) return;
+    const matches=this.state.matches.filter(m=>m.leagueId===id);
+    document.getElementById('manageBody').innerHTML=`
+      <div class="tabs" style="margin-bottom:18px">
+        <button class="tab-btn active" data-tab="mg-info">Info</button>
+        <button class="tab-btn" data-tab="mg-teams">Teams (${l.teams?.length||0})</button>
+        <button class="tab-btn" data-tab="mg-matches">Matches (${matches.length})</button>
+      </div>
+      <div class="tab-pane active" id="mg-info">
+        <div class="card-body">
+          <div class="card-row"><span>Status</span><strong>${l.status}</strong></div>
+          <div class="card-row"><span>Teams</span><strong>${l.teams?.length||0}/${l.maxTeams}</strong></div>
+          <div class="card-row"><span>Prize Pool</span><strong>💰 ${Math.round(l.prizePool)}</strong></div>
+          <div class="card-row"><span>Format</span><strong>${l.format}</strong></div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
+          <button class="btn btn-outline btn-sm" onclick="app.editLeague('${id}')"><i class="fas fa-edit"></i> Edit Details</button>
+          ${l.status==='registration'&&(l.teams?.length||0)>=2?`<button class="btn btn-gold btn-sm" onclick="app.startLeague('${id}');app.closeModal('manageModal')"><i class="fas fa-play"></i> Start League</button>`:''}
+          ${l.status==='in-progress'?`<button class="btn btn-ghost btn-sm" onclick="app.closeLeague('${id}')"><i class="fas fa-flag-checkered"></i> End League</button>`:''}
+          <button class="btn btn-danger btn-sm" onclick="app.deleteLeague('${id}');app.closeModal('manageModal')"><i class="fas fa-trash"></i> Delete</button>
+        </div>
+      </div>
+      <div class="tab-pane" id="mg-teams">
+        ${(l.teams||[]).length?`<div style="display:grid;gap:8px">${(l.teams||[]).map((t,i)=>`
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--bg3);border-radius:10px">
+            <span style="font-weight:600">${i+1}. ${t.name}</span>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-size:12px;color:var(--text3)">${t.ownerName}</span>
+              <button class="btn btn-danger btn-sm" onclick="app.removeTeamFromLeague('${id}','${t.id}')"><i class="fas fa-times"></i></button>
+            </div>
+          </div>`).join('')}</div>`:'<div class="empty" style="padding:30px 0"><i class="bx bx-group"></i><p>No teams yet</p></div>'}
+      </div>
+      <div class="tab-pane" id="mg-matches">
+        ${matches.length?matches.map(m=>this.renderMatchCard(m,true)).join(''):'<div class="empty" style="padding:30px 0"><i class="bx bx-calendar"></i><p>No matches yet. Start the league to generate matches.</p></div>'}
+      </div>
+    `;
+    // re-bind tabs inside modal
+    document.getElementById('manageBody').querySelectorAll('.tab-btn').forEach(btn=>{
+      btn.onclick=()=>{
+        document.getElementById('manageBody').querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('manageBody').querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+        document.getElementById(btn.dataset.tab)?.classList.add('active');
+      };
+    });
+    this.openModal('manageModal');
+  },
+
+  removeTeamFromLeague(lid,tid){
+    if(!confirm('Remove this team from the league?')) return;
+    const l=this.state.leagues.find(x=>x.id===lid); if(!l) return;
+    const t=l.teams?.find(x=>x.id===tid);
+    if(t&&l.entryFee>0) this.addCoins(l.entryFee,`Removed from league: ${l.name}`,t.ownerId);
+    l.teams=(l.teams||[]).filter(x=>x.id!==tid);
+    this.saveAll();
+    this.toast('Team removed and refund issued','info');
+    this.openManageLeague(lid);
+  },
+
+  closeLeague(id){
+    if(!confirm('End this league and determine winners?')) return;
+    const l=this.state.leagues.find(x=>x.id===id); if(!l) return;
+    l.status='completed';
+    l.endDate=new Date().toISOString();
+    // award prize to top team
+    const standings=this.calcStandings(l);
+    if(standings.length){
+      const winner=standings[0];
+      const prize=Math.round(l.prizePool);
+      this.addCoins(prize,`League winner: ${l.name}`,winner.ownerId);
+      this.addNotification(`Congratulations! ${winner.name} won ${l.name}! Prize: ${prize} coins`,'success');
+      this.toast(`${winner.name} wins "${l.name}"! Prize: ${prize} coins`,'success');
+    }
+    this.saveAll();
+    this.renderLeagues();
+    this.closeModal('manageModal');
+  },
+
+  calcStandings(league){
+    const teams=league.teams||[];
+    const matches=this.state.matches.filter(m=>m.leagueId===league.id&&m.status==='completed');
+    const map={};
+    teams.forEach(t=>{map[t.id]={id:t.id,name:t.name,ownerId:t.ownerId,played:0,wins:0,draws:0,losses:0,gf:0,ga:0,gd:0,points:0}});
+    matches.forEach(m=>{
+      if(!map[m.team1Id]||!map[m.team2Id]) return;
+      const s1=m.team1Score||0,s2=m.team2Score||0;
+      map[m.team1Id].played++;map[m.team2Id].played++;
+      map[m.team1Id].gf+=s1;map[m.team1Id].ga+=s2;
+      map[m.team2Id].gf+=s2;map[m.team2Id].ga+=s1;
+      if(s1>s2){map[m.team1Id].wins++;map[m.team1Id].points+=3;map[m.team2Id].losses++}
+      else if(s2>s1){map[m.team2Id].wins++;map[m.team2Id].points+=3;map[m.team1Id].losses++}
+      else{map[m.team1Id].draws++;map[m.team1Id].points+=1;map[m.team2Id].draws++;map[m.team2Id].points+=1}
+    });
+    return Object.values(map).map(s=>{s.gd=s.gf-s.ga;return s}).sort((a,b)=>b.points-a.points||b.gd-a.gd||b.gf-a.gf);
+  },
+
+  // =================== TEAMS ===================
+  renderTeams(){
+    const u=this.state.user;
+    const myTeams=this.state.teams.filter(t=>t.ownerId===u?.uid);
+    const grid=document.getElementById('teamsGrid');
+    if(!myTeams.length){
+      grid.innerHTML='<div class="empty"><i class="bx bx-group"></i><p>No teams yet. Create your first team!</p><button class="btn btn-gold" onclick="app.openCreateTeam()"><i class="fas fa-plus"></i> Create Team</button></div>';
+      return;
+    }
+    grid.innerHTML=myTeams.map(t=>this.teamCardHtml(t)).join('');
+  },
+
+  filterTeams(q){
+    const u=this.state.user;
+    const myTeams=this.state.teams.filter(t=>t.ownerId===u?.uid&&(t.name.toLowerCase().includes(q.toLowerCase())||t.gameType.toLowerCase().includes(q.toLowerCase())));
+    document.getElementById('teamsGrid').innerHTML=myTeams.length?myTeams.map(t=>this.teamCardHtml(t)).join(''):'<div class="empty"><i class="bx bx-search-alt"></i><p>No teams match your search</p></div>';
+  },
+
+  teamCardHtml(t){
+    const leaguesIn=this.state.leagues.filter(l=>l.teams?.some(lt=>lt.id===t.id)).length;
+    return `
+      <div class="card">
+        <div class="card-top-accent"></div>
+        <div class="card-title">⚽ ${t.name}</div>
+        <div class="card-meta">
+          <span class="pill"><i class="fas fa-gamepad"></i> ${t.gameType}</span>
+          <span class="pill"><i class="fas fa-chess"></i> ${t.formation}</span>
+          <span class="pill"><i class="fas fa-users"></i> ${t.players?.length||0} players</span>
+        </div>
+        <div class="card-body">
+          <div class="card-row"><span>Record</span><strong>${t.wins||0}W-${t.draws||0}D-${t.losses||0}L</strong></div>
+          <div class="card-row"><span>Goals</span><strong>${t.goalsFor||0} for / ${t.goalsAgainst||0} against</strong></div>
+          <div class="card-row"><span>Active Leagues</span><strong>${leaguesIn}</strong></div>
+        </div>
+        <div class="card-footer">
+          <button class="btn btn-outline btn-sm" onclick="app.editTeam('${t.id}')"><i class="fas fa-edit"></i> Edit</button>
+          <button class="btn btn-danger btn-sm" onclick="app.deleteTeam('${t.id}')"><i class="fas fa-trash"></i></button>
+        </div>
+      </div>
+    `;
+  },
+
+  openCreateTeam(){
+    if(!this.state.user){this.toast('Please login first','error');return}
+    document.getElementById('teamModalTitle').textContent='Create Team';
+    document.getElementById('teamSaveTxt').textContent='Create Team';
+    document.getElementById('editTeamId').value='';
+    document.getElementById('tName').value='';
+    document.getElementById('tGame').value='eFootball';
+    document.getElementById('tFormation').value='4-4-2';
+    document.getElementById('playerListForm').innerHTML='';
+    this.state.tempPlayers=[];
+    this.openModal('teamModal');
+  },
+
+  editTeam(id){
+    const t=this.state.teams.find(x=>x.id===id); if(!t) return;
+    document.getElementById('teamModalTitle').textContent='Edit Team';
+    document.getElementById('teamSaveTxt').textContent='Save Changes';
+    document.getElementById('editTeamId').value=id;
+    document.getElementById('tName').value=t.name;
+    document.getElementById('tGame').value=t.gameType;
+    document.getElementById('tFormation').value=t.formation;
+    this.state.tempPlayers=[...(t.players||[])];
+    this.renderPlayerListForm();
+    this.openModal('teamModal');
+  },
+
+  addPlayerToForm(){
+    const name=document.getElementById('newPlayerName').value.trim();
+    const pos=document.getElementById('newPlayerPos').value;
+    if(!name){this.toast('Enter player name','error');return}
+    if(this.state.tempPlayers.length>=25){this.toast('Max 25 players','warning');return}
+    this.state.tempPlayers.push({id:'p_'+Date.now(),name,pos,goals:0,assists:0,yellowCards:0,redCards:0,motm:0});
+    document.getElementById('newPlayerName').value='';
+    this.renderPlayerListForm();
+  },
+
+  renderPlayerListForm(){
+    const el=document.getElementById('playerListForm');
+    el.innerHTML=this.state.tempPlayers.map((p,i)=>`
+      <div class="player-item">
+        <div class="player-num">${i+1}</div>
+        <div class="player-name">${p.name}</div>
+        <span class="player-pos">${p.pos}</span>
+        <button class="player-remove" onclick="app.removePlayerFromForm(${i})"><i class="fas fa-times"></i></button>
+      </div>
+    `).join('');
+  },
+
+  removePlayerFromForm(i){
+    this.state.tempPlayers.splice(i,1);
+    this.renderPlayerListForm();
+  },
+
+  saveTeam(){
+    const id=document.getElementById('editTeamId').value;
+    const name=document.getElementById('tName').value.trim();
+    const game=document.getElementById('tGame').value;
+    const formation=document.getElementById('tFormation').value;
+    if(!name){this.toast('Enter team name','error');return}
+    if(id){
+      const t=this.state.teams.find(x=>x.id===id);
+      if(t){Object.assign(t,{name,gameType:game,formation,players:this.state.tempPlayers,updatedAt:new Date().toISOString()})}
+      this.toast('Team updated!','success');
+    } else {
+      const t={
+        id:'t_'+Date.now()+'_'+Math.random().toString(36).substr(2,6),
+        name,gameType:game,formation,
+        ownerId:this.state.user.uid,ownerName:this.state.user.displayName,
+        players:this.state.tempPlayers,
+        wins:0,draws:0,losses:0,goalsFor:0,goalsAgainst:0,leagues:[],
+        createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()
+      };
+      this.state.teams.push(t);
+      this.addNotification(`Team "${name}" created!`,'success');
+      this.toast('Team created!','success');
+    }
+    this.saveAll();
+    this.closeModal('teamModal');
+    this.renderTeams();
+  },
+
+  deleteTeam(id){
+    if(!confirm('Delete this team? This cannot be undone.')) return;
+    const t=this.state.teams.find(x=>x.id===id);
+    if(!t||t.ownerId!==this.state.user?.uid){this.toast('Unauthorized','error');return}
+    this.state.teams=this.state.teams.filter(x=>x.id!==id);
+    // remove from leagues
+    this.state.leagues.forEach(l=>{l.teams=(l.teams||[]).filter(lt=>lt.id!==id)});
+    this.saveAll();
+    this.toast('Team deleted','info');
+    this.renderTeams();
+  },
+
+  // =================== MATCHES ===================
+  renderMatches(){
+    const u=this.state.user; if(!u) return;
+    const myTeamIds=this.state.teams.filter(t=>t.ownerId===u.uid).map(t=>t.id);
+    // also add league team IDs
+    this.state.leagues.forEach(l=>{
+      (l.teams||[]).forEach(lt=>{if(lt.ownerId===u.uid) myTeamIds.push(lt.id)});
+    });
+    const myMatches=this.state.matches.filter(m=>myTeamIds.includes(m.team1Id)||myTeamIds.includes(m.team2Id));
+    const scheduled=myMatches.filter(m=>m.status==='scheduled');
+    const completed=this.state.matches.filter(m=>m.status==='completed');
+    const allPending=this.state.matches.filter(m=>m.status==='scheduled');
+    document.getElementById('myMatchesList').innerHTML=scheduled.length?scheduled.map(m=>this.renderMatchCard(m,true)).join(''):'<div class="empty"><i class="bx bx-calendar-check"></i><p>No upcoming matches</p></div>';
+    document.getElementById('allMatchesList').innerHTML=allPending.length?allPending.map(m=>this.renderMatchCard(m)).join(''):'<div class="empty"><i class="bx bx-calendar"></i><p>No scheduled matches</p></div>';
+    document.getElementById('resultsList').innerHTML=completed.length?completed.slice(0,30).reverse().map(m=>this.renderMatchCard(m)).join(''):'<div class="empty"><i class="bx bx-trophy"></i><p>No results yet</p></div>';
+  },
+
+  renderMatchCard(m,showSubmit=false){
+    const u=this.state.user;
+    const isMyMatch=u&&(m.team1OwnerId===u.uid||m.team2OwnerId===u.uid);
+    const canSubmit=isMyMatch&&m.status==='scheduled';
+    const won=m.status==='completed'&&m.winnerId===this.state.teams.find(t=>t.ownerId===u?.uid)?.id;
+    return `
+      <div class="match-card">
+        <div class="match-teams">
+          <div class="match-team"><div class="match-team-name ${m.status==='completed'&&m.team1Score>m.team2Score?'':'opacity:.7'}" style="${m.status==='completed'&&(m.team1Score>m.team2Score)?'color:var(--gold)':''}">${m.team1Name}</div></div>
+          <div class="match-score">${m.status==='completed'?`${m.team1Score} - ${m.team2Score}`:'VS'}</div>
+          <div class="match-team" style="text-align:right"><div class="match-team-name" style="${m.status==='completed'&&(m.team2Score>m.team1Score)?'color:var(--gold)':''}">${m.team2Name}</div></div>
+        </div>
+        <div class="match-meta">
+          <span>${m.leagueName||'Friendly'}</span>
+          <span class="badge ${m.status==='scheduled'?'badge-reg':m.status==='completed'?'badge-done':'badge-live'}">${m.status}</span>
+          ${canSubmit?`<button class="btn btn-gold btn-sm" onclick="app.openSubmitResult('${m.id}')"><i class="fas fa-check"></i> Submit Result</button>`:''}
+        </div>
+      </div>
+    `;
+  },
+
+  openSubmitResult(matchId){
+    const m=this.state.matches.find(x=>x.id===matchId); if(!m) return;
+    document.getElementById('resultMatchId').value=matchId;
+    document.getElementById('result-t1-label').textContent=m.team1Name+' Score';
+    document.getElementById('result-t2-label').textContent=m.team2Name+' Score';
+    document.getElementById('score1').value=0;
+    document.getElementById('score2').value=0;
+    document.getElementById('resultMatchPreview').innerHTML=`
+      <div class="match-card">
+        <div class="match-teams">
+          <div class="match-team"><div class="match-team-name">${m.team1Name}</div></div>
+          <div class="match-score" style="font-size:18px">VS</div>
+          <div class="match-team" style="text-align:right"><div class="match-team-name">${m.team2Name}</div></div>
+        </div>
+      </div>
+    `;
+    this.openModal('resultModal');
+  },
+
+  submitResult(){
+    const id=document.getElementById('resultMatchId').value;
+    const s1=parseInt(document.getElementById('score1').value)||0;
+    const s2=parseInt(document.getElementById('score2').value)||0;
+    const m=this.state.matches.find(x=>x.id===id); if(!m) return;
+    m.team1Score=s1; m.team2Score=s2;
+    m.status='completed';
+    m.submittedBy=this.state.user?.uid;
+    m.matchDate=new Date().toISOString();
+    if(s1>s2) m.winnerId=m.team1Id;
+    else if(s2>s1) m.winnerId=m.team2Id;
+    else m.winnerId=null;
+    // update team stats
+    const updateTeam=(tid,gf,ga,res)=>{
+      const t=this.state.teams.find(x=>x.id===tid);
+      if(!t) return;
+      t.goalsFor=(t.goalsFor||0)+gf;
+      t.goalsAgainst=(t.goalsAgainst||0)+ga;
+      if(res==='win'){t.wins=(t.wins||0)+1}
+      else if(res==='draw'){t.draws=(t.draws||0)+1}
+      else{t.losses=(t.losses||0)+1}
+    };
+    const res1=s1>s2?'win':s1<s2?'loss':'draw';
+    const res2=s2>s1?'win':s2<s1?'loss':'draw';
+    updateTeam(m.team1Id,s1,s2,res1);
+    updateTeam(m.team2Id,s2,s1,res2);
+    // update user stats
+    const updateUser=(ownerId,res)=>{
+      const uu=this.state.allUsers.find(x=>x.uid===ownerId);
+      if(!uu) return;
+      if(res==='win'){uu.totalWins=(uu.totalWins||0)+1;this.addCoins(25,'Match win reward',ownerId);this.addNotification('You won a match! +25 coins','success',ownerId)}
+      else if(res==='draw'){uu.totalDraws=(uu.totalDraws||0)+1;this.addCoins(10,'Match draw reward',ownerId)}
+      else{uu.totalLosses=(uu.totalLosses||0)+1}
+    };
+    updateUser(m.team1OwnerId,res1);
+    updateUser(m.team2OwnerId,res2);
+    this.saveAll();
+    this.toast(`Result submitted: ${m.team1Name} ${s1} - ${s2} ${m.team2Name}`,'success');
+    this.closeModal('resultModal');
+    this.renderMatches();
+    this.renderDashboard();
+  },
+
+  // =================== LEADERBOARD ===================
+  renderLeaderboard(){
+    const players=[...this.state.allUsers].sort((a,b)=>(b.totalWins||0)-(a.totalWins||0));
+    const teams=[...this.state.teams].sort((a,b)=>(b.wins||0)-(a.wins||0));
+    const rankCls=(i)=>i===0?'rank-gold':i===1?'rank-silver':i===2?'rank-bronze':'';
+    document.getElementById('playersLbBody').innerHTML=players.length?players.slice(0,100).map((p,i)=>`
+      <tr>
+        <td class="${rankCls(i)}">${i===0?'🥇':i===1?'🥈':i===2?'🥉':'#'+(i+1)}</td>
+        <td><div style="display:flex;align-items:center;gap:10px">
+          <img src="${p.photoURL||`https://ui-avatars.com/api/?name=${encodeURIComponent(p.displayName||'U')}&background=FFD700&color=000&size=40`}" style="width:34px;height:34px;border-radius:50%;object-fit:cover;border:1px solid var(--border)">
+          <div>
+            <div style="font-weight:600">${p.displayName||'Unknown'}</div>
+            ${p.isAdmin?'<span class="badge badge-admin" style="font-size:9px">ADMIN</span>':''}
+          </div>
+        </div></td>
+        <td><strong style="color:var(--green)">${p.totalWins||0}</strong></td>
+        <td>${(p.totalWins||0)+(p.totalLosses||0)+(p.totalDraws||0)}</td>
+        <td><strong style="color:var(--gold)">💰 ${(p.coins||0).toLocaleString()}</strong></td>
+      </tr>
+    `).join(''):`<tr><td colspan="5" style="text-align:center;padding:40px;color:var(--text3)">No data yet</td></tr>`;
+    document.getElementById('teamsLbBody').innerHTML=teams.length?teams.slice(0,100).map((t,i)=>`
+      <tr>
+        <td class="${rankCls(i)}">${i===0?'🥇':i===1?'🥈':i===2?'🥉':'#'+(i+1)}</td>
+        <td><strong>⚽ ${t.name}</strong><div style="font-size:11px;color:var(--text3)">${t.gameType}</div></td>
+        <td><strong style="color:var(--green)">${t.wins||0}</strong></td>
+        <td>${t.draws||0}</td>
+        <td style="color:var(--red)">${t.losses||0}</td>
+        <td>${t.goalsFor||0}</td>
+        <td>${t.goalsAgainst||0}</td>
+        <td style="color:${(t.goalsFor||0)-(t.goalsAgainst||0)>=0?'var(--green)':'var(--red)'}">${(t.goalsFor||0)-(t.goalsAgainst||0)>0?'+':''}${(t.goalsFor||0)-(t.goalsAgainst||0)}</td>
+      </tr>
+    `).join(''):`<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--text3)">No data yet</td></tr>`;
+  },
+
+  // =================== PROFILE ===================
+  renderProfile(){
+    const u=this.state.user; if(!u) return;
+    const uu=this.state.allUsers.find(x=>x.uid===u.uid)||u;
+    const av=uu.photoURL||`https://ui-avatars.com/api/?name=${encodeURIComponent(uu.displayName||'U')}&background=FFD700&color=000&size=128`;
+    document.getElementById('profAvatar').src=av;
+    document.getElementById('profName').textContent=uu.displayName||'Unknown';
+    document.getElementById('profEmail').textContent=uu.email||'';
+    const myTeams=this.state.teams.filter(t=>t.ownerId===u.uid).length;
+    const myLeagues=this.state.leagues.filter(l=>l.ownerId===u.uid||(uu.joinedLeagues||[]).includes(l.id)).length;
+    document.getElementById('prof-wins').textContent=uu.totalWins||0;
+    document.getElementById('prof-leagues').textContent=myLeagues;
+    document.getElementById('prof-teams').textContent=myTeams;
+    document.getElementById('profBadges').innerHTML=[
+      uu.isAdmin?'<span class="badge badge-admin">Admin</span>':'',
+      (uu.totalWins||0)>=10?'<span class="badge badge-live">Veteran</span>':'',
+      myTeams>=3?'<span class="badge badge-reg">Team Builder</span>':''
+    ].join('');
+    document.getElementById('editName').value=uu.displayName||'';
+    document.getElementById('editAvatar').value=uu.photoURL||'';
+    document.getElementById('editPass').value='';
+  },
+
+  saveProfile(){
+    const u=this.state.user; if(!u) return;
+    const name=document.getElementById('editName').value.trim();
+    const avatar=document.getElementById('editAvatar').value.trim();
+    const pass=document.getElementById('editPass').value;
+    if(!name){this.toast('Name cannot be empty','error');return}
+    const uu=this.state.allUsers.find(x=>x.uid===u.uid);
+    if(uu){
+      uu.displayName=name;
+      if(avatar) uu.photoURL=avatar;
+      if(pass){if(pass.length<6){this.toast('Password min 6 chars','error');return}uu.password=this.hashPass(pass)}
+    }
+    u.displayName=name;
+    if(avatar) u.photoURL=avatar;
+    DB.set('cg_user',u);
+    this.state.user=u;
+    this.saveAll();
+    this.updateTopbar();
+    this.renderSidebar();
+    this.renderProfile();
+    this.toast('Profile saved!','success');
+  },
+
+  // =================== COINS PAGE ===================
+  renderCoins(){
+    document.getElementById('coinsBigNum').textContent=this.getCoins().toLocaleString();
+    const today=new Date().toDateString();
+    const uu=this.state.allUsers.find(x=>x.uid===this.state.user?.uid);
+    document.getElementById('coinsDailyBonus').innerHTML=uu?.lastDailyBonus===today?'':`
+      <div class="bonus-btn" onclick="app.claimDailyBonus();app.renderCoins()">
+        <h3>🎁 Claim Daily Bonus</h3>
+        <p>+50 coins for logging in today</p>
+      </div>
+    `;
+    const hist=this.getCoinHistory();
+    document.getElementById('coinHistoryList').innerHTML=hist.length?hist.map(h=>`
+      <div class="coin-hist-item">
+        <div><div class="coin-hist-label">${h.reason}</div><div class="coin-hist-sub">${this.timeAgo(h.date)}</div></div>
+        <div class="coin-amount ${h.dir==='in'?'coin-in':'coin-out'}">${h.dir==='in'?'+':'-'}${h.amount}</div>
+      </div>
+    `).join(''):'<div style="text-align:center;color:var(--text3);padding:20px">No transactions yet</div>';
+  },
+
+  // =================== ADMIN ===================
+  renderAdmin(){
+    if(!this.state.user?.isAdmin){this.toast('Access denied','error');this.renderPage('dashboard');return}
+    this.renderAdminUsers();
+    this.renderAdminLeagues();
+    this.renderAdminTxns();
+    this.renderAdminAnnounces();
+  },
+
+  renderAdminUsers(q=''){
+    const users=this.state.allUsers.filter(u=>
+      !q||u.displayName?.toLowerCase().includes(q.toLowerCase())||u.email?.toLowerCase().includes(q.toLowerCase())
+    );
+    document.getElementById('adminUsersTable').innerHTML=`
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>User</th><th>Coins</th><th>Wins</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody>${users.map(u=>`
+            <tr>
+              <td><div style="font-weight:600">${u.displayName||'N/A'}</div><div style="font-size:11px;color:var(--text3)">${u.email}</div></td>
+              <td>💰 ${(u.coins||0).toLocaleString()}</td>
+              <td>${u.totalWins||0}</td>
+              <td>${u.isBanned?'<span class="badge badge-admin">Banned</span>':u.isAdmin?'<span class="badge badge-reg">Admin</span>':'<span class="badge badge-done">Active</span>'}</td>
+              <td>
+                <div style="display:flex;gap:6px;flex-wrap:wrap">
+                  ${u.isBanned?`<button class="btn btn-outline btn-sm" onclick="app.toggleBan('${u.uid}',false)">Unban</button>`:`<button class="btn btn-danger btn-sm" onclick="app.toggleBan('${u.uid}',true)">Ban</button>`}
+                  ${!u.isAdmin?`<button class="btn btn-ghost btn-sm" onclick="app.toggleAdmin('${u.uid}',true)">Make Admin</button>`:`<button class="btn btn-ghost btn-sm" onclick="app.toggleAdmin('${u.uid}',false)">Remove Admin</button>`}
+                </div>
+              </td>
+            </tr>
+          `).join('')}</tbody>
+        </table>
+      </div>
+    `;
+  },
+
+  toggleBan(uid,ban){
+    const u=this.state.allUsers.find(x=>x.uid===uid); if(!u) return;
+    u.isBanned=ban;
+    this.saveAll();
+    this.renderAdminUsers();
+    this.toast(ban?`User ${u.displayName} banned`:`User ${u.displayName} unbanned`,'info');
+  },
+
+  toggleAdmin(uid,isAdmin){
+    const u=this.state.allUsers.find(x=>x.uid===uid); if(!u) return;
+    u.isAdmin=isAdmin;
+    this.saveAll();
+    this.renderAdminUsers();
+    this.toast(isAdmin?`${u.displayName} is now Admin`:`${u.displayName} admin removed`,'info');
+  },
+
+  renderAdminLeagues(){
+    document.getElementById('adminLeaguesTable').innerHTML=`
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>League</th><th>Teams</th><th>Status</th><th>Prize Pool</th><th>Actions</th></tr></thead>
+          <tbody>${this.state.leagues.map(l=>`
+            <tr>
+              <td><div style="font-weight:600">${l.name}</div><div style="font-size:11px;color:var(--text3)">${l.gameType}</div></td>
+              <td>${l.teams?.length||0}/${l.maxTeams}</td>
+              <td><span class="badge ${l.status==='in-progress'?'badge-live':l.status==='completed'?'badge-done':'badge-reg'}">${l.status}</span></td>
+              <td>💰 ${Math.round(l.prizePool)}</td>
+              <td><div style="display:flex;gap:6px">
+                ${l.status==='registration'&&(l.teams?.length||0)>=2?`<button class="btn btn-gold btn-sm" onclick="app.startLeague('${l.id}');app.renderAdminLeagues()">Force Start</button>`:''}
+                <button class="btn btn-danger btn-sm" onclick="app.deleteLeague('${l.id}');app.renderAdminLeagues()"><i class="fas fa-trash"></i></button>
+              </div></td>
+            </tr>
+          `).join('')}</tbody>
+        </table>
+      </div>
+    `;
+  },
+
+  adminAdjustCoins(){
+    const input=document.getElementById('adminCoinUser').value.trim();
+    const amt=parseInt(document.getElementById('adminCoinAmt').value);
+    const reason=document.getElementById('adminCoinReason').value.trim()||'Admin adjustment';
+    if(!input||isNaN(amt)){this.toast('Fill all fields','error');return}
+    const u=this.state.allUsers.find(x=>x.displayName?.toLowerCase()===input.toLowerCase()||x.uid===input||x.email?.toLowerCase()===input.toLowerCase());
+    if(!u){this.toast('User not found','error');return}
+    if(amt>0) this.addCoins(amt,reason,u.uid);
+    else this.spendCoins(Math.abs(amt),reason,u.uid);
+    this.toast(`${amt>0?'+':''}${amt} coins applied to ${u.displayName}`,'success');
+    document.getElementById('adminCoinUser').value='';
+    document.getElementById('adminCoinAmt').value='';
+    document.getElementById('adminCoinReason').value='';
+    this.renderAdminTxns();
+  },
+
+  renderAdminTxns(){
+    const allTxns=[];
+    this.state.allUsers.forEach(u=>{
+      const hist=DB.get('cg_coins_'+u.uid,[]);
+      hist.forEach(h=>allTxns.push({...h,user:u.displayName}));
+    });
+    allTxns.sort((a,b)=>new Date(b.date)-new Date(a.date));
+    document.getElementById('adminAllTxns').innerHTML=allTxns.slice(0,50).map(h=>`
+      <div class="coin-hist-item">
+        <div><div class="coin-hist-label">${h.user}: ${h.reason}</div><div class="coin-hist-sub">${this.timeAgo(h.date)}</div></div>
+        <div class="coin-amount ${h.dir==='in'?'coin-in':'coin-out'}">${h.dir==='in'?'+':'-'}${h.amount}</div>
+      </div>
+    `).join('')||'<div style="text-align:center;color:var(--text3);padding:20px">No transactions</div>';
+  },
+
+  postAnnouncement(){
+    const title=document.getElementById('aTitle').value.trim();
+    const msg=document.getElementById('aMsg').value.trim();
+    if(!title||!msg){this.toast('Fill all fields','error');return}
+    const a={id:'a_'+Date.now(),title,msg,date:new Date().toISOString(),by:this.state.user?.displayName};
+    this.state.announcements.unshift(a);
+    if(this.state.announcements.length>20) this.state.announcements.pop();
+    this.saveAll();
+    document.getElementById('aTitle').value='';
+    document.getElementById('aMsg').value='';
+    this.renderAdminAnnounces();
+    this.toast('Announcement posted!','success');
+  },
+
+  renderAdminAnnounces(){
+    document.getElementById('adminAnnounceList').innerHTML=this.state.announcements.map(a=>`
+      <div class="announcement" style="margin-bottom:8px">
+        <i class="bx bx-broadcast" style="color:var(--blue);font-size:20px;margin-top:2px"></i>
+        <div class="announcement-text" style="flex:1">
+          <h4>${a.title}</h4><p>${a.msg}</p>
+          <span style="font-size:11px;color:var(--text3)">${this.timeAgo(a.date)} by ${a.by}</span>
+        </div>
+        <button class="btn btn-danger btn-sm" onclick="app.deleteAnnouncement('${a.id}')"><i class="fas fa-times"></i></button>
+      </div>
+    `).join('')||'<div style="text-align:center;color:var(--text3);padding:20px">No announcements</div>';
+  },
+
+  deleteAnnouncement(id){
+    this.state.announcements=this.state.announcements.filter(x=>x.id!==id);
+    this.saveAll();
+    this.renderAdminAnnounces();
+  },
+
+  // =================== TOAST ===================
+  toast(msg,type='success'){
+    const c=document.getElementById('toastContainer');
+    const t=document.createElement('div');
+    const icons={success:'fa-check-circle',error:'fa-exclamation-circle',info:'fa-info-circle',warning:'fa-exclamation-triangle'};
+    t.className=`toast toast-${type}`;
+    t.innerHTML=`<i class="fas ${icons[type]||icons.success}"></i> ${msg}`;
+    c.appendChild(t);
+    setTimeout(()=>{t.style.animation='toastIn .3s ease reverse';setTimeout(()=>t.remove(),280)},3500);
+  },
+
+  // =================== HELPERS ===================
+  timeAgo(date){
+    const diff=Math.floor((Date.now()-new Date(date))/1000);
+    if(diff<60) return 'just now';
+    if(diff<3600) return Math.floor(diff/60)+'m ago';
+    if(diff<86400) return Math.floor(diff/3600)+'h ago';
+    if(diff<604800) return Math.floor(diff/86400)+'d ago';
+    return new Date(date).toLocaleDateString();
+  },
+
+  uid(){return 'id_'+Date.now()+'_'+Math.random().toString(36).substr(2,8)}
+};
+
+// SEED DATA (only if empty)
+function seedDemoData(){
+  if(DB.get('cg_users',[]).length>0) return;
+  const uid='u_demo_admin';
+  const users=[{
+    uid,displayName:'Demo Admin',email:'admin@crunk.gg',password:app.hashPass('admin123'),
+    photoURL:'https://ui-avatars.com/api/?name=Demo+Admin&background=FFD700&color=000&size=80',
+    isAdmin:true,isBanned:false,createdAt:new Date().toISOString(),lastLogin:new Date().toISOString(),
+    totalWins:5,totalLosses:2,totalDraws:1,coins:1500,teams:[],joinedLeagues:[],lastDailyBonus:null
+  }];
+  DB.set('cg_users',users);
+  DB.set('cg_coins_'+uid,[
+    {amount:500,reason:'Welcome bonus',dir:'in',date:new Date(Date.now()-86400000*3).toISOString()},
+    {amount:50,reason:'Daily login bonus',dir:'in',date:new Date(Date.now()-86400000*2).toISOString()},
+    {amount:50,reason:'Daily login bonus',dir:'in',date:new Date(Date.now()-86400000).toISOString()},
+    {amount:900,reason:'Founder bonus',dir:'in',date:new Date().toISOString()}
+  ]);
+  DB.set('cg_announces',[{id:'a_seed',title:'Welcome to Crunk Games!',msg:'The competitive gaming platform is now live. Create leagues, build teams, and compete for glory!',date:new Date().toISOString(),by:'System'}]);
+}
+
+seedDemoData();
+document.addEventListener('DOMContentLoaded',()=>app.init());
+</script>
 </body>
 </html>
